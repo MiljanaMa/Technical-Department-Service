@@ -1,21 +1,36 @@
-var builder = WebApplication.CreateBuilder(args);
+using Technical_Department.API.Startup;
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+//builder.Services.ConfigureSwagger(builder.Configuration);
+const string corsPolicy = "_corsPolicy";
+builder.Services.ConfigureCors(corsPolicy);
+builder.Services.ConfigureAuth();
+builder.Services.RegisterModules();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseDeveloperExceptionPage();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
-app.UseStaticFiles();
+else
+{
+    app.UseExceptionHandler("/error");
+    app.UseHsts();
+}
 
 app.UseRouting();
+app.UseCors(corsPolicy);
 
+app.UseHttpsRedirection();
+app.UseAuthorization();
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
