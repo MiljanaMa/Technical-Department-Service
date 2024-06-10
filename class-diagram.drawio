@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-04-28T11:35:14.706Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="JbKtN4nZLQh9P2lxAa03" version="24.2.8" type="device">
+<mxfile host="app.diagrams.net" modified="2024-06-10T17:28:05.901Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="Aa8jV65mkOa1rkph5OWn" version="24.5.2" type="device">
   <diagram id="GDx_2gZbZ9wgl7-7VXHY" name="Page-1">
-    <mxGraphModel dx="3210" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+    <mxGraphModel dx="4525" dy="2650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -9,7 +9,7 @@
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="k1ia0Kni4IpyKNYvvvFL-2" value="Id ? (value object???)" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="k1ia0Kni4IpyKNYvvvFL-1" vertex="1">
+        <mxCell id="k1ia0Kni4IpyKNYvvvFL-2" value="Id?" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="k1ia0Kni4IpyKNYvvvFL-1" vertex="1">
           <mxGeometry y="26" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="k1ia0Kni4IpyKNYvvvFL-3" value="Name: string" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="k1ia0Kni4IpyKNYvvvFL-1" vertex="1">
@@ -21,7 +21,7 @@
         <mxCell id="TyGQaCX3mV4lijws8Y4i-1" value="Type: IngredientType" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="k1ia0Kni4IpyKNYvvvFL-1" vertex="1">
           <mxGeometry y="104" width="160" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="TyGQaCX3mV4lijws8Y4i-3" value="Unit: MeasurmentUnit" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="k1ia0Kni4IpyKNYvvvFL-1" vertex="1">
+        <mxCell id="TyGQaCX3mV4lijws8Y4i-3" value="Unit: MeasurementUnit" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="k1ia0Kni4IpyKNYvvvFL-1" vertex="1">
           <mxGeometry y="130" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="k1ia0Kni4IpyKNYvvvFL-5" value="Meal" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
