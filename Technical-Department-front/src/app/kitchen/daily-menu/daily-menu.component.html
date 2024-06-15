@@ -1,0 +1,37 @@
+<mat-tab-group>
+    <mat-tab *ngFor="let dayMenu of dailyMenus" [label]="getDayLabel(dayMenu.dayOfWeek)">
+      <table mat-table [dataSource]="getTableData(dayMenu)" class="mat-elevation-z8">
+        <!-- Consumer Type Column -->
+        <ng-container matColumnDef="consumerType">
+          <th mat-header-cell *matHeaderCellDef> Konzument</th>
+          <td mat-cell *matCellDef="let element"> {{ element.consumerType }} </td>
+        </ng-container>
+  
+<!-- Meal Type Columns -->
+<ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType">
+    <th mat-header-cell *matHeaderCellDef> {{ getMealTypeLabel(mealType) }} </th>
+    <td mat-cell *matCellDef="let element" class="meal-cell">
+      <ng-container *ngIf="getMealForType(element.mealOffers, mealType)">
+        <div class="meal-image-container">
+          <img [src]="getMealForType(element.mealOffers, mealType)?.image" alt="Meal Image">
+        </div>
+        <div class="meal-name">
+          {{ getMealForType(element.mealOffers, mealType)?.name }}
+        </div>
+        <button mat-icon-button (click)="openChangeMealModal(element, mealType)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="!getMealForType(element.mealOffers, mealType)">
+        N/A
+      </ng-container>
+    </td>
+  </ng-container>
+  
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+  
