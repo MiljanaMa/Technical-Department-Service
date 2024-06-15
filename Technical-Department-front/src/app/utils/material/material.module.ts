@@ -16,11 +16,12 @@ import {MatTable, MatTableModule} from "@angular/material/table"
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator"
 import {MatSort, MatSortModule} from "@angular/material/sort"
 import {MatDatepicker, MatDatepickerModule} from "@angular/material/datepicker"
-import {MatNativeDateModule} from "@angular/material/core"
+import {MatNativeDateModule, MatOption} from "@angular/material/core"
 import {MatRadioButton, MatRadioModule} from "@angular/material/radio"
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox"
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
-
+import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatTab, MatTabGroup, MatTabLabel, MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [],
@@ -45,7 +46,9 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
     MatNativeDateModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatDividerModule
+    MatDividerModule,
+    MatFormFieldModule,
+    MatTabsModule
   ],
   exports: [
     MatInput,
@@ -73,7 +76,13 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
     MatDrawerContent,
     MatListItem,
     MatNavList,
-    MatDivider
+    MatDivider,
+    MatFormField,
+    MatLabel,
+    MatOption,
+    MatTab,
+    MatTabGroup,
+    MatTabLabel
   ]
 })
 export class MaterialModule { }

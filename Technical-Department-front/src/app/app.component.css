@@ -1,6 +1,10 @@
-mat-toolbar {
+  mat-toolbar {
     background: #003B6D;
     color: white;
+  }
+
+  mat-sidenav-container {
+    height: calc(100vh - 65px);
   }
   mat-sidenav {
     margin: 16px;
@@ -12,7 +16,8 @@ mat-toolbar {
     padding: 16px;
     text-align: center;
   }
-  .content {
+
+  mat-sidenav-content{
     height: calc(100vh - 130px);
     border-radius: 10px;
     margin: 16px;
@@ -20,18 +25,31 @@ mat-toolbar {
     padding: 16px;
     overflow: auto;
   }
-  mat-sidenav-container {
-    height: calc(100vh - 65px);
+
+  .content {
+    height: calc(100vh - 130px);
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+    padding: 16px;
+    overflow: auto;
+    color: white;
   }
+ 
   .menu-button {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     font-size: 1rem;
+    
   }
   .menu-button mat-icon {
     margin-right: 8px;
+  }
+
+  .menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
   }
 
   mat-divider {
@@ -46,6 +64,6 @@ mat-toolbar {
     min-height: 20px;
   }
 
-  .content {
-    color: white;
+  .maticon-header {
+    color: #003B6D;
   }
