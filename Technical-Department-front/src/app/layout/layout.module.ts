@@ -1,21 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../utils/material/material.module';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { HeaderComponent } from './header/header.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
-    SidenavComponent,
-    HeaderComponent
+    HomeComponent
   ],
   imports: [
     CommonModule,
     MaterialModule
   ],
   exports: [
-    SidenavComponent,
-    HeaderComponent
+    HomeComponent
   ]
 })
 export class LayoutModule { }

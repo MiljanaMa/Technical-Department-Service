@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './utils/material/material.module';
+import { KitchenModule } from './kitchen/kitchen.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,9 +16,12 @@ import { MaterialModule } from './utils/material/material.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     LayoutModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    KitchenModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
