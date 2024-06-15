@@ -1,0 +1,27 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-header-cell, .mat-cell {
+    text-align: center;
+  }
+  .meal-cell {
+    text-align: center;
+  }
+  
+  .meal-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .meal-image-container img {
+    width: 50px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+  }
+  
+  .meal-name {
+    margin-top: 5px; /* Adjust spacing between image and name */
+    font-size: 12px; /* Adjust font size as needed */
+  }
+  
