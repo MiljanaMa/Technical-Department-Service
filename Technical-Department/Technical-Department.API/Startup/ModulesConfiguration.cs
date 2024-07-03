@@ -1,11 +1,11 @@
-﻿namespace Technical_Department.API.Startup
+﻿using Technical_Department.Kitchen.Infrastructure;
+namespace Technical_Department.API.Startup;
+
+public static class ModulesConfiguration
 {
-    public static class ModulesConfiguration
+    public static IServiceCollection RegisterModules(this IServiceCollection services)
     {
-        public static IServiceCollection RegisterModules(this IServiceCollection services)
-        {
-            //services.ConfigureKitchenModule();
-            return services;
-        }
+        services.ConfigureKitchenModule();
+        return services;
     }
 }

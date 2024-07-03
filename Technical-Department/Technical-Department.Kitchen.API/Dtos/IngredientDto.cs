@@ -1,0 +1,11 @@
+﻿using Technical_Department.Kitchen.API.Dtos.Enums;
+
+namespace Technical_Department.Kitchen.API.Dtos;
+public class IngredientDto
+{
+    public string Name { get; set; }
+    public double Calories { get; set; }
+    public IngredientType Type { get; set; }
+    public long UnitId { get; set; }
+    public MeasurementUnitDto Unit { get; set; }
+}
