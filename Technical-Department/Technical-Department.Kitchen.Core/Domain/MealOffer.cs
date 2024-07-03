@@ -9,6 +9,6 @@ namespace Technical_Department.Kitchen.Core.Domain
         public ConsumerType ConsumerType { get; init; }
         public long MealId { get; init; }
         public Meal Meal { get; init; }
-        public int EaterQuantity { get; init; }
+        public int ConsumerQuantity { get; init; }
     }
 }

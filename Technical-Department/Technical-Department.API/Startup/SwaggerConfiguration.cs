@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-//using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models;
 namespace Technical_Department.API.Startup
 {
 
     public static class SwaggerConfiguration
         
-    {/*
+    {
         public static IServiceCollection ConfigureSwagger(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(setup =>
             {
                 setup.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Explorer API",
+                    Title = "Technical-Department API",
                     Version = "v1"
                 });
                 var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -36,6 +36,6 @@ namespace Technical_Department.API.Startup
             });
             });
             return services;
-        }*/
+        }
     }
 }

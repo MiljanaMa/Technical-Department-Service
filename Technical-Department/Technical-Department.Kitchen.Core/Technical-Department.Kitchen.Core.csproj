@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks.Core\BuildingBlocks.Core.csproj" />
+    <ProjectReference Include="..\Technical-Department.Kitchen.API\Technical-Department.Kitchen.API.csproj" />
   </ItemGroup>
 
 </Project>
