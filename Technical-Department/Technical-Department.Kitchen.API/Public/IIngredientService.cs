@@ -7,5 +7,7 @@ namespace Technical_Department.Kitchen.API.Public
     {
         Result<IngredientDto> GetAllBy();
         Result<IngredientDto> Create(IngredientDto ingredient);
+        Result<IngredientDto> Update(IngredientDto ingredient);
+        Result<IngredientDto> Get(long id);
     }
 }

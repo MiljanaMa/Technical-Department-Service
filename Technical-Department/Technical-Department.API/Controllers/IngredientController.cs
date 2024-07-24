@@ -16,10 +16,10 @@ public class IngredientController : BaseApiController
         _ingredientService = ingredientService;
     }
 
-    [HttpGet("")]
-    public ActionResult<IngredientDto> Get()
+    [HttpGet("{id:int}")]
+    public ActionResult<IngredientDto> Get(int id)
     {
-        var result = _ingredientService.GetAllBy();
+        var result = _ingredientService.Get(id);
         return CreateResponse(result);
     }
     [HttpPost("")]
@@ -28,4 +28,11 @@ public class IngredientController : BaseApiController
         var result = _ingredientService.Create(ingredient);
         return CreateResponse(result);
     }
+    [HttpPut("{id:long}")]
+    public ActionResult<IngredientDto> Update([FromBody] IngredientDto ingredient)
+    {
+        var result = _ingredientService.Update(ingredient);
+        return CreateResponse(result);
+    }
+
 }
