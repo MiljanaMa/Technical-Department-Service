@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+    <ProjectReference Include="..\Technical-Department.Kitchen.Core\Technical-Department.Kitchen.Core.csproj" />
+  </ItemGroup>
+
 </Project>
