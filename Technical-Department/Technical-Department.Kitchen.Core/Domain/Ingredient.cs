@@ -8,6 +8,9 @@ namespace Technical_Department.Kitchen.Core.Domain
     {
         public required string Name { get; init; }
         public double Calories { get; set; }
+        public double Proteins { get; set; }
+        public double Carbohydrates { get; set; }
+        public double Fats { get; set; }
         public IngredientType Type { get; init; }
         public long UnitId { get; init; }
         public MeasurementUnit Unit { get; init; }
