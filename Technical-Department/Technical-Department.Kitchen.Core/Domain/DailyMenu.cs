@@ -7,5 +7,6 @@ namespace Technical_Department.Kitchen.Core.Domain
     {
         public DayOfWeek DayOfWeek { get; init; }
         public ICollection<MealOffer> Menu { get; init; }
+        public long WeeklyMenuId { get; init; }
     }
 }
