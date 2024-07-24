@@ -3,6 +3,7 @@
 public class IngredientQuantityDto
 {
     public long IngredientId { get; set; }
-    public IngredientDto Ingredient { get; set; }
+    public string IngredientName { get; set; }
+    public long MealId { get; set; }
     public double Quantity { get; set; }
 }

@@ -5,6 +5,7 @@ namespace Technical_Department.Kitchen.API.Public
 {
     public interface IIngredientService
     {
-        Result<IngredientDto> GetAll();
+        Result<IngredientDto> GetAllBy();
+        Result<IngredientDto> Create(IngredientDto ingredient);
     }
 }

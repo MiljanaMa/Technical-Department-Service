@@ -15,7 +15,7 @@ namespace Technical_Department.API.Startup
                     Title = "Technical-Department API",
                     Version = "v1"
                 });
-                var jwtSecurityScheme = new OpenApiSecurityScheme
+                /*var jwtSecurityScheme = new OpenApiSecurityScheme
                 {
                     BearerFormat = "JWT",
                     Name = "JWT Authentication",
@@ -33,7 +33,7 @@ namespace Technical_Department.API.Startup
                 setup.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 { jwtSecurityScheme, Array.Empty<string>() }
-            });
+            });*/
             });
             return services;
         }

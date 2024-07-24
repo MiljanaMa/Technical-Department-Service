@@ -5,6 +5,9 @@ public class IngredientDto
 {
     public string Name { get; set; }
     public double Calories { get; set; }
+    public double Proteins { get; set; }
+    public double Carbohydrates { get; set; }
+    public double Fats { get; set; }
     public IngredientType Type { get; set; }
     public long UnitId { get; set; }
     public MeasurementUnitDto Unit { get; set; }

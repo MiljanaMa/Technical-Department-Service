@@ -19,7 +19,13 @@ public class IngredientController : BaseApiController
     [HttpGet("")]
     public ActionResult<IngredientDto> Get()
     {
-        var result = _ingredientService.GetAll();
+        var result = _ingredientService.GetAllBy();
+        return CreateResponse(result);
+    }
+    [HttpPost("")]
+    public ActionResult<IngredientDto> Create([FromBody] IngredientDto ingredient)
+    {
+        var result = _ingredientService.Create(ingredient);
         return CreateResponse(result);
     }
 }
