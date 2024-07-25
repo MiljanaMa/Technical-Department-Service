@@ -1,30 +1,4 @@
-<!--<div class="table">
-    <table>
-        <tr >
-            <th *ngFor="let day of daysOfWeek" > 
-                <div>{{day.name}}</div>
-                <div>{{day.date | date: 'dd/MM/yyyy'}}</div>
-                <mat-icon *ngIf="day.checked" class="checked">check_circle_outline</mat-icon>
-                <mat-icon *ngIf="!day.checked" class="not-checked">highlight_off</mat-icon>
-            </th>
-        </tr>
-    </table>
- </div>
-
-
-    <table>
-        <tr >
-            <th *ngFor="let type of mealTypes" > 
-                <div>{{type.name}}</div>
-            </th>
-        </tr>
-    </table>
- </div>
--->
-
-<div class="button">
-    <button class="confirm-button mat-button" >POTVRDI NEDELJNI MENI</button>
- </div>
+<br/>
 
 <mat-tab-group [(selectedIndex)]="selectedDayIndex">
     <mat-tab *ngFor="let day of daysOfWeekTabs; let i = index" [label]="day.name">
@@ -55,96 +29,102 @@
                 <mat-tab-group [selectedIndex]="selectedMealIndex">
                   <mat-tab *ngFor="let type of mealTypes; let i = index" [label]="type.name">
                     <ng-template mat-tab-label>
-                        <div>
-                            <div>{{type.name}}</div>
-                            <!-- <mat-icon class="checked">check_circle_outline</mat-icon>-->
-                            <mat-icon class="not-checked">highlight_off</mat-icon>
-                        </div>
-                      </ng-template>
+                      <div>
+                          <div>{{type.name}}</div>
+                          <!-- <mat-icon class="checked">check_circle_outline</mat-icon>-->
+                          <mat-icon class="not-checked">highlight_off</mat-icon>
+                      </div>
+                    </ng-template>
                    
-                        <div class="container">
-                            <form [formGroup]="mealForm">
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Trudnice:</mat-label>
-                                  <mat-select  formControlName="pregnant">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
+                  <div class="container">
+                      <form [formGroup]="mealForm">
+                        <div>
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Trudnice:</mat-label>
+                            <input type="text" matInput formControlName="pregnantFormControl" [matAutocomplete]="pregnantAuto">
+                            <mat-autocomplete autoActiveFirstOption  #pregnantAuto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of pregnantFilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Operisni pacijenti:</mat-label>
+                            <input type="text" matInput formControlName="operatedFormControl" [matAutocomplete]="operatedAuto">
+                            <mat-autocomplete autoActiveFirstOption  #operatedAuto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of operatedFilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>  
                           
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Operisni pacijenti:</mat-label>
-                                  <mat-select formControlName="operated">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
                           
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Blagi pacijenti:</mat-label>
-                                  <mat-select formControlName="mild">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                          
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Standardni pacijenti:</mat-label>
-                                  <mat-select formControlName="standard">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                        
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Doktori:</mat-label>
-                                  <mat-select formControlName="doctors">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                              
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Deca(2-4):</mat-label>
-                                  <mat-select formControlName="childrenFrom2To4">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                              
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Deca(4-14):</mat-label>
-                                  <mat-select formControlName="childrenFrom4To14">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                        
-                              <div>
-                                <mat-form-field>
-                                  <mat-label>Dijabeticari:</mat-label>
-                                  <mat-select formControlName="diabetic">
-                                    <mat-option value="Jaja sa sirom">Jaja sa sirom</mat-option>
-                                    <mat-option value="Sendvici">Sendvici</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                            </form>
-                          </div>
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Blagi pacijenti:</mat-label>
+                            <input type="text"  matInput formControlName="mildFormControl" [matAutocomplete]="mildAuto">
+                            <mat-autocomplete autoActiveFirstOption #mildAuto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of mildFilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>   
+
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Standardni pacijenti:</mat-label>
+                            <input type="text" matInput formControlName="standardFormControl" [matAutocomplete]="standardAuto">
+                            <mat-autocomplete autoActiveFirstOption #standardAuto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of standardFilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                                                                      
+                         <div>
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Doktori:</mat-label>
+                            <input type="text" matInput formControlName="doctorsFormControl" [matAutocomplete]="doctorsAuto">
+                            <mat-autocomplete autoActiveFirstOption #doctorsAuto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of doctorsFilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Deca(2-4):</mat-label>
+                            <input type="text" matInput formControlName="childrenFrom2To4FormControl" [matAutocomplete]="childrenFrom2To4Auto">
+                            <mat-autocomplete autoActiveFirstOption #childrenFrom2To4Auto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of childrenFrom2To4FilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Deca(4-14):</mat-label>
+                            <input type="text" matInput formControlName="childrenFrom4To14FormControl" [matAutocomplete]="childrenFrom4To14Auto">
+                            <mat-autocomplete autoActiveFirstOption #childrenFrom4To14Auto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of childrenFrom4To14FilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+
+                          <mat-form-field class="form-field-margin">
+                            <mat-label>Dijabeticari:</mat-label>
+                            <input type="text" matInput formControlName="diabeticFormControl" [matAutocomplete]="diabeticAuto">
+                            <mat-autocomplete autoActiveFirstOption #diabeticAuto="matAutocomplete" [displayWith]="displayName">
+                              <mat-option *ngFor="let option of diabeticFilteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option> 
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>  
+                                         
+                      </form>
+                    </div>
                   </mat-tab>
                 </mat-tab-group>
               </div>
@@ -152,5 +132,10 @@
             
     </mat-tab>
 </mat-tab-group>
+
+<div class="button">
+  <button class="confirm-button mat-button" disabled>POTVRDI NEDELJNI MENI</button>
+</div>
+
     
  
