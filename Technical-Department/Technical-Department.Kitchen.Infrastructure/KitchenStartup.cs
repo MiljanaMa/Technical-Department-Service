@@ -28,12 +28,14 @@ public static class KitchenStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IIngredientService, IngredientService>();
+        services.AddScoped<IMealService, MealService>();
 
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(IIngredientRepository), typeof(IngredientRepository));
+        services.AddScoped(typeof(IMealRepository), typeof(MealRepository));
 
         services.AddDbContext<KitchenContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("kitchen"),

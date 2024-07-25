@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Technical_Department.API</RootNamespace>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
