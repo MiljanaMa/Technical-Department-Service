@@ -91,6 +91,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     Proteins = table.Column<double>(type: "double precision", nullable: false),
                     Carbohydrates = table.Column<double>(type: "double precision", nullable: false),
                     Fats = table.Column<double>(type: "double precision", nullable: false),
+                    Sugar = table.Column<double>(type: "double precision", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     UnitId = table.Column<long>(type: "bigint", nullable: false)
                 },

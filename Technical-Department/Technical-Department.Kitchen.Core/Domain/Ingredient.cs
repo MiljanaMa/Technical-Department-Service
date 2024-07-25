@@ -11,6 +11,7 @@ namespace Technical_Department.Kitchen.Core.Domain
         public double Proteins { get; set; }
         public double Carbohydrates { get; set; }
         public double Fats { get; set; }
+        public double Sugar { get; set; }
         public IngredientType Type { get; init; }
         public long UnitId { get; init; }
         public MeasurementUnit Unit { get; init; }
