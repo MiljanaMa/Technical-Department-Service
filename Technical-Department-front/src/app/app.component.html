@@ -1,54 +1,21 @@
 <mat-toolbar class="mat-elevation-z8">
-    <button
-      mat-icon-button
-      *ngIf="sidenav.mode === 'over'"
-      (click)="sidenav.toggle()"
-    >
-      <mat-icon class="maticon-header" *ngIf="!sidenav.opened"> menu </mat-icon>
-      <mat-icon class="maticon-header" *ngIf="sidenav.opened"> close </mat-icon>
-    </button>
-  </mat-toolbar>
-  
-  <mat-sidenav-container>
-    <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
-      <button mat-button class="menu-button" routerLink="/">
-        <mat-icon>home</mat-icon>
-        <span class="content">Pocetna</span>
-      </button>
-    
-      <mat-divider></mat-divider>
-    
-      <button mat-button class="menu-button" routerLink="/menu">
-        <mat-icon>dashboard</mat-icon>
-        <span class="content">Meni</span>
-      </button>
-      <button mat-button class="menu-button" routerLink="/meals">
-        <mat-icon>restaurant</mat-icon>
-        <span class="content">Jela</span>
-      </button>
-      <button mat-button class="menu-button" routerLink="/ingredients">
-        <mat-icon>kitchen</mat-icon>
-        <span class="content">Namirnice</span>
-      </button>
-      <button mat-button class="menu-button" routerLink="/test">
-        <mat-icon>Test</mat-icon>
-        <span class="content">Test</span>
-      </button>
-    
-      <mat-divider></mat-divider>
-    
-      <button mat-button class="menu-button" routerLink="/">
-        <mat-icon>person</mat-icon>
-        <span class="content">Profil</span>
-      </button>
-    
-      <button mat-button class="menu-button" routerLink="/">
-        <mat-icon>help</mat-icon>
-        <span class="content">Pomoc</span>
-      </button>
-    </mat-sidenav>
-    <mat-sidenav-content class="mat-elevation-z8">
-        <router-outlet></router-outlet>
-    </mat-sidenav-content>    
-  </mat-sidenav-container>
+  <button mat-button routerLink="/menu">
+    <mat-icon>dashboard</mat-icon>
+    <span>Nov meni</span>
+  </button>
+  <button mat-button routerLink="/test">
+    <mat-icon>title</mat-icon>
+    <span>Test</span>
+  </button>
+  <button mat-button routerLink="/meals">
+    <mat-icon>restaurant</mat-icon>
+    <span>Jela</span>
+  </button>
+  <button mat-button routerLink="/ingredients">
+    <mat-icon>kitchen</mat-icon>
+    <span>Namirnice</span>
+  </button>
+ 
+</mat-toolbar>
 
+<router-outlet></router-outlet>

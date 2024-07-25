@@ -68,13 +68,13 @@ export class DailyMenuComponent implements OnInit{
 
   loadTestData() {
     const testMeals: Meal[] = [
-      { id: 1, name: "Kajgana", image: "https://www.allrecipes.com/thmb/0VXMwCY9RVNrNvWcF_9v0iZpNqA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/JF_241160_CreamyCottageCheeseScrambled_4x3_12902-619d00dc88594ea9b8ed884a108db16d.jpg" },
-      { id: 2, name: "Pasulj", image: "https://n1info.rs/wp-content/uploads/2019/11/pasulj-290613.jpeg" },
-      { id: 3, name: "Piletina", image: "https://n1info.rs/wp-content/uploads/2021/02/shutterstock_603921101.jpg" },
-      { id: 4, name: "Jabuka", image: "https://sadnicejabuke.rs/wp-content/uploads/2018/02/greni-smit.jpg" },
-      { id: 5, name: "Palacinke", image: "https://glossy.espreso.co.rs/data/images/2023/03/03/09/356942_mekanepalacinkesakremomshutterstock-336080225_ff.jpg" },
-      { id: 6, name: "Kupus salata", image: "https://www.b92.net/news/pics/2023/12/07/18738371526571b8a9a1a71265855196_w640.jpg" },
-      { id: 7, name: "Paradajz salata", image: "https://cafeveliki.com/wp-content/uploads/2021/09/paradajz-salata.jpg" }
+      { id: 1, name: "Kajgana" },
+      { id: 2, name: "Pasulj"},
+      { id: 3, name: "Piletina"},
+      { id: 4, name: "Jabuka" },
+      { id: 5, name: "Palacinke" },
+      { id: 6, name: "Kupus salata" },
+      { id: 7, name: "Paradajz salata"}
     ];
 
     const testMealOffers: MealOffer[] = [];

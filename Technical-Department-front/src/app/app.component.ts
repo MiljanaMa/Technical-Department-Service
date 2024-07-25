@@ -1,8 +1,5 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { NavigationEnd, Router } from '@angular/router';
-import { MatSidenav } from '@angular/material/sidenav';
-import { filter } from 'rxjs/operators';
+import { Component } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
@@ -11,25 +8,5 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent{
   title = 'Technical-Department-front';
-  @ViewChild(MatSidenav)
-  sidenav!: MatSidenav;
-
-  constructor(private observer: BreakpointObserver, private router: Router) {}
-
-
-  ngAfterViewInit() {
-  
-    this.router.events
-      .pipe(
-        filter((e) => e instanceof NavigationEnd)
-      )
-      .subscribe(() => {
-        if (this.sidenav.mode === 'over') {
-          this.sidenav.close();
-        }
-      });
-  }
-
-
 
 }

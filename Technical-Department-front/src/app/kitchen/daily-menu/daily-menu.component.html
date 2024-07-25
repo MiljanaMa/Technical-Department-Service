@@ -13,7 +13,7 @@
     <td mat-cell *matCellDef="let element" class="meal-cell">
       <ng-container *ngIf="getMealForType(element.mealOffers, mealType)">
         <div class="meal-image-container">
-          <img [src]="getMealForType(element.mealOffers, mealType)?.image" alt="Meal Image">
+         <!-- <img [src]="getMealForType(element.mealOffers, mealType)?.image" alt="Meal Image"> -->
         </div>
         <div class="meal-name">
           {{ getMealForType(element.mealOffers, mealType)?.name }}
