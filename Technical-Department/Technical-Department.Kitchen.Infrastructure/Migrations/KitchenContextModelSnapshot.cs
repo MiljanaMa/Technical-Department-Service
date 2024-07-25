@@ -79,6 +79,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<double>("Proteins")
                         .HasColumnType("double precision");
 
+                    b.Property<double>("Sugar")
+                        .HasColumnType("double precision");
+
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 

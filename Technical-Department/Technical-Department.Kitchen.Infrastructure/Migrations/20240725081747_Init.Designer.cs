@@ -14,7 +14,7 @@ using Technical_Department.Kitchen.Infrastructure.Database;
 namespace Technical_Department.Kitchen.Infrastructure.Migrations
 {
     [DbContext(typeof(KitchenContext))]
-    [Migration("20240724155539_Init")]
+    [Migration("20240725081747_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -80,6 +80,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<double>("Proteins")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Sugar")
                         .HasColumnType("double precision");
 
                     b.Property<int>("Type")
