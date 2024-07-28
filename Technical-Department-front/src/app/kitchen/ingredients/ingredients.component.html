@@ -25,5 +25,13 @@
       <span class="label">Šećeri:</span>
       <span class="value">{{ ingredient.sugar }} g</span>
     </div>
+    <div class="ingredient-actions">
+      <button mat-icon-button (click)="updateIngredient(ingredient)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="deleteIngredient(ingredient.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

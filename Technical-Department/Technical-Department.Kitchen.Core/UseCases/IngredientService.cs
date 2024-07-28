@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Core.Domain;
 using BuildingBlocks.Core.UseCases;
 using FluentResults;
 using Technical_Department.Kitchen.API.Dtos;
@@ -36,5 +37,10 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
+    }
+    Result<PagedResult<IngredientDto>> IIngredientService.GetPagedWithMeasurementUnit(int page, int pageSize)
+    {
+        var result = _ingredientRepository.GetPagedWithMeasurementUnit(page, pageSize);
+        return MapToDto(result);
     }
 }
