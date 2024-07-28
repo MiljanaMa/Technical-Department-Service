@@ -6,6 +6,6 @@ namespace Technical_Department.Kitchen.Core.Domain
     {
         public DateOnly From { get; init; }
         public DateOnly To { get; init; }
-        public ICollection<DailyMenu> Menu { get; init; }
+        public ICollection<DailyMenu>? Menu { get; init; }
     }
 }

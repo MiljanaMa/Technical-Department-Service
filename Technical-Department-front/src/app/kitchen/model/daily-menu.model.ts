@@ -4,6 +4,7 @@ export interface DailyMenu {
     id?: number;
     dayOfWeek: DayOfWeek;
     menu: MealOffer[];
+    weeklyMenuId?: number;
 }
 
 export enum DayOfWeek {

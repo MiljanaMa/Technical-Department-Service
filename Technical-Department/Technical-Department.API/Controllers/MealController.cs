@@ -30,7 +30,7 @@ namespace Technical_Department.API.Controllers
             return CreateResponse(result);
         }
         [HttpPost("")]
-        public ActionResult<IngredientDto> Create([FromBody] MealDto meal)
+        public ActionResult<MealDto> Create([FromBody] MealDto meal)
         {
             var result = _mealService.Create(meal);
             return CreateResponse(result);
