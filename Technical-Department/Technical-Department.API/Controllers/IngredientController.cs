@@ -16,10 +16,10 @@ public class IngredientController : BaseApiController
         _ingredientService = ingredientService;
     }
 
-    [HttpGet("{id:int}")]
-    public ActionResult<IngredientDto> Get(int id)
+    [HttpGet("")]
+    public ActionResult<IngredientDto> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _ingredientService.Get(id);
+        var result = _ingredientService.GetPaged(page, pageSize);
         return CreateResponse(result);
     }
     [HttpPost("")]
