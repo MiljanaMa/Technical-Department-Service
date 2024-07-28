@@ -41,7 +41,8 @@ export class IngredientsComponent implements OnInit{
   }
   addIngredient(): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
-      width: '450px'
+      width: '450px',
+      data: null
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -50,5 +51,28 @@ export class IngredientsComponent implements OnInit{
         console.log('The dialog was closed', result);
       }
     });
+  }
+  updateIngredient(ingredient: Ingredient): void {
+    const dialogRef = this.dialog.open(IngredientModalComponent, {
+      width: '450px',
+      data: ingredient
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadIngredients();
+        console.log('The dialog was closed', result);
+      }
+    });
+  }
+  deleteIngredient(ingredientId: number): void {
+    this.service.deleteIngredient(ingredientId).subscribe({
+      next: (result: any) => {
+        this.loadIngredients();
+      },
+      error: () => {
+        //add some toast
+      }
+    })
   }
 }

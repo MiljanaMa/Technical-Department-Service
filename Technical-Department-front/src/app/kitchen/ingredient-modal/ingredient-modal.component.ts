@@ -23,28 +23,33 @@ export class IngredientModalComponent implements OnInit {
     'OSTALO': IngredientType.OTHER
   };
   public IngredientTypes: [string, IngredientType][] = Object.entries(this.IngredientTypeMapping);
-  
+
   constructor(private service: KitchenService,
     public dialogRef: MatDialogRef<IngredientModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Ingredient,
     private fb: FormBuilder
   ) {
     this.ingredientForm = this.fb.group({
-      id: [data?.id || 0],
-      name: [data?.name || '', Validators.required],
-      calories: [data?.calories || 0, [Validators.required, Validators.min(0)]],
-      proteins: [data?.proteins || 0, [Validators.required, Validators.min(0)]],
-      carbohydrates: [data?.carbohydrates || 0, [Validators.required, Validators.min(0)]],
-      fats: [data?.fats || 0, [Validators.required, Validators.min(0)]],
-      sugar: [data?.sugar || 0, [Validators.required, Validators.min(0)]],
-      type: [data?.type || '', Validators.required],
-      unit: [data?.unit || '', Validators.required]
+      id: [this.data?.id || 0],
+      name: [this.data?.name || '', Validators.required],
+      calories: [this.data?.calories || 0, [Validators.required, Validators.min(0)]],
+      proteins: [this.data?.proteins || 0, [Validators.required, Validators.min(0)]],
+      carbohydrates: [this.data?.carbohydrates || 0, [Validators.required, Validators.min(0)]],
+      fats: [this.data?.fats || 0, [Validators.required, Validators.min(0)]],
+      sugar: [this.data?.sugar || 0, [Validators.required, Validators.min(0)]],
+      type: [this.data?.type || '', Validators.required],
+      unit: [this.data?.unit || '', Validators.required]
     });
   }
   ngOnInit(): void {
     this.service.getAllMeasurementUnits().subscribe({
       next: (result: any) => {
         this.measurementUnits = result.results;
+
+        if (this.data && this.data.unitId) {
+          const selectedUnit = this.measurementUnits.find(unit => unit.id === this.data.unitId);
+          this.ingredientForm.patchValue({ unit: selectedUnit });
+        }
       },
       error: () => {
         //add some toast
@@ -55,14 +60,26 @@ export class IngredientModalComponent implements OnInit {
     if (this.ingredientForm.valid) {
       const newIngredient: Ingredient = this.ingredientForm.value;
       newIngredient.unitId = newIngredient.unit.id;
-      this.service.createIngredient(newIngredient).subscribe({
-        next: (result: any) => {
-          this.dialogRef.close(this.ingredientForm.value);
-        },
-        error: () => {
-          //add some toast
-        }
-      })
+
+      if (!this.data) {
+        this.service.createIngredient(newIngredient).subscribe({
+          next: (result: any) => {
+            this.dialogRef.close(this.ingredientForm.value);
+          },
+          error: () => {
+            //add some toast
+          }
+        })
+      } else {
+        this.service.updateIngredient(newIngredient).subscribe({
+          next: (result: any) => {
+            this.dialogRef.close(this.ingredientForm.value);
+          },
+          error: () => {
+            //add some toast
+          }
+        })
+      }
     }
   }
 

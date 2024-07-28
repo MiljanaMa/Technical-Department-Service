@@ -19,7 +19,7 @@ public class IngredientController : BaseApiController
     [HttpGet("")]
     public ActionResult<IngredientDto> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _ingredientService.GetPaged(page, pageSize);
+        var result = _ingredientService.GetPagedWithMeasurementUnit(page, pageSize);
         return CreateResponse(result);
     }
     [HttpPost("")]
@@ -28,10 +28,17 @@ public class IngredientController : BaseApiController
         var result = _ingredientService.Create(ingredient);
         return CreateResponse(result);
     }
-    [HttpPut("{id:long}")]
+    [HttpPut("{id:int}")]
     public ActionResult<IngredientDto> Update([FromBody] IngredientDto ingredient)
     {
         var result = _ingredientService.Update(ingredient);
+        return CreateResponse(result);
+    }
+
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id)
+    {
+        var result = _ingredientService.Delete(id);
         return CreateResponse(result);
     }
 

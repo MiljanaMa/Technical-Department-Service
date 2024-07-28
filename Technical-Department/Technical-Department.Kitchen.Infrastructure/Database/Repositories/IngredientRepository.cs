@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Infrastructure.Database;
+﻿using BuildingBlocks.Core.UseCases;
+using BuildingBlocks.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,12 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         public IngredientRepository(KitchenContext dbContext) : base(dbContext)
         {
             _dbSet = dbContext.Set<Ingredient>();
+        }
+        public PagedResult<Ingredient> GetPagedWithMeasurementUnit(int page, int pageSize)
+        {
+            var task = _dbSet.Include(i => i.Unit).OrderBy(i => i.Type).GetPagedById(page, pageSize);
+            task.Wait();
+            return task.Result;
         }
     }
 }
