@@ -3,6 +3,8 @@ import { KitchenService } from '../kitchen.service';
 import { Ingredient, IngredientType } from '../model/ingredient.model';
 import { MatDialog } from '@angular/material/dialog';
 import { IngredientModalComponent } from '../ingredient-modal/ingredient-modal.component';
+import { FormControl } from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-ingredients',
@@ -11,6 +13,9 @@ import { IngredientModalComponent } from '../ingredient-modal/ingredient-modal.c
 })
 export class IngredientsComponent implements OnInit{
   public ingredients: Ingredient[] = [];
+  filteredIngredients: Ingredient[] = [];
+  searchControl = new FormControl();
+  
   constructor(private service: KitchenService, public dialog: MatDialog){}
   public IngredientTypeMapping: { [key: string]: IngredientType } = {
       'POVRĆE I VOĆE': IngredientType.VEGETABLES_FRUITS,
@@ -24,11 +29,13 @@ export class IngredientsComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadIngredients();
+    this.searchControl.valueChanges.subscribe(value => this.searchIngredients(value));
   }
 
   loadIngredients(): void {
     this.service.getAllIngredients().subscribe({
       next: (result: any) => {
+        this.filteredIngredients = result.results;
         this.ingredients = result.results;
       },
       error: () => {
@@ -38,6 +45,11 @@ export class IngredientsComponent implements OnInit{
   }
   getIngredientsByType(type: IngredientType): Ingredient[] {
     return this.ingredients.filter(ingredient => ingredient.type === type);
+  }
+  searchIngredients(query: string): void {
+    const lowerCaseQuery = query.toLowerCase();
+    this.filteredIngredients = this.ingredients.filter(ingredient =>
+      ingredient.name.toLowerCase().includes(lowerCaseQuery));
   }
   addIngredient(): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
