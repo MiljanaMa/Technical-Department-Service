@@ -1,5 +1,4 @@
-﻿
-using BuildingBlocks.Core.Domain;
+﻿using BuildingBlocks.Core.Domain;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 
 namespace Technical_Department.Kitchen.Core.Domain
@@ -14,6 +13,8 @@ namespace Technical_Department.Kitchen.Core.Domain
         public double Sugar { get; set; }
         public IngredientType Type { get; init; }
         public long UnitId { get; init; }
-        public MeasurementUnit Unit { get; init; }
+        public MeasurementUnit Unit { get; private set; }
+
+        public void SetMeasurementUnit(MeasurementUnit unit) => this.Unit = unit;
     }
 }

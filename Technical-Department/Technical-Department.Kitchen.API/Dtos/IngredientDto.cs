@@ -3,6 +3,7 @@
 namespace Technical_Department.Kitchen.API.Dtos;
 public class IngredientDto
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public double Calories { get; set; }
     public double Proteins { get; set; }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { KitchenService } from '../kitchen.service';
 import { Ingredient, IngredientType } from '../model/ingredient.model';
+import { MatDialog } from '@angular/material/dialog';
+import { IngredientModalComponent } from '../ingredient-modal/ingredient-modal.component';
 
 @Component({
   selector: 'app-ingredients',
@@ -9,7 +11,7 @@ import { Ingredient, IngredientType } from '../model/ingredient.model';
 })
 export class IngredientsComponent implements OnInit{
   public ingredients: Ingredient[] = [];
-  constructor(private service: KitchenService){}
+  constructor(private service: KitchenService, public dialog: MatDialog){}
   public IngredientTypeMapping: { [key: string]: IngredientType } = {
       'POVRĆE I VOĆE': IngredientType.VEGETABLES_FRUITS,
       'ŽITARICE': IngredientType.GRAIN,
@@ -19,7 +21,12 @@ export class IngredientsComponent implements OnInit{
       'OSTALO': IngredientType.OTHER
     };
   public IngredientTypes: [string, IngredientType][] = Object.entries(this.IngredientTypeMapping);
+
   ngOnInit(): void {
+    this.loadIngredients();
+  }
+
+  loadIngredients(): void {
     this.service.getAllIngredients().subscribe({
       next: (result: any) => {
         this.ingredients = result.results;
@@ -31,5 +38,17 @@ export class IngredientsComponent implements OnInit{
   }
   getIngredientsByType(type: IngredientType): Ingredient[] {
     return this.ingredients.filter(ingredient => ingredient.type === type);
+  }
+  addIngredient(): void {
+    const dialogRef = this.dialog.open(IngredientModalComponent, {
+      width: '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadIngredients();
+        console.log('The dialog was closed', result);
+      }
+    });
   }
 }

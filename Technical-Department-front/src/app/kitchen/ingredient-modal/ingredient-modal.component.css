@@ -1,0 +1,23 @@
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 900px;
+    overflow: hidden; /* Prevent scrolling */
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  .button-container {
+    justify-content: space-between;
+    width: 100%;
+  }  
