@@ -10,4 +10,5 @@ public class MealOfferDto
     public string MealName { get; set; }
     public int ConsumerQuantity { get; set; }
     public long DailyMenuId { get; set; }
+
 }

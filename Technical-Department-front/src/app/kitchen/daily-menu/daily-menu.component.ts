@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/dailyMenu.model';
+//import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/dailyMenu.model';
 import { ConsumerType, MealOffer, MealType } from '../model/meal-offer.model';
 import { Meal } from '../model/meal.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,23 +10,26 @@ import { MealChangeModalComponent } from '../meal-change-modal/meal-change-modal
   templateUrl: './daily-menu.component.html',
   styleUrls: ['./daily-menu.component.css']
 })
+
 export class DailyMenuComponent implements OnInit{
-  dailyMenus: DailyMenu[] = [];
+  
+  //dailyMenus: DailyMenu[] = [];
   mealTypes = Object.values(MealType);
   displayedColumns = ['consumerType', ...this.mealTypes];
 
   constructor(
     private dialog: MatDialog//,
-    /*private mealService: MealService*/
+    //private mealService: MealService
   ) {
-    /*this.mealService.getMealOffers().subscribe(mealOffers => {
-      this.mealOffers = mealOffers;
-    });*/
+   // this.mealService.getMealOffers().subscribe(mealOffers => {
+    //  this.mealOffers = mealOffers;
+    //});
   }
 
   ngOnInit(): void {
-    this.loadTestData();
+   // this.loadTestData();
   }
+  /*
   openChangeMealModal(element: MealOffer, mealType: string): void {
     const dialogRef = this.dialog.open(MealChangeModalComponent, {
       width: '500px',
@@ -61,10 +64,7 @@ export class DailyMenuComponent implements OnInit{
   getMealTypeLabel(mealType: MealType): string {
     return mealType;
   }
-  /*
-  getConsumerTypeLabel(consumerType: ConsumerType): string {
-    return ConsumerTypeLabels[consumerType];
-  }*/
+  
 
   loadTestData() {
     const testMeals: Meal[] = [
@@ -131,4 +131,5 @@ export class DailyMenuComponent implements OnInit{
       }
     ];
   }
+*/
 }
