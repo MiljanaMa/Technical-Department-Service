@@ -15,9 +15,4 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
     {
         _ingredientRepository = ingredientRepository;
     }
-
-    public Result<IngredientDto> GetAllBy()
-    {
-        throw new NotImplementedException();
-    }
 }

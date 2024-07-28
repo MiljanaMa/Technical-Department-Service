@@ -1,0 +1,58 @@
+.ingredient-details {
+    line-height: 1.5; /* Adjust line spacing */
+  }
+  
+  .ingredient-item {
+    margin-bottom: 2px; /* Space between each label-value pair */
+  }
+  
+  .label {
+    display: inline-block; /* Ensure labels are aligned with values */
+    width: 150px; /* Fixed width for labels, adjust as needed */
+    font-weight: normal; /* Make labels bold */
+  }
+  
+  .value {
+    display: inline; /* Values are displayed inline with the label */
+  }
+  .name {
+    text-align: center; /* Values are displayed inline with the label */
+    font-weight: bold;
+    display: inline;
+    margin-bottom: 8px;
+  }
+  .styled-heading {
+    text-align: center; /* Center the text */
+    font-size: 2rem; /* Adjust font size */
+    color: #333; /* Dark gray color */
+    font-family: 'Arial', sans-serif; /* Font family */
+    font-weight: 500; /* Bold font weight */
+    margin: 10px 0; /* Vertical margin for spacing */
+    padding: 10px; /* Padding around the text */
+    border-bottom: 2px solid #007bff; /* Bottom border with color */
+    background-color: #f8f9fa; /* Light background color */
+    border-radius: 8px; /* Rounded corners for the background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-transform: uppercase; /* Uppercase text */
+  }
+  .tables-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows tables to wrap to the next line if there's not enough space */
+    gap: 10px; /* Space between tables */
+  }
+  
+  /* Styles for each table wrapper */
+  .table-wrapper {
+    flex: 1 1 10%; /* Flex grow, shrink, and basis */
+    min-width: 10px; /* Minimum width of each table */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for each table */
+    padding: 10px;
+    border-radius: 8px; /* Rounded corners */
+    background-color: #f8f9fa; /* Light background color */
+  }
+  
+  h3 {
+    text-align: center; /* Center align headings */
+    font-size: 1.2rem;
+  }
+  

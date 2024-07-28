@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Meal } from './model/meal.model';
 import { environment } from 'src/env/environment';
+import { Ingredient } from './model/ingredient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,5 +14,8 @@ export class KitchenService {
 
   getMeals(): Observable<Meal[]> {
     return this.http.get<Meal[]>(environment.apiHost + 'meal');
+  }
+  getAllIngredients(): Observable<Ingredient[]> {
+    return this.http.get<Ingredient[]>(environment.apiHost + 'ingredient');
   }
 }

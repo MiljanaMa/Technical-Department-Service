@@ -1,1 +1,36 @@
-<p>ingredients works!</p>
+<h1 class="styled-heading">Namirnice</h1>
+<div class="tables-container">
+    <div *ngFor="let type of IngredientTypes" class="table-wrapper">
+      <h3>{{ type[0] }}</h3>
+      <table>
+        <tbody>
+          <tr *ngFor="let ingredient of getIngredientsByType(type[1])">
+            <td class="ingredient-details">
+              <span class="name"> {{ ingredient.name }} </span>
+              <div class="ingredient-item">
+                <span class="label">Kalorije:</span>
+                <span class="value">{{ ingredient.calories }} cal</span>
+              </div>
+              <div class="ingredient-item">
+                <span class="label">Ugljeni hidrati:</span>
+                <span class="value">{{ ingredient.carbohydrates }} g</span>
+              </div>
+              <div class="ingredient-item">
+                <span class="label">Proteini:</span>
+                <span class="value">{{ ingredient.proteins }} g</span>
+              </div>
+              <div class="ingredient-item">
+                <span class="label">Masti:</span>
+                <span class="value">{{ ingredient.fats }} g</span>
+              </div>
+              <div class="ingredient-item">
+                <span class="label">Šećeri:</span>
+                <span class="value">{{ ingredient.sugar }} g</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
