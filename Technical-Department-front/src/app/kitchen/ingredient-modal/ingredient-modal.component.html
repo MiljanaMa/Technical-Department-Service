@@ -1,0 +1,86 @@
+<h4 mat-dialog-title class="centered">Namirnica</h4>
+<mat-dialog-content class="centered">
+  <form [formGroup]="ingredientForm" class="form-container">
+    <mat-form-field class="full-width">
+      <mat-label>Ime</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="ingredientForm.get('name')!.hasError('required')">
+        Ime je obavezno uneti
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Kalorije</mat-label>
+      <input matInput type="number" formControlName="calories">
+      <mat-error *ngIf="ingredientForm.get('calories')!.hasError('required')">
+        Kalorije je obavezno uneti
+      </mat-error>
+      <mat-error *ngIf="ingredientForm.get('calories')!.hasError('min')">
+        Vrednost mora biti veća ili jednaka od 0
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Proteins</mat-label>
+      <input matInput type="number" formControlName="proteins">
+      <mat-error *ngIf="ingredientForm.get('proteins')!.hasError('required')">
+        Proteine je obavezno uneti
+      </mat-error>
+      <mat-error *ngIf="ingredientForm.get('proteins')!.hasError('min')">
+        Vrednost mora biti veća ili jednaka od 0
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Ugljenihidrati</mat-label>
+      <input matInput type="number" formControlName="carbohydrates">
+      <mat-error *ngIf="ingredientForm.get('carbohydrates')!.hasError('required')">
+        Ugljenehidrate je obavezno uneti
+      </mat-error>
+      <mat-error *ngIf="ingredientForm.get('carbohydrates')!.hasError('min')">
+        Vrednost mora biti veća ili jednaka od 0
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Masti</mat-label>
+      <input matInput type="number" formControlName="fats">
+      <mat-error *ngIf="ingredientForm.get('fats')!.hasError('required')">
+        Masti je obavezno uneti
+      </mat-error>
+      <mat-error *ngIf="ingredientForm.get('fats')!.hasError('min')">
+        Vrednost mora biti veća ili jednaka od 0
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Šećer</mat-label>
+      <input matInput type="number" formControlName="sugar">
+      <mat-error *ngIf="ingredientForm.get('sugar')!.hasError('required')">
+        Šećere je obavezno uneti
+      </mat-error>
+      <mat-error *ngIf="ingredientForm.get('sugar')!.hasError('min')">
+        Vrednost mora biti veća ili jednaka od 0
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Tip</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let type of IngredientTypes" [value]="type[1]">{{ type[0] }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="ingredientForm.get('type')!.hasError('required')">
+        Tip je obavezno uneti
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Merna jedinica</mat-label>
+      <mat-select formControlName="unit">
+        <mat-option *ngFor="let unit of measurementUnits" [value]="unit">{{ unit.name }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="ingredientForm.get('unit')!.hasError('required')">
+        Mernu jedinicu je obavezno uneti
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="centered button-container">
+    <span>
+    <button mat-button color="primary" (click)="onSave()">Sačuvaj</button>
+    <button mat-button (click)="onCancel()">Otkaži</button>
+    </span>
+  </mat-dialog-actions>

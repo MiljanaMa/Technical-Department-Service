@@ -8,11 +8,13 @@ import { KitchenModule } from './kitchen/kitchen.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +24,11 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     KitchenModule,
     MatDialogModule, 
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule  
     
   ],
   providers: [],
