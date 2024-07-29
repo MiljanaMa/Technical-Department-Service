@@ -17,6 +17,14 @@ namespace Technical_Department.Kitchen.Core.Domain
             Menu = new Collection<MealOffer>();
         }
 
+        public DailyMenu(DayOfWeek dayOfWeek, long weeklyMenuId, WeeklyMenu weeklyMenu)
+        {
+            DayOfWeek = dayOfWeek;
+            Menu = new Collection<MealOffer>();
+            WeeklyMenuId = weeklyMenuId;
+            WeeklyMenu = weeklyMenu;
+        }
+
         public void AddMealOffer(MealOffer offer)
         {
                   

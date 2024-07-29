@@ -1,10 +1,10 @@
 <br/>
 
-<mat-tab-group [selectedIndex]="selectedDayIndex">
-    <mat-tab *ngFor="let day of daysOfWeekTabs; let i = index" [label]="day.name">
+<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)">
+    <mat-tab *ngFor="let day of daysOfWeek; let i = index" [label]="day.name">
         <ng-template mat-tab-label>
             <div>
-                <div>{{day.name}} ({{day.date | date: 'dd.MM.yyyy.'}})</div>
+                <div>{{day.name}}</div>
                 <!--
                 <mat-icon *ngIf="day.breakfastChecked" class="checked">check_circle_outline</mat-icon>
                 <mat-icon *ngIf="!day.breakfastChecked" class="not-checked">highlight_off</mat-icon>
@@ -28,8 +28,8 @@
         <div class="tab-content">
 
             <div class="container">
-                <mat-tab-group [selectedIndex]="selectedMealIndex">
-                  <mat-tab *ngFor="let type of mealTypes; let i = index" [label]="type.name">
+                <mat-tab-group (selectedTabChange)="onSelectedMealTabChange($event)">
+                  <mat-tab *ngFor="let type of mealTypes; let i = index" [label]="type.name" >
                     <ng-template mat-tab-label>
                       <div>
                           <div>{{type.name}}</div>
@@ -124,10 +124,6 @@
                             </mat-autocomplete>
                           </mat-form-field>
                         </div>  
-                              
-                        <div class="button">
-                          <button mat-raised-button (click)="next()">Dalje</button>
-                        </div>
                       </form>
                     </div>
                   </mat-tab>

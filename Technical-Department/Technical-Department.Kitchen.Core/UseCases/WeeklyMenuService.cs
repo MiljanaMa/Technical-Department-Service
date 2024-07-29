@@ -21,5 +21,18 @@ namespace Technical_Department.Kitchen.Core.UseCases
             _weeklyMenuRepository = weeklyMenuRepository;
         }
 
+        public Result<WeeklyMenuDto> Create(WeeklyMenuDto weeklyMenu)
+        {
+            try
+            {
+                var result = _weeklyMenuRepository.Create(MapToDomain(weeklyMenu));
+                return MapToDto(result);
+            }   
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
     }
 }

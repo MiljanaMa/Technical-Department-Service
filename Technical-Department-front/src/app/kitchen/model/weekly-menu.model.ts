@@ -5,4 +5,14 @@ export interface WeeklyMenu {
     from: string;
     to: string;
     menu?: DailyMenu[];
+    status: WeeklyMenuStatus;
 }
+
+export enum WeeklyMenuStatus {
+    PREVIOUS,
+    CURRENT,
+    DRAFT,
+    NEW
+}
+
+

@@ -6,7 +6,7 @@ export interface MealOffer{
     consumerType: ConsumerType;
     mealId: number;
     mealName: string;
-    consumerQuanitity?: number; //remove ? later
+    consumerQuantity: number; //remove ? later
     dailyMenuId?: number; // remove ?
 }
 
@@ -37,7 +37,7 @@ export const MealTypeLabels = {
     [MealType.MORNING_SNACK]: "JUTARNJA UZINA",
     [MealType.LUNCH]: "RUCAK",
     [MealType.LUNCH_SALAD]: "SALATA UZ RUCAK",
-    [MealType.DINNER_SNACK]: "OPODNEVNA UZINA",
+    [MealType.DINNER_SNACK]: "POPODNEVNA UZINA",
     [MealType.DINNER]: "VECERA",
     [MealType.DINNER_SALAD]: "SALATA UZ VECERU"
 };

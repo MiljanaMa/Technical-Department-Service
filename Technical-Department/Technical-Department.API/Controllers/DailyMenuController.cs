@@ -13,7 +13,7 @@ namespace Technical_Department.API.Controllers
         {
             _dailyMenuService = dailyMenuService;
         }
-      
+
 
         [HttpGet("{id:int}")]
         public ActionResult<DailyMenuDto> Get(int id)
@@ -21,12 +21,7 @@ namespace Technical_Department.API.Controllers
             var result = _dailyMenuService.Get(id);
             return CreateResponse(result);
         }
-        [HttpPost("")]
-        public ActionResult<DailyMenuDto> Create([FromBody] DailyMenuDto dailyMenu)
-        {
-            var result = _dailyMenuService.Create(dailyMenu);
-            return CreateResponse(result);
-        }
+        
         [HttpPut("{id:long}")]
         public ActionResult<DailyMenuDto> Update([FromBody] DailyMenuDto dailyMenu)
         {
