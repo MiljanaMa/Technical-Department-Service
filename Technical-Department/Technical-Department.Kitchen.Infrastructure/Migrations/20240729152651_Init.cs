@@ -72,7 +72,8 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     From = table.Column<DateOnly>(type: "date", nullable: false),
-                    To = table.Column<DateOnly>(type: "date", nullable: false)
+                    To = table.Column<DateOnly>(type: "date", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

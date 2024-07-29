@@ -14,7 +14,7 @@ using Technical_Department.Kitchen.Infrastructure.Database;
 namespace Technical_Department.Kitchen.Infrastructure.Migrations
 {
     [DbContext(typeof(KitchenContext))]
-    [Migration("20240727090708_Init")]
+    [Migration("20240729152651_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -173,6 +173,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
 
                     b.Property<DateOnly>("From")
                         .HasColumnType("date");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<DateOnly>("To")
                         .HasColumnType("date");
