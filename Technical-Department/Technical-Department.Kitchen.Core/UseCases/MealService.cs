@@ -16,14 +16,42 @@ namespace Technical_Department.Kitchen.Core.UseCases
     public class MealService : CrudService<MealDto, Meal>, IMealService
     {
         private readonly IMealRepository _mealRepository;
-        public MealService(IMealRepository mealRepository, IMapper mapper) : base(mealRepository, mapper)
+        private readonly ICrudRepository<Ingredient> _ingredientRepository;
+        public MealService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base(mealRepository, mapper)
         {
             _mealRepository = mealRepository;
+            _ingredientRepository = ingredientRepository;
         }
 
-        public Result<List<MealDto>> GetAll()
+        public Result<ICollection<MealDto>> GetAll(int page, int pageSize)
         {
-            var result = _mealRepository.GetAll();
+            var result = _mealRepository.GetPaged(page, pageSize);
+            ICollection<MealDto> dtos = MapToDto(result).Value.Results;
+
+            foreach (var dto in dtos)
+            {
+                foreach(var item in dto.Ingredients)
+                {
+                    var ingredient = _ingredientRepository.Get(item.IngredientId);
+                    item.IngredientName = ingredient.Name;
+                    item.UnitShortName = ingredient.Unit.ShortName;
+                }
+            }
+
+            return Result.Ok(dtos);
+        }
+        public Result<MealDto> Create(MealDto meal)
+        {
+            double calories = 0;
+            foreach(var i in meal.Ingredients)
+            {
+                var ingredient = _ingredientRepository.Get(i.IngredientId);
+                calories += ingredient.Calories * i.Quantity * 10;
+            }
+
+            meal.Calories = calories;
+
+            var result = _mealRepository.Create(MapToDomain(meal));
             return MapToDto(result);
         }
 

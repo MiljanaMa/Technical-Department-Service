@@ -8,19 +8,16 @@ namespace Technical_Department.Kitchen.Core.Domain
     {
         public IngredientQuantity() { }
         [JsonConstructor]
-        public IngredientQuantity(long mealId, long ingredientId, double quantity)
+        public IngredientQuantity(long ingredientId, double quantity)
         {
-            MealId = mealId;
             IngredientId = ingredientId;
             Quantity = quantity;
         }
-        public long MealId { get; init; }
         public long IngredientId { get; init; }
         public double Quantity { get; init; }
         protected override bool EqualsCore(IngredientQuantity ingredientQuantity)
         {
-            return IngredientId == ingredientQuantity.IngredientId &&
-                   MealId == ingredientQuantity.MealId;
+            return IngredientId == ingredientQuantity.IngredientId;
         }
 
         protected override int GetHashCodeCore()

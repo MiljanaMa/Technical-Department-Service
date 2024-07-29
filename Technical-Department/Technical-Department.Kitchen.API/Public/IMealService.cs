@@ -11,7 +11,7 @@ namespace Technical_Department.Kitchen.API.Public
 {
     public interface IMealService
     {
-        Result<List<MealDto>> GetAll();
+        Result<ICollection<MealDto>> GetAll(int page, int pageSize);
         Result<MealDto> Create(MealDto meal);
         Result<MealDto> Update(MealDto meal);
         Result<MealDto> Get(int id);

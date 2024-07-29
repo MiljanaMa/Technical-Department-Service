@@ -17,9 +17,9 @@ namespace Technical_Department.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<MealDto>> GetAll()
+        public ActionResult<List<MealDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _mealService.GetAll();
+            var result = _mealService.GetAll(page, pageSize);
             return CreateResponse(result);
         }
 
@@ -30,7 +30,7 @@ namespace Technical_Department.API.Controllers
             return CreateResponse(result);
         }
         [HttpPost("")]
-        public ActionResult<IngredientDto> Create([FromBody] MealDto meal)
+        public ActionResult<MealDto> Create([FromBody] MealDto meal)
         {
             var result = _mealService.Create(meal);
             return CreateResponse(result);

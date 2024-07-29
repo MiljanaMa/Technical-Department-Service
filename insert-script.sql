@@ -2,6 +2,7 @@ INSERT INTO kitchen."MeasurementUnits" VALUES (11, 'Kilogram', 'kg');
 INSERT INTO kitchen."MeasurementUnits" VALUES (12, 'Komad', 'kom');
 INSERT INTO kitchen."MeasurementUnits" VALUES (13, 'Litar', 'lit');
 
+
 INSERT INTO kitchen."Ingredients" VALUES (1, 'Mrkva', 41, 0.9, 9.6, 0.2, 4.7, 1, 11);
 INSERT INTO kitchen."Ingredients" VALUES (2, 'Beli luk', 35, 0.9, 7.7, 0.1, 0, 1, 11);
 INSERT INTO kitchen."Ingredients" VALUES (3, 'Crni luk', 38, 0.8, 8.6, 0.1, 0, 1, 11);
@@ -9,11 +10,9 @@ INSERT INTO kitchen."Ingredients" VALUES (4, 'Pasulj', 143, 9, 26.22, 0.65, 2.1,
 INSERT INTO kitchen."Ingredients" VALUES (5, 'Slanina', 548, 36, 1.4, 43, 0, 4, 11);
 INSERT INTO kitchen."Ingredients" VALUES (6, 'Psenicno brasno', 340, 13, 72, 2.5, 0.4, 2, 11);
 INSERT INTO kitchen."Ingredients" VALUES (7, 'Aleva paprika', 282, 14, 54, 13, 10, 5, 11);
-INSERT INTO kitchen."Ingredients" VALUES (8, 'Ulje suncokretovo', 942, 0, 0, 101, 0, 0, 13);
 INSERT INTO kitchen."Ingredients" VALUES (9, 'Jaja', 143, 13, 0, 9.5, 0, 3, 12);
 INSERT INTO kitchen."Ingredients" VALUES (10, 'Oslic', 78, 18, 0, 0.9, 0, 4, 11);
 INSERT INTO kitchen."Ingredients" VALUES (11, 'Krompir', 22, 1, 4.7, 0, 0, 1, 11);
-INSERT INTO kitchen."Ingredients" VALUES (12, 'Sirce', 88, 0.5, 17, 0, 15, 5, 13);
 INSERT INTO kitchen."Ingredients" VALUES (13, 'Jogurt', 63, 5.3, 7, 1.6, 7, 3, 13);
 INSERT INTO kitchen."Ingredients" VALUES (14, 'Sir sitni', 350, 6.2, 5.5, 34, 3.8, 3, 11);
 INSERT INTO kitchen."Ingredients" VALUES (15, 'Kore za pitu', 299, 7.1, 53, 6, 0.2, 2, 11);
@@ -43,3 +42,5 @@ INSERT INTO kitchen."Ingredients" VALUES (38, 'Makaroni integralni', 347, 13, 64
 INSERT INTO kitchen."Ingredients" VALUES (39, 'Karfiol', 25, 1.9, 5, 0.3, 1.9, 1, 11);
 INSERT INTO kitchen."Ingredients" VALUES (40, 'Tikvice', 17, 1.2, 3.2, 0.3, 2.5, 1, 11);
 INSERT INTO kitchen."Ingredients" VALUES (41, 'Pilece grudi', 110, 23, 0, 1.3, 0, 4, 11);
+INSERT INTO kitchen."Ingredients" VALUES (8, 'Ulje suncokretovo', 812, 0.5, 0, 91.6, 0, 0, 13);
+INSERT INTO kitchen."Ingredients" VALUES (12, 'Sirce', 6, 1.2, 0, 0, 0, 5, 13);
