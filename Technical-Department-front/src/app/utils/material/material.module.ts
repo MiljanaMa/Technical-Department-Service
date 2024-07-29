@@ -20,7 +20,7 @@ import { MatNativeDateModule, MatOption } from "@angular/material/core"
 import { MatRadioButton, MatRadioModule } from "@angular/material/radio"
 import { MatCheckbox, MatCheckboxModule } from "@angular/material/checkbox"
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
-import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatTab, MatTabGroup, MatTabLabel, MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogActions, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
 import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/grid-list';
@@ -96,7 +96,8 @@ import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/gri
     MatGridTile,
     MatHeaderRowDef,
     MatRow,
-    MatTableModule
+    MatTableModule,
+    MatError
   ]
 })
 export class MaterialModule { }

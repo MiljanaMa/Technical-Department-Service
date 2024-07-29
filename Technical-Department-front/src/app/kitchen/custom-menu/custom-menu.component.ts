@@ -1,11 +1,9 @@
-import { Component, ViewChild, ElementRef, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
-import { DayOfWeekTab } from '../model/day-of-week-tab';
-import { Meal } from '../model/meal.model';
-import { ConsumerType, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Observable, map, of, startWith } from 'rxjs';
-import { MatTabGroup } from '@angular/material/tabs';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Observable, of, startWith, map } from 'rxjs';
 import { KitchenService } from '../kitchen.service';
+import { Meal } from '../model/meal.model';
+import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
 
@@ -14,18 +12,19 @@ import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
   templateUrl: './custom-menu.component.html',
   styleUrls: ['./custom-menu.component.css']
 })
-export class CustomMenuComponent implements OnInit{
-  mealForm: FormGroup;
+export class CustomMenuComponent implements OnInit {
+  mealFormGroup: FormGroup = new FormGroup({});
   meals: Meal[] = [];
-  weeklyMenu!: WeeklyMenu;
+  weeklyMenu: WeeklyMenu | undefined;
+  canConfirm: boolean = false;
 
   selectedMealType: MealType = MealType.BREAKFAST;
   mealTypes = Object.keys(MealType)
-  .filter(key => !isNaN(Number(MealType[key as keyof typeof MealType])))
-  .map(key => ({
-    name: MealTypeLabels[MealType[key as keyof typeof MealType] as keyof typeof MealTypeLabels],
-    value: MealType[key as keyof typeof MealType]
-  }));
+    .filter(key => !isNaN(Number(MealType[key as keyof typeof MealType])))
+    .map(key => ({
+      name: MealTypeLabels[MealType[key as keyof typeof MealType] as keyof typeof MealTypeLabels],
+      value: MealType[key as keyof typeof MealType]
+    }));
 
   selectedDailyMenuId: number | undefined;
   daysOfWeek = Object.keys(DayOfWeek)
@@ -35,42 +34,124 @@ export class CustomMenuComponent implements OnInit{
       value: DayOfWeek[key as keyof typeof DayOfWeek]
     }));
 
-  pregnantFilteredOptions: Observable<Meal[]> = of([]);
-  operatedFilteredOptions: Observable<Meal[]> = of([]);
-  mildFilteredOptions: Observable<Meal[]> = of([]);
-  standardFilteredOptions: Observable<Meal[]> = of([]);
-  doctorsFilteredOptions: Observable<Meal[]> = of([]);
-  childrenFrom2To4FilteredOptions: Observable<Meal[]> = of([]);
-  childrenFrom4To14FilteredOptions: Observable<Meal[]> = of([]);
-  diabeticFilteredOptions: Observable<Meal[]> = of([]);
+  consumerTypes = Object.keys(ConsumerType)
+    .filter(key => !isNaN(Number(ConsumerType[key as keyof typeof ConsumerType])))
+    .map(key => ({
+      name: ConsumerTypeLabels[ConsumerType[key as keyof typeof ConsumerType] as keyof typeof ConsumerTypeLabels],
+      value: ConsumerType[key as keyof typeof ConsumerType]
+    }));
 
-  constructor(private service: KitchenService){
-    
-    this.mealForm = new FormGroup({
-      pregnantFormControl: new FormControl(''),
-      operatedFormControl: new FormControl(''),
-      mildFormControl: new FormControl(''),
-      standardFormControl: new FormControl(''),
-      doctorsFormControl: new FormControl(''),
-      childrenFrom2To4FormControl: new FormControl(''),
-      childrenFrom4To14FormControl: new FormControl(''),
-      diabeticFormControl: new FormControl(''),
-    })
+  filteredOptions: { [key: string]: Observable<Meal[]> } = {};
+
+  constructor(private service: KitchenService) {
+    this.initializeEmptyFormGroup();
   }
 
   ngOnInit() {
-
     this.createInitialWeeklyMenu();
-    this.getMeals();
+  }
 
-    this.mealForm.get('pregnantFormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.PREGNANT));
-    this.mealForm.get('operatedFormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.OPERATED_PATIENT));
-    this.mealForm.get('mildFormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.MILD_PATIENT));
-    this.mealForm.get('standardFormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.STANDARD_PATIENT));
-    this.mealForm.get('doctorsFormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.DOCTOR));
-    this.mealForm.get('childrenFrom2To4FormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.CHILDREN_2_4));
-    this.mealForm.get('childrenFrom4To14FormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.CHILDREN_4_14));
-    this.mealForm.get('diabeticFormControl')?.valueChanges.subscribe(value => this.onFieldChange(ConsumerType.DIABETIC));
+  initializeEmptyFormGroup() {
+    this.daysOfWeek.forEach(day => {
+      this.mealTypes.forEach(mealType => {
+        this.consumerTypes.forEach(consumerType => {
+          const controlName = this.getFormControlName(day.value, mealType.value, consumerType.value);
+          this.mealFormGroup.addControl(controlName, new FormControl('', [this.validateMeal.bind(this)]));
+          this.filteredOptions[controlName] = of([]);
+        });
+      });
+    });
+  }
+
+  // Function to test if variable is a string
+private isString(variable: any) {
+  return typeof variable === "string";
+}
+
+  validateMeal(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    return this.isString(control.value) ? { invalidMeal: true } : null; 
+  }
+
+  createInitialWeeklyMenu(): void {
+    const menus: DailyMenu[] = [];
+    this.weeklyMenu = {
+      from: this.formatDate(this.getNextMonday()),
+      to: this.formatDate(this.getNextMondayPlusWeek()),
+      menu: menus,
+      status: WeeklyMenuStatus.DRAFT
+    };
+
+    this.service.addWeeklyMenu(this.weeklyMenu).subscribe({
+      next: (result: WeeklyMenu) => {
+        this.weeklyMenu = result;
+        console.log("Weekly menu:", result);
+        this.selectedDailyMenuId = this.weeklyMenu.menu![0].id;
+        this.getMeals();
+      },
+      error: (error) => {
+        console.error('Error saving weekly menu:', error);
+        if (error.error && error.error.errors) {
+          console.log('Validation errors:', error.error.errors);
+        }
+      }
+    });
+  }
+
+  getMeals(): void {
+    this.service.getMeals().subscribe({
+      next: (result: Meal[]) => {
+        this.meals = result;
+        if (this.weeklyMenu && this.weeklyMenu.menu) {
+          this.initializeForms();
+        }
+      },
+      error: () => { }
+    });
+  }
+
+  initializeForms() {
+    if (!this.weeklyMenu?.menu) return;
+
+    this.weeklyMenu.menu.forEach((dailyMenu, dayIndex) => {
+      this.mealTypes.forEach((mealType, mealTypeIndex) => {
+        this.consumerTypes.forEach(consumerType => {
+          const controlName = this.getFormControlName(dailyMenu.dayOfWeek, mealType.value, consumerType.value);
+          const formControl = this.mealFormGroup.get(controlName);
+
+          if (formControl) {
+            formControl.setValue(''); // Initialize the control's value
+            formControl.valueChanges.subscribe(value => {
+              console.log("Form control value changed:", value);
+              this.onFieldChange(consumerType.value, dailyMenu.dayOfWeek, mealType.value);
+            });
+
+            // Setup filtered options for autocomplete
+            this.filteredOptions[controlName] = formControl.valueChanges.pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
+          }
+        });
+      });
+    });
+  }
+
+  getFormControlName(day: DayOfWeek, mealType: MealType, consumerType: ConsumerType): string {
+    return `${day}-${mealType}-${consumerType}`;
+  }
+
+  displayName(meal: Meal): string {
+    return meal ? meal.name : '';
+  }
+
+  private _filter(value: any): Meal[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : (value.name || '').toLowerCase();
+    return this.meals.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 
   getNextMonday(): Date {
@@ -81,7 +162,7 @@ export class CustomMenuComponent implements OnInit{
     nextMonday.setDate(today.getDate() + daysUntilNextMonday);
     return nextMonday;
   }
-  
+
   getNextMondayPlusWeek(): Date {
     const nextMonday = this.getNextMonday();
     const nextMondayPlusWeek = new Date(nextMonday);
@@ -89,82 +170,15 @@ export class CustomMenuComponent implements OnInit{
     return nextMondayPlusWeek;
   }
 
-  createInitialWeeklyMenu(): void{
-    const menus : DailyMenu[] = [];
-    this.weeklyMenu = {
-      from: this.formatDate(this.getNextMonday()), 
-      to: this.formatDate(this.getNextMondayPlusWeek()),
-      menu: menus,
-      status: WeeklyMenuStatus.DRAFT
-    };
-  
-    this.service.addWeeklyMenu(this.weeklyMenu).subscribe({
-      next: (result: WeeklyMenu) => {
-        this.weeklyMenu.menu = result.menu;
-        console.log("Weekly menu:", result);     
-      },
-      error: (error) => {
-        console.error('Error saving weekly menu:', error);
-        if (error.error && error.error.errors) {
-          console.log('Validation errors:', error.error.errors);
-        }
-      }
-    });
-  }
- 
-  getMeals(): void {
-    this.service.getMeals().subscribe({
-      next: (result: Meal[]) => {
-        this.meals = result;
-
-        this.pregnantFilteredOptions = this.initializeFilteredOptions('pregnantFormControl');
-        this.operatedFilteredOptions = this.initializeFilteredOptions('operatedFormControl');
-        this.mildFilteredOptions = this.initializeFilteredOptions('mildFormControl');
-        this.standardFilteredOptions = this.initializeFilteredOptions('standardFormControl');
-        this.doctorsFilteredOptions = this.initializeFilteredOptions('doctorsFormControl');
-        this.childrenFrom2To4FilteredOptions = this.initializeFilteredOptions('childrenFrom2To4FormControl');
-        this.childrenFrom4To14FilteredOptions = this.initializeFilteredOptions('childrenFrom4To14FormControl');
-        this.diabeticFilteredOptions = this.initializeFilteredOptions('diabeticFormControl');
-      },
-      error: () => {
-      }
-    })
-  }
-
-  displayName(meal: Meal): string {
-    return meal.name;
-  }
-
-  private initializeFilteredOptions(controlName: string): Observable<Meal[]> {
-    return this.mealForm.get(controlName)!.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : (value as any)?.name;
-        return this._filter(name);
-      })
-    );
-  }
-
-  private _filter(name: string): Meal[] {
-    const filterValue = name.toLowerCase();
-
-    return this.meals.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
-  private formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
-  }
-
-  onSelectedMealTabChange(event: any): void {
+  onSelectedMealTabChange(event: any, dayIndex: number): void {
     this.selectedMealType = this.mealTypes[event.index].value;
-    console.log("Selected meal tab:" + this.selectedMealType); 
+    console.log("Selected meal tab:" + this.selectedMealType);
   }
 
- 
   onSelectedDayTabChange(event: any): void {
     const selectedDayOfWeek = this.daysOfWeek[event.index].value;
-    console.log("Selected day of week tab: " + selectedDayOfWeek); 
-    if (this.weeklyMenu && this.weeklyMenu.menu) { 
+    console.log("Selected day of week tab: " + selectedDayOfWeek);
+    if (this.weeklyMenu && this.weeklyMenu.menu) {
       for (const dailyMenu of this.weeklyMenu.menu) {
         if (dailyMenu.dayOfWeek === selectedDayOfWeek) {
           this.selectedDailyMenuId = dailyMenu.id;
@@ -174,19 +188,35 @@ export class CustomMenuComponent implements OnInit{
     }
   }
 
-  onFieldChange(fieldConsumerType: ConsumerType): void{
-    const mealOffer :  MealOffer = {consumerType: fieldConsumerType, mealName: this.meals[0].name!, mealId: this.meals[0].id!, type: this.selectedMealType, consumerQuantity: 0, dailyMenuId: this.selectedDailyMenuId};
-    this.service.addMealOffer(mealOffer).subscribe({
-      next: () => {
-        console.log("Added/changed meal offer");
-      },
-      error: (error) => {
-        console.error('Error adding meal offer: ', error);
-        if (error.error && error.error.errors) {
-          console.log('Validation errors:', error.error.errors);
-        }
+  onFieldChange(consumerType: ConsumerType, day: DayOfWeek, mealType: MealType): void {
+    console.log("Get into on field change")
+    const controlName = this.getFormControlName(day, mealType, consumerType);
+    const mealNameControl = this.mealFormGroup.get(controlName);
+    if (mealNameControl) {
+      console.log("Get into on field change into if mealNameControl")
+      const selectedMeal = this.meals.find(m => m === mealNameControl.value);
+      if (selectedMeal) {
+        console.log("Get into on field change into if mealNameContro into if selectedMeal: " + selectedMeal)
+        const mealOffer: MealOffer = {
+          consumerType,
+          mealName: selectedMeal.name!,
+          mealId: selectedMeal.id!,
+          type: mealType,
+          consumerQuantity: 0,
+          dailyMenuId: this.selectedDailyMenuId
+        };
+        this.service.addMealOffer(mealOffer).subscribe({
+          next: () => {
+            console.log("Added/changed meal offer");
+          },
+          error: (error) => {
+            console.error('Error adding meal offer: ', error);
+            if (error.error && error.error.errors) {
+              console.log('Validation errors:', error.error.errors);
+            }
+          }
+        });
       }
-    })
+    }
   }
-
 }

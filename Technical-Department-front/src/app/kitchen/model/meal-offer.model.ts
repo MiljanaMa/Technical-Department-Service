@@ -64,8 +64,7 @@ export enum ConsumerType{
     DOCTOR = 4,
     CHILDREN_2_4 = 5,
     CHILDREN_4_14 = 6,
-    DIABETIC = 7,
-    ALL = 8
+    DIABETIC = 7
 } 
 
 export const ConsumerTypeLabels = {
@@ -76,6 +75,5 @@ export const ConsumerTypeLabels = {
     [ConsumerType.DOCTOR]: "DOKTORI",
     [ConsumerType.CHILDREN_2_4]: "DECA(2-4)",
     [ConsumerType.CHILDREN_4_14]: "DECA(4-14)",
-    [ConsumerType.DIABETIC]: "DIJABETICARI",
-    [ConsumerType.ALL]: "SVI"
+    [ConsumerType.DIABETIC]: "DIJABETICARI"
 }

@@ -10,6 +10,5 @@ public enum ConsumerType
     DOCTOR,
     CHILDREN_2_4,
     CHILDREN_4_14,
-    DIABETIC,
-    ALL
+    DIABETIC
 }
