@@ -4,6 +4,7 @@ namespace Technical_Department.Kitchen.API.Dtos;
 
 public class MealDto
 {
+    public int Id { get; set; }
     public int Code { get; set; }
     public string Name { get; set; }
     public double Calories { get; set; }
