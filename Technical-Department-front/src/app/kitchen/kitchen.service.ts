@@ -15,6 +15,18 @@ export class KitchenService {
   getMeals(): Observable<Meal[]> {
     return this.http.get<Meal[]>(environment.apiHost + 'meal');
   }
+  getMeal(mealId: number): Observable<Meal> {
+    return this.http.get<Meal>(environment.apiHost + 'meal/' + mealId);
+  }
+  createMeal(meal: Meal): Observable<Meal> {
+    return this.http.post<Meal>(environment.apiHost + 'meal', meal);
+  }
+  deleteMeal(mealId: number): Observable<void> {
+    return this.http.delete<void>(environment.apiHost + 'meal/' + mealId);
+  }
+  updateMeal(meal: Meal): Observable<Meal> {
+    return this.http.put<Meal>(environment.apiHost + `meal/${meal.id}`, meal);
+  }
   getAllIngredients(): Observable<Ingredient[]> {
     return this.http.get<Ingredient[]>(environment.apiHost + 'ingredient');
   }

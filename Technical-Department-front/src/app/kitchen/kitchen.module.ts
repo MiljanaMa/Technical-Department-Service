@@ -15,6 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MealFormComponent } from './meal-form/meal-form.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MealsComponent,
     DailyMenuComponent,
     MealChangeModalComponent,
-    IngredientModalComponent
+    IngredientModalComponent,
+    MealFormComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +42,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatDialogModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatChipsModule
   ],
   exports: [
     MenuComponent,

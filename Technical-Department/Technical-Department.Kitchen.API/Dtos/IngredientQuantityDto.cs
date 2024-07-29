@@ -2,8 +2,8 @@
 
 public class IngredientQuantityDto
 {
-    public long IngredientId { get; set; }
+    public int IngredientId { get; set; }
     public string IngredientName { get; set; }
-    public long MealId { get; set; }
+    public string UnitShortName { get; set; }
     public double Quantity { get; set; }
 }

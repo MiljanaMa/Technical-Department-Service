@@ -68,13 +68,13 @@ export class DailyMenuComponent implements OnInit{
 
   loadTestData() {
     const testMeals: Meal[] = [
-      { id: 1, name: "Kajgana" },
+      /*{ id: 1, name: "Kajgana" },
       { id: 2, name: "Pasulj"},
       { id: 3, name: "Piletina"},
       { id: 4, name: "Jabuka" },
       { id: 5, name: "Palacinke" },
       { id: 6, name: "Kupus salata" },
-      { id: 7, name: "Paradajz salata"}
+      { id: 7, name: "Paradajz salata"}*/
     ];
 
     const testMealOffers: MealOffer[] = [];
