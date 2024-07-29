@@ -46,7 +46,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
             foreach(var i in meal.Ingredients)
             {
                 var ingredient = _ingredientRepository.Get(i.IngredientId);
-                calories += ingredient.Calories * i.Quantity * 10;
+
+                if(ingredient.Unit.Name.Equals("Komad"))
+                    calories += (ingredient.Calories * i.Quantity * 60)/100;
+                else
+                    calories += ingredient.Calories * i.Quantity * 10;
             }
 
             meal.Calories = calories;
