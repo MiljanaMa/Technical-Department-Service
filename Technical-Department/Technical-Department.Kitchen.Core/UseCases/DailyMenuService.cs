@@ -28,7 +28,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             var typeDomain = (Domain.Enums.MealType)mealOfferDto.Type;
             var consumerTypeDomain = (Domain.Enums.ConsumerType)mealOfferDto.ConsumerType;
 
-            MealOffer mealOffer = new MealOffer(typeDomain, consumerTypeDomain, mealOfferDto.MealId, mealOfferDto.ConsumerQuantity, mealOfferDto.DailyMenuId);
+            MealOffer mealOffer = new MealOffer(typeDomain, consumerTypeDomain, mealOfferDto.MealId, mealOfferDto.MealName, mealOfferDto.ConsumerQuantity, mealOfferDto.DailyMenuId);
             dailyMenu.AddMealOffer(mealOffer);
                         
             return Update(MapToDto(dailyMenu));

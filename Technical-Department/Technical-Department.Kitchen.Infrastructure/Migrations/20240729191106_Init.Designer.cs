@@ -14,7 +14,7 @@ using Technical_Department.Kitchen.Infrastructure.Database;
 namespace Technical_Department.Kitchen.Infrastructure.Migrations
 {
     [DbContext(typeof(KitchenContext))]
-    [Migration("20240729152651_Init")]
+    [Migration("20240729191106_Init")]
     partial class Init
     {
         /// <inheritdoc />
