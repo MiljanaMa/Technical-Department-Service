@@ -14,6 +14,7 @@ namespace Technical_Department.Kitchen.API.Public
         Result<ICollection<MealDto>> GetAll(int page, int pageSize);
         Result<MealDto> Create(MealDto meal);
         Result<MealDto> Update(MealDto meal);
+        Result Delete(int mealId);
         Result<MealDto> Get(int id);
     }
 }

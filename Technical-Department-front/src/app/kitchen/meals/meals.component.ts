@@ -42,7 +42,7 @@ export class MealsComponent implements OnInit {
     this.router.navigate([`/meal-form/${meal.id}`]);
   }
   deleteMeal(mealId: number): void {
-    this.service.deleteIngredient(mealId).subscribe({
+    this.service.deleteMeal(mealId).subscribe({
       next: (result: any) => {
         this.loadMeals();
       },

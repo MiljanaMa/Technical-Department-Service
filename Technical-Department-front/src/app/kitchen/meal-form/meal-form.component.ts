@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DishType, IngredientQuantity, Meal } from '../model/meal.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { KitchenService } from '../kitchen.service';
@@ -24,7 +24,9 @@ export class MealFormComponent implements OnInit {
     'UŽINA': DishType.SNACK
   };
 
-  constructor(private fb: FormBuilder, private service: KitchenService, private route: ActivatedRoute, private router: Router) {
+  constructor(private fb: FormBuilder, private service: KitchenService,
+     private route: ActivatedRoute, private router: Router,
+     private cdr: ChangeDetectorRef) {
     this.mealForm = this.fb.group({
       name: ['', Validators.required],
       code: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -32,28 +34,39 @@ export class MealFormComponent implements OnInit {
       types: this.fb.array([]),
       ingredients: this.fb.array([])
     });
-    this.addCheckboxes();
-    this.initializeIngredients(5);
-    
-  }
+    /*this.dishTypes.forEach(type => {
+      this.typesFormArray.push(this.fb.group({
+        checked: [false],
+        name: [type]
+      }));
+    });*/
 
+  }
+/*
   private addCheckboxes() {
     this.dishTypes.forEach(() => this.typesFormArray.push(this.fb.control(false)));
   }
-
+*/
   get typesFormArray() {
     return this.mealForm.controls['types'] as FormArray;
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id !== "null") {
-      this.loadMeal(parseInt(id || ''));
-    }
+
     this.service.getAllIngredients().subscribe({
       next: (result: any) => {
+
         this.allIngredients = result.results;
+
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id !== "null") {
+          this.loadMeal(parseInt(id || ''));
+        } else {
+          //this.addCheckboxes();
+          this.initializeIngredients(5);
+        }
         this.initializeIngredientFilteredOptions();
+
       },
       error: () => {
         // Handle error
@@ -66,10 +79,32 @@ export class MealFormComponent implements OnInit {
       next: (result: any) => {
         this.mealForm.patchValue({
           name: result.name,
-          date: result.date
+          date: result.standardizationDate,
+          code: result.code
         });
+      const typesFormArray = this.mealForm.get('types') as FormArray;
+      // Clear existing controls
+      typesFormArray.clear();
+
+      // Add controls with the appropriate checked state
+      this.dishTypes.forEach((type, index) => {
+        // Check if the type is in the result's types array
+        const isChecked = result.types.includes(index);
+        typesFormArray.push(this.fb.control(this.fb.group({
+          checked: [isChecked],
+          name: [type]
+        })));
+      });
+      // Update existing types controls
+      /*const typesFormArray = this.mealForm.get('types') as FormArray;
+      result.types.forEach((typeIndex: number) => {
+        typesFormArray.at(typeIndex).get('checked')?.setValue(true);
+      });*/
+      // Trigger change detection
+      //this.cdr.detectChanges();
+
         result.ingredients.forEach((ingredient: any) => {
-          this.addIngredient(ingredient);
+          this.addExistingIngredient(ingredient);
         });
       },
       error: () => {
@@ -78,10 +113,11 @@ export class MealFormComponent implements OnInit {
     });
   }
 
-  addIngredient(ingredient = { ingredient: '', quantity: 0 }): void {
+  addExistingIngredient(iq: IngredientQuantity): void {
+    var existingIngredient = this.allIngredients.filter(ingredient => ingredient.id === iq.ingredientId);
     const ingredientGroup = this.fb.group({
-      ingredient: [ingredient.ingredient, Validators.required],
-      quantity: [ingredient.quantity, Validators.required]
+      ingredient: [existingIngredient[0], Validators.required],
+      quantity: [iq.quantity, Validators.required]
     });
 
     this.ingredients.push(ingredientGroup);
@@ -111,15 +147,16 @@ export class MealFormComponent implements OnInit {
 
       let dateTime = new Date(this.mealForm.value.date);
       let standardizedDate = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate());
-
+      const id = this.route.snapshot.paramMap.get('id');
       const newMeal: Meal = {
+        id: parseInt(id || '0'),
         name: this.mealForm.value.name,
         standardizationDate: standardizedDate,
         code: this.mealForm.value.code,
         calories: 0.0,
         types: this.mealForm.value.types
-                      .map((checked : boolean, i: number) => checked ? this.dishTypeMapping[this.dishTypes[i]] : null)
-                      .filter((v: DishType | null)=> v !== null),
+          .map((checked: boolean, i: number) => checked ? this.dishTypeMapping[this.dishTypes[i]] : null)
+          .filter((v: DishType | null) => v !== null),
         ingredients: this.mealForm.value.ingredients.map((i: any) => ({
           ingredientId: i.ingredient.id,
           ingredientName: i.ingredient.name,
@@ -127,14 +164,26 @@ export class MealFormComponent implements OnInit {
           unitShortName: ''
         }))
       };
-      this.service.createMeal(newMeal).subscribe({
-        next: () => {
-          this.router.navigate([`meals`]);
-        },
-        error: () => {
-          // Handle error
+  
+        if (id !== "null") {
+          this.service.updateMeal(newMeal).subscribe({
+            next: () => {
+              this.router.navigate([`meals`]);
+            },
+            error: () => {
+              // Handle error
+            }
+          });
+        } else {
+          this.service.createMeal(newMeal).subscribe({
+            next: () => {
+              this.router.navigate([`meals`]);
+            },
+            error: () => {
+              // Handle error
+            }
+          });
         }
-      });
     }
   }
 
@@ -174,7 +223,7 @@ export class MealFormComponent implements OnInit {
   }
   getIngredientUnit(index: number): Observable<string> {
     const selectedIngredientName = this.ingredients.controls[index].get('ingredient')?.value;
-    
+
     if (selectedIngredientName) {
       return this.ingredientFilteredOptions[index].pipe(
         map((options: Ingredient[]) => {
@@ -184,7 +233,7 @@ export class MealFormComponent implements OnInit {
         startWith('N/A') // Default value while waiting for data
       );
     }
-    
+
     return of('N/A');
   }
 }

@@ -27,9 +27,9 @@
   </mat-form-field>
 
   <div formArrayName="types" class="dish-types">
-    <div *ngFor="let type of dishTypes; let i = index" class="checkbox-container">
-      <input type="checkbox" [formControlName]="i" id="type{{i}}">
-      <label for="type{{i}}">{{ type }}</label>
+    <div *ngFor="let type of typesFormArray.controls; let i = index" class="checkbox-container">
+      <input type="checkbox" formControlName="{{i}}" id="type{{i}}" checked="type.value" value="type.value.get('checked')?.value">
+      <label for="type{{i}}">{{ type.value.get('name')?.value }}</label>
     </div>
   </div>
 
@@ -56,8 +56,7 @@
           <mat-icon>delete</mat-icon>
         </button>
     </div>
-
-    <button mat-button (click)="addNewIngredient()">Dodaj namirnicu</button>
-    <button mat-raised-button color="primary" type="submit">Sačuvaj jelo</button>
   </div>
+  <button mat-button (click)="addNewIngredient()">Dodaj namirnicu</button>
+  <button mat-raised-button color="primary" type="submit">Sačuvaj jelo</button>
 </form>
