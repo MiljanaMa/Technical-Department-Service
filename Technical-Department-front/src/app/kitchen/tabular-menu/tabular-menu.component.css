@@ -1,0 +1,17 @@
+.center{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+  
+  .main-meal {
+    background-color: #CCE6FF;
+  }
+  
+  .salad {
+    background-color: #E6FFE6;
+  }
+  
+  .snack {
+    background-color: #FFFACD;
+  }

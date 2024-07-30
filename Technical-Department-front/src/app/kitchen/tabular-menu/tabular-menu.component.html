@@ -16,8 +16,10 @@
   
     <!-- Meal Type Columns -->
     <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
-      <th mat-header-cell *matHeaderCellDef><b> {{ mealType.name }} </b></th>
-      <td mat-cell *matCellDef="let element">{{ element[mealType.value.toString()] }}</td>
+      <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
+      <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
+        <div class="center">{{ element[mealType.value.toString()] }}</div>
+      </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
