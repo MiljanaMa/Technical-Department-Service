@@ -69,9 +69,9 @@ export enum ConsumerType{
 
 export const ConsumerTypeLabels = {
     [ConsumerType.PREGNANT]: "PORODILJE",
-    [ConsumerType.OPERATED_PATIENT]: "OPERISANI",
+    [ConsumerType.OPERATED_PATIENT]: "OPERISANI PACIJENTI",
     [ConsumerType.MILD_PATIENT]: "TESKI PACIJENTI",
-    [ConsumerType.STANDARD_PATIENT]: "STANDARDNI",
+    [ConsumerType.STANDARD_PATIENT]: "STANDARDNI PACIJENTI",
     [ConsumerType.DOCTOR]: "DOKTORI",
     [ConsumerType.CHILDREN_2_4]: "DECA(2-4)",
     [ConsumerType.CHILDREN_4_14]: "DECA(4-14)",
