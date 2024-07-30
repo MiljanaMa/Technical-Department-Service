@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable, of, startWith, map } from 'rxjs';
 import { KitchenService } from '../kitchen.service';
-import { Meal } from '../model/meal.model';
+import { DishType, Meal } from '../model/meal.model';
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
@@ -14,7 +14,7 @@ import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
 })
 export class CustomMenuComponent implements OnInit {
   mealFormGroup: FormGroup = new FormGroup({});
-  meals: Meal[] = [];
+  allMeals: Meal[] = [];
   weeklyMenu: WeeklyMenu | undefined;
   canConfirm: boolean = false;
 
@@ -101,10 +101,9 @@ private isString(variable: any) {
   getMeals(): void {
     this.service.getMeals().subscribe({
       next: (result: Meal[]) => {
-        this.meals = result;
-        if (this.weeklyMenu && this.weeklyMenu.menu) {
-          this.initializeForms();
-        }
+        this.allMeals = result;
+        this.initializeForms();
+        
       },
       error: () => { }
     });
@@ -129,7 +128,7 @@ private isString(variable: any) {
             // Setup filtered options for autocomplete
             this.filteredOptions[controlName] = formControl.valueChanges.pipe(
               startWith(''),
-              map(value => this._filter(value))
+              map(value => this._filter(value, mealType.value))
             );
           }
         });
@@ -145,9 +144,30 @@ private isString(variable: any) {
     return meal ? meal.name : '';
   }
 
-  private _filter(value: any): Meal[] {
+  private _filter(value: any, mealType: MealType): Meal[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : (value.name || '').toLowerCase();
-    return this.meals.filter(option => option.name.toLowerCase().includes(filterValue));
+    const meals = this.getMealsForMealType(mealType)
+    return meals.filter(option => option.name.toLowerCase().includes(filterValue));
+  
+  }
+
+  private getMealsForMealType(mealType: MealType): Meal[] {
+    switch (mealType) {
+      case MealType.BREAKFAST:
+        return this.allMeals.filter(m => m.types.includes(DishType.BREAKFAST));
+      case MealType.MORNING_SNACK:      
+      case MealType.DINNER_SNACK:
+        return this.allMeals.filter(m => m.types.includes(DishType.SNACK));
+      case MealType.LUNCH:
+        return this.allMeals.filter(m => m.types.includes(DishType.LUNCH));
+      case MealType.DINNER:
+        return this.allMeals.filter(m => m.types.includes(DishType.DINNER));
+      case MealType.LUNCH_SALAD:
+      case MealType.DINNER_SALAD:
+        return this.allMeals.filter(m => m.types.includes(DishType.SALAD));
+      default:
+        return this.allMeals;
+    }
   }
 
   private formatDate(date: Date): string {
@@ -194,7 +214,7 @@ private isString(variable: any) {
     const mealNameControl = this.mealFormGroup.get(controlName);
     if (mealNameControl) {
       console.log("Get into on field change into if mealNameControl")
-      const selectedMeal = this.meals.find(m => m === mealNameControl.value);
+      const selectedMeal = this.allMeals.find(m => m === mealNameControl.value);
       if (selectedMeal) {
         console.log("Get into on field change into if mealNameContro into if selectedMeal: " + selectedMeal)
         const mealOffer: MealOffer = {
