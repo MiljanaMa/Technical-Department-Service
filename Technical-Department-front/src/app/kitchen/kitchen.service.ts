@@ -18,15 +18,15 @@ export class KitchenService {
     return this.http.get<Meal[]>(environment.apiHost + 'meal');
   }
 
-  addDailyMenu(dailyMenu: DailyMenu): Observable<DailyMenu> {
-    return this.http.post<DailyMenu>(environment.apiHost + 'daily-menu', dailyMenu);
-  }
-
   addMealOffer(mealOffer: MealOffer): Observable<DailyMenu> {
     return this.http.post<DailyMenu>(`${environment.apiHost}daily-menu/add-meal-offer`, mealOffer);
   }
   
-  addWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
+  addOrFetchWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
     return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu', weeklyMenu);
+  }
+
+  getDraftMenu(id: number): Observable<WeeklyMenu> {
+    return this.http.get<WeeklyMenu>(environment.apiHost + 'weekly-menu/draft')
   }
 }

@@ -1,4 +1,4 @@
-<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)">
+<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)"  [selectedIndex]="selectedDayTabIndex">
   <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
     <ng-template mat-tab-label>
       <div>
@@ -8,7 +8,7 @@
     </ng-template>
 
     <div class="tab-content">
-      <mat-tab-group (selectedTabChange)="onSelectedMealTabChange($event, dayIndex)">
+      <mat-tab-group  (selectedTabChange)="onSelectedMealTabChange($event, dayIndex)" [selectedIndex]="selectedMealTabIndex">
         <mat-tab *ngFor="let mealType of mealTypes; let mealTypeIndex = index">
           <ng-template mat-tab-label>
             <div>
@@ -31,6 +31,9 @@
                   </mat-form-field>
                 </div>
               </div>
+              <div class="button">
+                <button class="next-button mat-button" (click)="showNextTab()">DALJE</button>
+              </div>
             </form>
           </div>
         </mat-tab>
@@ -40,5 +43,5 @@
 </mat-tab-group>
 
 <div class="button">
-  <button class="confirm-button mat-button" [disabled]="!canConfirm">POTVRDI NEDELJNI MENI</button>
+  <button class="confirm-button mat-button" [disabled]="!canConfirm" (click)="showTabularView()">POTVRDI NEDELJNI MENI</button>
 </div>

@@ -21,7 +21,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             _weeklyMenuRepository = weeklyMenuRepository;
         }
 
-        public Result<WeeklyMenuDto> Create(WeeklyMenuDto weeklyMenu)
+        public override Result<WeeklyMenuDto> Create(WeeklyMenuDto weeklyMenu)
         {
             try
             {
@@ -31,6 +31,19 @@ namespace Technical_Department.Kitchen.Core.UseCases
             catch (ArgumentException e)
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<WeeklyMenuDto> GetDraftMenu()
+        {
+            try
+            {
+                var result = _weeklyMenuRepository.GetDraftMenu();
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
 

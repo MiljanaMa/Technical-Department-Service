@@ -9,5 +9,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
 {
     public interface IWeeklyMenuRepository : ICrudRepository<WeeklyMenu>
     {
+        WeeklyMenu GetDraftMenu();
     }
 }
