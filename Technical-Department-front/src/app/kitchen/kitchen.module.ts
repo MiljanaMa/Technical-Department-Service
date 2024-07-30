@@ -9,6 +9,7 @@ import { DailyMenuComponent } from './daily-menu/daily-menu.component';
 import { MealChangeModalComponent } from './meal-change-modal/meal-change-modal.component';
 import { NewMenuComponent } from './new-menu/new-menu.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { TabularMenuComponent } from './tabular-menu/tabular-menu.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AppRoutingModule } from '../app-routing.module';
     MealsComponent,
     DailyMenuComponent,
     MealChangeModalComponent,
-    NewMenuComponent
+    NewMenuComponent,
+    TabularMenuComponent
   ],
   imports: [
     CommonModule,

@@ -15,18 +15,20 @@ namespace Technical_Department.API.Controllers
         }
 
 
-        [HttpGet("{id:int}")]
-        public ActionResult<WeeklyMenuDto> Get(int id)
+        [HttpGet("draft")]
+        public ActionResult<WeeklyMenuDto> GetDraftWeeklyMenu()
         {
-            var result = _weeklyMenuService.Get(id);
+            var result = _weeklyMenuService.GetDraftMenu();
             return CreateResponse(result);
         }
+
         [HttpPost("")]
         public ActionResult<WeeklyMenuDto> Create([FromBody] WeeklyMenuDto weeklyMenu)
         {
             var result = _weeklyMenuService.Create(weeklyMenu);
             return CreateResponse(result);
         }
+         
         [HttpPut("{id:long}")]
         public ActionResult<WeeklyMenuDto> Update([FromBody] WeeklyMenuDto weeklyMenu)
         {

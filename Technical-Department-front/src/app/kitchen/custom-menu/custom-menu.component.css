@@ -32,9 +32,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    
   }
+
+  .next-button.mat-button {
+    padding: 16px;
+    font-size: large;
+}
 
   .confirm-button.mat-button {
     background-color: #003B6D;

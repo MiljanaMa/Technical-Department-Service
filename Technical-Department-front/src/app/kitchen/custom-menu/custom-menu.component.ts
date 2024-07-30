@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable, of, startWith, map } from 'rxjs';
 import { KitchenService } from '../kitchen.service';
@@ -6,6 +6,7 @@ import { DishType, Meal } from '../model/meal.model';
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-menu',
@@ -13,6 +14,10 @@ import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
   styleUrls: ['./custom-menu.component.css']
 })
 export class CustomMenuComponent implements OnInit {
+
+  selectedDayTabIndex : number = 0;
+  selectedMealTabIndex : number = 0;
+
   mealFormGroup: FormGroup = new FormGroup({});
   allMeals: Meal[] = [];
   weeklyMenu: WeeklyMenu | undefined;
@@ -82,7 +87,7 @@ private isString(variable: any) {
       status: WeeklyMenuStatus.DRAFT
     };
 
-    this.service.addWeeklyMenu(this.weeklyMenu).subscribe({
+    this.service.addOrFetchWeeklyMenu(this.weeklyMenu).subscribe({
       next: (result: WeeklyMenu) => {
         this.weeklyMenu = result;
         console.log("Weekly menu:", result);
@@ -111,20 +116,30 @@ private isString(variable: any) {
 
   initializeForms() {
     if (!this.weeklyMenu?.menu) return;
-
+  
     this.weeklyMenu.menu.forEach((dailyMenu, dayIndex) => {
       this.mealTypes.forEach((mealType, mealTypeIndex) => {
         this.consumerTypes.forEach(consumerType => {
           const controlName = this.getFormControlName(dailyMenu.dayOfWeek, mealType.value, consumerType.value);
           const formControl = this.mealFormGroup.get(controlName);
-
+  
           if (formControl) {
-            formControl.setValue(''); // Initialize the control's value
+            const existingMealOffer = dailyMenu.menu?.find(offer =>
+              offer.consumerType === consumerType.value && offer.type === mealType.value
+            );
+  
+            if (existingMealOffer) {
+              const selectedMeal = this.allMeals.find(meal => meal.id === existingMealOffer.mealId);
+              if (selectedMeal) {
+                formControl.setValue(selectedMeal);
+              }
+            }
+  
             formControl.valueChanges.subscribe(value => {
               console.log("Form control value changed:", value);
               this.onFieldChange(consumerType.value, dailyMenu.dayOfWeek, mealType.value);
             });
-
+  
             // Setup filtered options for autocomplete
             this.filteredOptions[controlName] = formControl.valueChanges.pipe(
               startWith(''),
@@ -135,6 +150,7 @@ private isString(variable: any) {
       });
     });
   }
+  
 
   getFormControlName(day: DayOfWeek, mealType: MealType, consumerType: ConsumerType): string {
     return `${day}-${mealType}-${consumerType}`;
@@ -209,7 +225,6 @@ private isString(variable: any) {
   }
 
   onFieldChange(consumerType: ConsumerType, day: DayOfWeek, mealType: MealType): void {
-    console.log("Get into on field change")
     const controlName = this.getFormControlName(day, mealType, consumerType);
     const mealNameControl = this.mealFormGroup.get(controlName);
     if (mealNameControl) {
@@ -227,7 +242,7 @@ private isString(variable: any) {
         };
         this.service.addMealOffer(mealOffer).subscribe({
           next: () => {
-            console.log("Added/changed meal offer");
+            console.log("Added/changed meal offer");          
           },
           error: (error) => {
             console.error('Error adding meal offer: ', error);
@@ -238,5 +253,21 @@ private isString(variable: any) {
         });
       }
     }
+  }
+
+  showNextTab(): void{
+    if(this.selectedMealTabIndex < 6){
+      this.selectedMealTabIndex = this.selectedMealTabIndex + 1;
+    }else{
+      if(this.selectedDayTabIndex < 6){
+        this.selectedDayTabIndex = this.selectedDayTabIndex + 1;
+        this.selectedMealTabIndex = 0;
+      }
+    }
+    
+  }
+
+  showTabularView(): void {
+    
   }
 }
