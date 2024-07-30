@@ -94,4 +94,22 @@ export class TabularMenuComponent implements OnInit {
       }
     }
   }
+
+  getMealTypeClass(mealType: MealType): string {
+    console.log("Meal type:" + mealType)
+    switch (mealType) {
+      case MealType.BREAKFAST:
+      case MealType.LUNCH:
+      case MealType.DINNER:
+        return 'main-meal';
+      case MealType.MORNING_SNACK:      
+      case MealType.DINNER_SNACK:
+        return 'snack';
+      case MealType.LUNCH_SALAD:
+      case MealType.DINNER_SALAD:
+        return 'salad';
+      default:
+        return '';
+    }
+  }
 }
