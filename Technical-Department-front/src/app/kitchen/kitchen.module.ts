@@ -5,21 +5,19 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { MealsComponent } from './meals/meals.component';
 import { MaterialModule } from '../utils/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DailyMenuComponent } from './daily-menu/daily-menu.component';
-import { MealChangeModalComponent } from './meal-change-modal/meal-change-modal.component';
 import { NewMenuComponent } from './new-menu/new-menu.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { TabularMenuComponent } from './tabular-menu/tabular-menu.component';
+import { EditMealDialogComponent } from './edit-meal-dialog/edit-meal-dialog.component';
 
 @NgModule({
   declarations: [
     CustomMenuComponent,
     IngredientsComponent,
     MealsComponent,
-    DailyMenuComponent,
-    MealChangeModalComponent,
     NewMenuComponent,
-    TabularMenuComponent
+    TabularMenuComponent,
+    EditMealDialogComponent
   ],
   imports: [
     CommonModule,

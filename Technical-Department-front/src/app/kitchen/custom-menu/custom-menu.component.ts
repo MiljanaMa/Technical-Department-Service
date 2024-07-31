@@ -164,7 +164,6 @@ private isString(variable: any) {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : (value.name || '').toLowerCase();
     const meals = this.getMealsForMealType(mealType)
     return meals.filter(option => option.name.toLowerCase().includes(filterValue));
-  
   }
 
   private getMealsForMealType(mealType: MealType): Meal[] {
@@ -228,10 +227,8 @@ private isString(variable: any) {
     const controlName = this.getFormControlName(day, mealType, consumerType);
     const mealNameControl = this.mealFormGroup.get(controlName);
     if (mealNameControl) {
-      console.log("Get into on field change into if mealNameControl")
       const selectedMeal = this.allMeals.find(m => m === mealNameControl.value);
       if (selectedMeal) {
-        console.log("Get into on field change into if mealNameContro into if selectedMeal: " + selectedMeal)
         const mealOffer: MealOffer = {
           consumerType,
           mealName: selectedMeal.name!,
@@ -268,6 +265,6 @@ private isString(variable: any) {
   }
 
   showTabularView(): void {
-    
+
   }
 }
