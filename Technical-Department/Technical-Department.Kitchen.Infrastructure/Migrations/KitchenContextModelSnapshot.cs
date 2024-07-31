@@ -90,20 +90,6 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.ToTable("Ingredients", "kitchen");
                 });
 
-            modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.IngredientQuantity", b =>
-                {
-                    b.Property<long>("IngredientId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("MealId")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("double precision");
-
-                    b.ToTable("IngredientQuantity", "kitchen");
-                });
-
             modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.Meal", b =>
                 {
                     b.Property<long>("Id")
@@ -131,8 +117,8 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("StandardizationDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("StandardizationDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

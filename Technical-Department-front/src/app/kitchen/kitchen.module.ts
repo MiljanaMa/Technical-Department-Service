@@ -9,6 +9,11 @@ import { NewMenuComponent } from './new-menu/new-menu.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { TabularMenuComponent } from './tabular-menu/tabular-menu.component';
 import { EditMealDialogComponent } from './edit-meal-dialog/edit-meal-dialog.component';
+import { IngredientModalComponent } from './ingredient-modal/ingredient-modal.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MealFormComponent } from './meal-form/meal-form.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -17,14 +22,20 @@ import { EditMealDialogComponent } from './edit-meal-dialog/edit-meal-dialog.com
     MealsComponent,
     NewMenuComponent,
     TabularMenuComponent,
-    EditMealDialogComponent
+    EditMealDialogComponent,
+    IngredientModalComponent,
+    MealFormComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
     CommonModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    MatChipsModule
   ],
   exports: [
     CustomMenuComponent,

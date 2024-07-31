@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
+using Technical_Department.Kitchen.Core.UseCases;
 
 namespace Technical_Department.API.Controllers
 {
@@ -17,9 +18,9 @@ namespace Technical_Department.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<MealDto>> GetAll()
+        public ActionResult<List<MealDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _mealService.GetAll();
+            var result = _mealService.GetAll(page, pageSize);
             return CreateResponse(result);
         }
 
@@ -39,6 +40,12 @@ namespace Technical_Department.API.Controllers
         public ActionResult<MealDto> Update([FromBody] MealDto meal)
         {
             var result = _mealService.Update(meal);
+            return CreateResponse(result);
+        }
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var result = _mealService.Delete(id);
             return CreateResponse(result);
         }
 
