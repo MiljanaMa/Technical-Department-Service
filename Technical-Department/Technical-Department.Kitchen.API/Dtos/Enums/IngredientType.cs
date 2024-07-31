@@ -2,15 +2,11 @@
 {
     public enum IngredientType
     {
-        FRUIT,
         FAT,
-        VEGETABLE,
-        FISH,
-        SEED,
-        EGG,
+        VEGETABLES_FRUITS,
         GRAIN,
-        MILK_PRODUCT,
+        MILK_PRODUCTS_EGGS,
         MEAT,
-        SPICE
+        OTHER
     }
 }

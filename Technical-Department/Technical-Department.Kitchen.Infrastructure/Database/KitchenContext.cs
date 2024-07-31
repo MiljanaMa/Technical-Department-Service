@@ -24,7 +24,6 @@ public class KitchenContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("kitchen");
-        modelBuilder.Entity<IngredientQuantity>().HasNoKey();
 
         ConfigureKitchen(modelBuilder);
     }

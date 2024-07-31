@@ -18,19 +18,6 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                 name: "kitchen");
 
             migrationBuilder.CreateTable(
-                name: "IngredientQuantity",
-                schema: "kitchen",
-                columns: table => new
-                {
-                    MealId = table.Column<long>(type: "bigint", nullable: false),
-                    IngredientId = table.Column<long>(type: "bigint", nullable: false),
-                    Quantity = table.Column<double>(type: "double precision", nullable: false)
-                },
-                constraints: table =>
-                {
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Meals",
                 schema: "kitchen",
                 columns: table => new
@@ -40,7 +27,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     Code = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Calories = table.Column<double>(type: "double precision", nullable: false),
-                    StandardizationDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    StandardizationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Ingredients = table.Column<ICollection<IngredientQuantity>>(type: "jsonb", nullable: false),
                     DishTypes = table.Column<string>(type: "text", nullable: false)
                 },
@@ -149,10 +136,6 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DailyMenus",
-                schema: "kitchen");
-
-            migrationBuilder.DropTable(
-                name: "IngredientQuantity",
                 schema: "kitchen");
 
             migrationBuilder.DropTable(

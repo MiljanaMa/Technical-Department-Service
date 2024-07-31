@@ -15,7 +15,7 @@ import { MatSlider, MatSliderModule } from "@angular/material/slider"
 import { MatColumnDef, MatHeaderRowDef, MatRow, MatTable, MatTableModule } from "@angular/material/table"
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator"
 import { MatSort, MatSortModule } from "@angular/material/sort"
-import { MatDatepicker, MatDatepickerModule } from "@angular/material/datepicker"
+import { MatDateRangeInput, MatDatepicker, MatDatepickerModule, MatDatepickerToggle } from "@angular/material/datepicker"
 import { MatNativeDateModule, MatOption } from "@angular/material/core"
 import { MatRadioButton, MatRadioModule } from "@angular/material/radio"
 import { MatCheckbox, MatCheckboxModule } from "@angular/material/checkbox"
@@ -52,7 +52,8 @@ import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/gri
     MatFormFieldModule,
     MatTabsModule,
     MatDialogModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDatepickerModule
   ],
   exports: [
     MatInput,
@@ -97,7 +98,8 @@ import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/gri
     MatHeaderRowDef,
     MatRow,
     MatTableModule,
-    MatError
+    MatError,
+    MatDatepickerModule
   ]
 })
 export class MaterialModule { }

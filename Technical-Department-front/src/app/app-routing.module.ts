@@ -5,6 +5,7 @@ import { MealsComponent } from './kitchen/meals/meals.component';
 import { IngredientsComponent } from './kitchen/ingredients/ingredients.component';
 import { NewMenuComponent } from './kitchen/new-menu/new-menu.component';
 import { TabularMenuComponent } from './kitchen/tabular-menu/tabular-menu.component';
+import { MealFormComponent } from './kitchen/meal-form/meal-form.component';
 
 const routes: Routes = [
   {path: 'new-menu', component: NewMenuComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path: 'ingredients', component: IngredientsComponent},
   {path: 'custom-menu', component: CustomMenuComponent},
   {path: 'tabular-menu', component: TabularMenuComponent},
+  {path: 'meal-form/:id', component: MealFormComponent},
 ];
 
 @NgModule({
