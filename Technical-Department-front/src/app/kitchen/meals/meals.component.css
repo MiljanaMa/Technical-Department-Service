@@ -1,0 +1,85 @@
+.meals-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows cards to wrap to the next line */
+  gap: 15px; /* Space between meal cards */
+  justify-content: center; /* Center the cards in the container */
+}
+
+.meal-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 500px; /* Set a fixed width for the cards */
+  max-width: 100%; /* Ensure cards don't exceed container width */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.meal-name {
+  font-size: 1.25rem; /* Slightly smaller font size */
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.meal-calories {
+  font-size: 1rem; /* Adjust the font size as needed */
+  color: #333; /* Text color */
+  margin: 15px 0; /* Adjust top and bottom margin for spacing */
+  padding: 5px 0; /* Padding for additional spacing */
+  text-align: center;
+}
+
+.meal-calories::before {
+  content: "Kalorije:      ";
+  font-weight: bold; /* Make the label bold */
+}
+
+.ingredients-list {
+  display: grid; /* Use grid layout */
+  grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
+  gap: 10px; /* Space between grid items */
+  margin-bottom: 10px;
+}
+
+.ingredient-item {
+  display: contents; /* Makes the item elements act like grid cells */
+}
+
+.ingredient-name, 
+.ingredient-quantity, 
+.ingredient-unit {
+  display: flex; /* Ensures content aligns correctly within grid cells */
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+  font-size: 0.9rem; /* Slightly smaller font size */
+  color: #333;
+}
+
+.ingredient-name {
+  font-weight: bold;
+}
+
+.ingredient-quantity {
+  font-style: italic;
+}
+
+.ingredient-unit {
+  font-style: italic;
+  color: #666; /* Adjust color for better visibility */
+}
+
+.styled-heading {
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  font-weight: 500;
+  margin: 10px 0;
+  padding: 10px;
+  border-bottom: 2px solid #007bff;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+}
