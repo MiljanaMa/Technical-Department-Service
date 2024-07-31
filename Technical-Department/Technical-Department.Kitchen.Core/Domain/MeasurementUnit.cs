@@ -1,6 +1,4 @@
 ﻿using BuildingBlocks.Core.Domain;
-using Explorer.BuildingBlocks.Core.Domain;
-using System.Text.Json.Serialization;
 
 
 namespace Technical_Department.Kitchen.Core.Domain
