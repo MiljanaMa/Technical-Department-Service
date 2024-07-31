@@ -19,6 +19,11 @@
       <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
       <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
         <div class="center">{{ element[mealType.value.toString()] }}</div>
+        <div class="center">
+            <button mat-button (click)="openModal(mealType.value, element.consumerType)"> 
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
       </td>
     </ng-container>
   

@@ -3,6 +3,8 @@ import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels }
 import { WeeklyMenu } from '../model/weekly-menu.model';
 import { KitchenService } from '../kitchen.service';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
+import { EditMealDialogComponent } from '../edit-meal-dialog/edit-meal-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-tabular-menu',
@@ -39,7 +41,7 @@ export class TabularMenuComponent implements OnInit {
 
   displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
-  constructor(private service: KitchenService) { }
+  constructor(private service: KitchenService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.service.getDraftMenu(1).subscribe({
@@ -96,7 +98,6 @@ export class TabularMenuComponent implements OnInit {
   }
 
   getMealTypeClass(mealType: MealType): string {
-    console.log("Meal type:" + mealType)
     switch (mealType) {
       case MealType.BREAKFAST:
       case MealType.LUNCH:
@@ -112,4 +113,57 @@ export class TabularMenuComponent implements OnInit {
         return '';
     }
   }
+
+  getConsumerTypeByName(name: string): ConsumerType | undefined {
+    const keys = Object.keys(ConsumerType).filter(k => isNaN(Number(k)));
+    for (const key of keys) {
+      if (ConsumerTypeLabels[ConsumerType[key as keyof typeof ConsumerType]] === name) {
+        return ConsumerType[key as keyof typeof ConsumerType];
+      }
+    }
+    return undefined;
+  }
+
+  openModal(mealType: MealType, consumerTypeName: string): void {
+    const consumerType = this.getConsumerTypeByName(consumerTypeName);
+    const mealOffer = this.mealOffers.find(offer => offer.type === mealType && offer.consumerType === consumerType && offer.dailyMenuId === this.selectedDailyMenu?.id);
+    
+    if (mealOffer) {
+      const dialogRef = this.dialog.open(EditMealDialogComponent, {
+        width: '250px',
+        data: { mealOffer }
+      });
+  
+      dialogRef.afterClosed().subscribe((result: MealOffer) => {
+        if (result) {
+          console.log('The dialog was closed with result:', result);
+          this.updateMealOffer(result);
+          
+        } else {
+          console.log('The dialog was closed without result');
+        }
+      });
+    } else {
+      console.error('Meal offer not found for the given criteria.');
+    }
+  }
+  
+
+  updateMealOffer(updatedOffer: MealOffer): void {
+    const index = this.mealOffers.findIndex(offer => 
+      offer.type === updatedOffer.type && 
+      offer.consumerType === updatedOffer.consumerType && 
+      offer.dailyMenuId === updatedOffer.dailyMenuId
+    );
+  
+    if (index !== -1) {
+      this.mealOffers[index] = updatedOffer;
+    } else {
+      this.mealOffers.push(updatedOffer);
+    }
+  
+    this.updateDataSource();
+  }
+  
+  
 }
