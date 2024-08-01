@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
-import { WeeklyMenu } from '../model/weekly-menu.model';
+import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
 import { KitchenService } from '../kitchen.service';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { EditMealDialogComponent } from '../edit-meal-dialog/edit-meal-dialog.component';
@@ -43,7 +43,7 @@ export class TabularMenuComponent implements OnInit {
 
   displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
-  constructor(private service: KitchenService, private dialog: MatDialog, private route: ActivatedRoute ) { }
+  constructor(private service: KitchenService, private dialog: MatDialog, private route: ActivatedRoute, private router: Router ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -55,6 +55,7 @@ export class TabularMenuComponent implements OnInit {
                
           if (this.weeklyMenu.menu && this.weeklyMenu.menu.length > 0) {
             this.selectedDailyMenu = this.weeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);
+            console.log(this.selectedDailyMenu);
             if (!this.selectedDailyMenu) {
               console.log("No monday")
               this.selectedDailyMenu = this.weeklyMenu.menu[0];
@@ -135,7 +136,6 @@ export class TabularMenuComponent implements OnInit {
   openModal(mealType: MealType, consumerTypeName: string): void {
     const consumerType = this.getConsumerTypeByName(consumerTypeName);
     const mealOffer = this.mealOffers.find(offer => offer.type === mealType && offer.consumerType === consumerType && offer.dailyMenuId === this.selectedDailyMenu?.id);
-    
     if (mealOffer) {
       const dialogRef = this.dialog.open(EditMealDialogComponent, {
         width: '250px',
@@ -187,6 +187,24 @@ export class TabularMenuComponent implements OnInit {
     const year = date.getFullYear().toString().slice(-2);
     return `${day}/${month}/${year}`;
   }
+
+
   
-  confirmMenu() : void {}
+  confirmMenu() : void {
+
+    this.weeklyMenu!.status = WeeklyMenuStatus.NEW;
+
+    this.service.updateMenuStatus(this.weeklyMenu!).subscribe({
+      next: (result: WeeklyMenu) => {
+        this.router.navigate(['/new-menu']);
+    },
+      error: (error) => {
+        console.error('Error updating weekly menu:', error);
+        if (error.error && error.error.errors) {
+          console.log('Validation errors:', error.error.errors);
+        }
+      }
+    });
+    
+  }
 }

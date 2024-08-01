@@ -24,6 +24,17 @@ namespace Technical_Department.Kitchen.Core.Domain
             ConsumerQuantity = consumerQuantity;
             DailyMenuId = dailyMenuId;
         }
+
+        public MealOffer(MealOffer mealOffer, long dailyMenuId)
+        {
+            Type = mealOffer.Type;
+            ConsumerType = mealOffer.ConsumerType;
+            MealId = mealOffer.MealId;
+            MealName = mealOffer.MealName;
+            ConsumerQuantity = mealOffer.ConsumerQuantity;
+            DailyMenuId = dailyMenuId;
+        }
+
         protected override bool EqualsCore(MealOffer mealOffer)
         {
             return MealId == mealOffer.MealId &&

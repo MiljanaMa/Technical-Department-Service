@@ -36,6 +36,11 @@ namespace Technical_Department.Kitchen.Core.Domain
 
             Menu.Add(offer);
         }
+
+        public void ClearMenu()
+        {
+            Menu.Clear();
+        }
     }
 
 
