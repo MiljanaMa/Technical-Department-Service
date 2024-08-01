@@ -10,6 +10,7 @@ using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
 using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Core.Domain;
+using Technical_Department.Kitchen.Core.Domain.Enums;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
@@ -34,11 +35,16 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
         }
 
-        public Result<WeeklyMenuDto> GetDraftMenu()
+        public Result<WeeklyMenuDto> GetMenuByStatus(string status)
         {
             try
             {
-                var result = _weeklyMenuRepository.GetDraftMenu();
+                if (!Enum.TryParse(status, true, out WeeklyMenuStatus parsedStatus))
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError($"Invalid status value: {status}");
+                }
+
+                var result = _weeklyMenuRepository.GetMenuByStatus(parsedStatus);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)

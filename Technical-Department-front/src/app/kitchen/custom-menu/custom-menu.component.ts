@@ -1,12 +1,13 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable, of, startWith, map } from 'rxjs';
 import { KitchenService } from '../kitchen.service';
 import { DishType, Meal } from '../model/meal.model';
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -48,7 +49,7 @@ export class CustomMenuComponent implements OnInit {
 
   filteredOptions: { [key: string]: Observable<Meal[]> } = {};
 
-  constructor(private service: KitchenService) {
+  constructor(private service: KitchenService, private snackBar: MatSnackBar, private router: Router) {
     this.initializeEmptyFormGroup();
   }
 
@@ -66,17 +67,21 @@ export class CustomMenuComponent implements OnInit {
         });
       });
     });
+
+    this.mealFormGroup.statusChanges.subscribe(status => {
+      this.canConfirm = status === 'VALID';
+    });
   }
 
-  // Function to test if variable is a string
 private isString(variable: any) {
   return typeof variable === "string";
 }
 
-  validateMeal(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) return null;
-    return this.isString(control.value) ? { invalidMeal: true } : null; 
-  }
+validateMeal(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return { required: true }; 
+  return this.isString(control.value) ? { invalidMeal: true } : null; 
+}
+
 
   createInitialWeeklyMenu(): void {
     const menus: DailyMenu[] = [];
@@ -140,7 +145,6 @@ private isString(variable: any) {
               this.onFieldChange(consumerType.value, dailyMenu.dayOfWeek, mealType.value);
             });
   
-            // Setup filtered options for autocomplete
             this.filteredOptions[controlName] = formControl.valueChanges.pipe(
               startWith(''),
               map(value => this._filter(value, mealType.value))
@@ -192,7 +196,7 @@ private isString(variable: any) {
   getNextMonday(): Date {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
-    const daysUntilNextMonday = (7 - dayOfWeek + 1) % 7 || 7; // Days to next Monday
+    const daysUntilNextMonday = (7 - dayOfWeek + 1) % 7 || 7; 
     const nextMonday = new Date(today);
     nextMonday.setDate(today.getDate() + daysUntilNextMonday);
     return nextMonday;
@@ -207,15 +211,14 @@ private isString(variable: any) {
 
   onSelectedMealTabChange(event: any, dayIndex: number): void {
     this.selectedMealType = this.mealTypes[event.index].value;
-    console.log("Selected meal tab:" + this.selectedMealType);
+    this.selectedMealTabIndex = this.mealTypes[event.index].value;
   }
 
   onSelectedDayTabChange(event: any): void {
-    const selectedDayOfWeek = this.daysOfWeek[event.index].value;
-    console.log("Selected day of week tab: " + selectedDayOfWeek);
+    this.selectedDayTabIndex = this.daysOfWeek[event.index].value;
     if (this.weeklyMenu && this.weeklyMenu.menu) {
       for (const dailyMenu of this.weeklyMenu.menu) {
-        if (dailyMenu.dayOfWeek === selectedDayOfWeek) {
+        if (dailyMenu.dayOfWeek === this.selectedDayTabIndex) {
           this.selectedDailyMenuId = dailyMenu.id;
           break;
         }
@@ -265,6 +268,55 @@ private isString(variable: any) {
   }
 
   showTabularView(): void {
+    if (!this.mealFormGroup.valid) {
+      this.snackBar.open('Proverite da li su sve forme validno popunjene.', 'OK', {
+        duration: 3000, 
+        panelClass: ['mat-warn'] 
+      });
+      return;
+    }else{
+      this.router.navigate(['/tabular-menu/draft']);
+    }
+  }
 
+  isDayValid(day: DayOfWeek): boolean {
+    let isValid = true;
+    this.mealTypes.forEach(mealType => {
+      this.consumerTypes.forEach(consumerType => {
+        const controlName = this.getFormControlName(day, mealType.value, consumerType.value);
+        const control = this.mealFormGroup.get(controlName);
+        if (control && control.invalid) {
+          isValid = false;
+        }
+      });
+    });
+    return isValid;
+  }
+
+  isMealValid(day: DayOfWeek, mealType: MealType): boolean {
+    let isValid = true;
+    this.consumerTypes.forEach(consumerType => {
+      const controlName = this.getFormControlName(day, mealType, consumerType.value);
+      const control = this.mealFormGroup.get(controlName);
+      if (control && control.invalid) {
+        isValid = false;
+      }
+    });
+    return isValid;
+  }
+
+  getDayDate(dayIndex: number): string {
+    if (!this.weeklyMenu?.from) return '';
+
+    const fromDate = new Date(this.weeklyMenu.from);
+    fromDate.setDate(fromDate.getDate() + dayIndex);
+    return this.formatToDayMonthYear(fromDate);
+  }
+
+  formatToDayMonthYear(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}/${month}/${year}`;
   }
 }

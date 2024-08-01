@@ -15,10 +15,10 @@ namespace Technical_Department.API.Controllers
         }
 
 
-        [HttpGet("draft")]
-        public ActionResult<WeeklyMenuDto> GetDraftWeeklyMenu()
+        [HttpGet("status")]
+        public ActionResult<WeeklyMenuDto> GetMenuByStatus([FromQuery] string status)
         {
-            var result = _weeklyMenuService.GetDraftMenu();
+            var result = _weeklyMenuService.GetMenuByStatus(status);
             return CreateResponse(result);
         }
 

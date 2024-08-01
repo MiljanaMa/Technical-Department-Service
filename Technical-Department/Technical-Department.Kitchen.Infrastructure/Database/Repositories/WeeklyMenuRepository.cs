@@ -47,13 +47,13 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             return weeklyMenu;
         }
 
-        public WeeklyMenu GetDraftMenu()
+        public WeeklyMenu GetMenuByStatus(WeeklyMenuStatus status)
         {
-            var entity = _dbSet.Where(m => m.Status == WeeklyMenuStatus.DRAFT).
-                Include(m => m.Menu)
-                .FirstOrDefault();
-            if (entity == null) return null;
+            var entity = _dbSet.Where(m => m.Status == status)
+                               .Include(m => m.Menu)
+                               .FirstOrDefault();
             return entity;
         }
+
     }
 }

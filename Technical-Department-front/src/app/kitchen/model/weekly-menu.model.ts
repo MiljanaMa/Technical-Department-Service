@@ -12,7 +12,8 @@ export enum WeeklyMenuStatus {
     PREVIOUS,
     CURRENT,
     DRAFT,
-    NEW
+    NEW,
+    DEFAULT
 }
 
 
