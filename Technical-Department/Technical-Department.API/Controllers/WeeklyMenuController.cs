@@ -28,7 +28,14 @@ namespace Technical_Department.API.Controllers
             var result = _weeklyMenuService.Create(weeklyMenu);
             return CreateResponse(result);
         }
-         
+
+        [HttpPost("default")]
+        public ActionResult<WeeklyMenuDto> CreateDraftFromDefaultMenu([FromBody] WeeklyMenuDto weeklyMenu)
+        {
+            var result = _weeklyMenuService.CreateDraftFromDefaultMenu(weeklyMenu);
+            return CreateResponse(result);
+        }
+
         [HttpPut("{id:long}")]
         public ActionResult<WeeklyMenuDto> Update([FromBody] WeeklyMenuDto weeklyMenu)
         {

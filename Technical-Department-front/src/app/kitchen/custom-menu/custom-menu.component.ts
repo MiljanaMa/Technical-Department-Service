@@ -92,7 +92,7 @@ validateMeal(control: AbstractControl): ValidationErrors | null {
       status: WeeklyMenuStatus.DRAFT
     };
 
-    this.service.addOrFetchWeeklyMenu(this.weeklyMenu).subscribe({
+    this.service.createOrFetchWeeklyMenu(this.weeklyMenu).subscribe({
       next: (result: WeeklyMenu) => {
         this.weeklyMenu = result;
         console.log("Weekly menu:", result);

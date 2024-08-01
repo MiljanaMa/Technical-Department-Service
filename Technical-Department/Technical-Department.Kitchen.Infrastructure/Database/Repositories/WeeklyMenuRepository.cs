@@ -10,6 +10,7 @@ using Technical_Department.Kitchen.Core.Domain;
 using BuildingBlocks.Core.Domain;
 using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
 using Technical_Department.Kitchen.Core.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 {
@@ -46,6 +47,59 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             DbContext.SaveChanges();
             return weeklyMenu;
         }
+
+        public WeeklyMenu CreateDraftFromDefaultMenu(WeeklyMenu newDraftMenu)
+        {
+            var existingDraftMenu = GetMenuByStatus(WeeklyMenuStatus.DRAFT);
+
+            var defaultMenu = GetMenuByStatus(WeeklyMenuStatus.DEFAULT);
+
+            if (defaultMenu == null)
+            {
+                return null;
+            }
+
+            if (existingDraftMenu != null)
+            {
+                foreach (var dailyMenu in existingDraftMenu.Menu)
+                {
+                    dailyMenu.ClearMenu();
+                    var defaultDailyMenu = defaultMenu.Menu.FirstOrDefault(dm => dm.DayOfWeek == dailyMenu.DayOfWeek);
+                    if (defaultDailyMenu != null)
+                    {
+                        foreach (var mealOffer in defaultDailyMenu.Menu)
+                        {
+                            MealOffer newOffer = new MealOffer(mealOffer, dailyMenu.Id);
+                            dailyMenu.Menu.Add(newOffer);
+                            DbContext.Update(dailyMenu);
+                            DbContext.SaveChanges();
+                        }
+                    }
+                }
+
+                return existingDraftMenu;
+            }
+
+            WeeklyMenu createdMenu = Create(newDraftMenu);
+
+            foreach (var dailyMenu in createdMenu.Menu)
+            {
+                dailyMenu.ClearMenu();
+                var defaultDailyMenu = defaultMenu.Menu.FirstOrDefault(dm => dm.DayOfWeek == dailyMenu.DayOfWeek);
+                if (defaultDailyMenu != null)
+                {
+                    foreach (var mealOffer in defaultDailyMenu.Menu)
+                    {
+                        MealOffer newOffer = new MealOffer(mealOffer, dailyMenu.Id);
+                        dailyMenu.AddMealOffer(newOffer);
+                        DbContext.Update(dailyMenu);
+                        DbContext.SaveChanges();
+                    }
+                }
+            }
+            return createdMenu;
+        }
+
 
         public WeeklyMenu GetMenuByStatus(WeeklyMenuStatus status)
         {

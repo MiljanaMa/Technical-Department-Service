@@ -35,6 +35,19 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
         }
 
+        public Result<WeeklyMenuDto> CreateDraftFromDefaultMenu(WeeklyMenuDto weeklyMenu)
+        {
+            try
+            {
+                var result = _weeklyMenuRepository.CreateDraftFromDefaultMenu(MapToDomain(weeklyMenu));
+                return MapToDto(result);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
         public Result<WeeklyMenuDto> GetMenuByStatus(string status)
         {
             try

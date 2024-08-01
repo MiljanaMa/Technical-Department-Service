@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Core.UseCases;
+﻿using BuildingBlocks.Core.Domain;
+using BuildingBlocks.Core.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
 {
     public interface IWeeklyMenuRepository : ICrudRepository<WeeklyMenu>
     {
+        WeeklyMenu CreateDraftFromDefaultMenu(WeeklyMenu weeklyMenu);
         WeeklyMenu GetMenuByStatus(WeeklyMenuStatus status);
     }
 }

@@ -23,8 +23,16 @@ export class KitchenService {
     return this.http.post<DailyMenu>(`${environment.apiHost}daily-menu/add-meal-offer`, mealOffer);
   }
   
-  addOrFetchWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
+  createOrFetchWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
     return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu', weeklyMenu);
+  }
+
+  createDraftFromDefaultMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
+    return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu/default', weeklyMenu);
+  }
+
+  updateMenuStatus(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
+    return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/${weeklyMenu.id}`, weeklyMenu)
   }
 
   getMenu(menuStatus: string): Observable<WeeklyMenu> {

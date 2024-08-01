@@ -11,6 +11,7 @@ namespace Technical_Department.Kitchen.API.Public
     public interface IWeeklyMenuService
     {
         Result<WeeklyMenuDto> Create(WeeklyMenuDto weeklyMenu);
+        Result<WeeklyMenuDto> CreateDraftFromDefaultMenu(WeeklyMenuDto weeklyMenu);
         Result<WeeklyMenuDto> Update(WeeklyMenuDto weeklyMenu);
         Result<WeeklyMenuDto> GetMenuByStatus(string status);
     }
