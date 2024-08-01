@@ -1,0 +1,30 @@
+.center{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.confirm-button.mat-button {
+    background-color: #003B6D;
+    color: white; 
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+    padding: 16px;
+    font-size: large;
+    width: 200px;
+}
+
+.no-menu-message {
+    color: #d9534f; 
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    background-color: #f2dede;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }

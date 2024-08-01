@@ -5,7 +5,7 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { MealsComponent } from './meals/meals.component';
 import { MaterialModule } from '../utils/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NewMenuComponent } from './new-menu/new-menu.component';
+import { MenusComponent } from './menus/menus.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { TabularMenuComponent } from './tabular-menu/tabular-menu.component';
 import { EditMealDialogComponent } from './edit-meal-dialog/edit-meal-dialog.component';
@@ -20,7 +20,7 @@ import { MatChipsModule } from '@angular/material/chips';
     CustomMenuComponent,
     IngredientsComponent,
     MealsComponent,
-    NewMenuComponent,
+    MenusComponent,
     TabularMenuComponent,
     EditMealDialogComponent,
     IngredientModalComponent,
