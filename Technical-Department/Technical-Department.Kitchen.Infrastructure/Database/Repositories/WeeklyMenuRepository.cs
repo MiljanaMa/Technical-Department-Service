@@ -48,6 +48,8 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             return weeklyMenu;
         }
 
+        //REFACTOR THIS
+        //FIX EVERYTHING TO MATCH AGGREGATE AND DOMAIN DRIVEN DESIGN
         public WeeklyMenu CreateDraftFromDefaultMenu(WeeklyMenu newDraftMenu)
         {
             var existingDraftMenu = GetMenuByStatus(WeeklyMenuStatus.DRAFT);
