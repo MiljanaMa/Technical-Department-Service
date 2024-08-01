@@ -17,10 +17,12 @@
   }
   
   .checked {
+    margin: 5px;
     color: green; 
   }
   
   .not-checked {
+    margin: 5px;
     color: orange;
   }
   
@@ -60,5 +62,24 @@
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+
+.date-range-container {
+  padding: 10px;
+  background-color: #f0f0f0; /* Light grey background */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  margin-bottom: 20px; /* Spacing below the date range */
+  text-align: center; /* Center-align the text */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.date-range {
+  font-size: 15px; /* Larger font size */
+  font-weight: 600; /* Semi-bold text */
+  color: #333; /* Darker text color for contrast */
+}
+
+
+
 
 

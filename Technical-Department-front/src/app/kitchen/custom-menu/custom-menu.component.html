@@ -1,9 +1,11 @@
+<br>
 <mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)"  [selectedIndex]="selectedDayTabIndex">
   <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
     <ng-template mat-tab-label>
       <div>
-        <div>{{day.name}}</div>
-        <!--ICONS-->
+        <div> {{ day.name }} ({{ getDayDate(dayIndex) }}) </div>
+        <mat-icon class="checked" *ngIf="isDayValid(day.value)">check_circle_outline</mat-icon> 
+        <mat-icon class="not-checked" *ngIf="!isDayValid(day.value)">highlight_off</mat-icon>  
       </div>
     </ng-template>
 
@@ -12,8 +14,10 @@
         <mat-tab *ngFor="let mealType of mealTypes; let mealTypeIndex = index">
           <ng-template mat-tab-label>
             <div>
-              <div>{{mealType.name}}</div>
-            </div>
+              <div>{{ mealType.name }}</div> 
+              <mat-icon class="checked" *ngIf="isMealValid(day.value, mealType.value)">check_circle_outline</mat-icon> 
+              <mat-icon class="not-checked" *ngIf="!isMealValid(day.value, mealType.value)">highlight_off</mat-icon>    
+            </div>   
           </ng-template>
 
           <div class="container">
@@ -43,5 +47,5 @@
 </mat-tab-group>
 
 <div class="button">
-  <button class="confirm-button mat-button" [disabled]="!canConfirm" (click)="showTabularView()">POTVRDI NEDELJNI MENI</button>
+  <button class="confirm-button mat-button" (click)="showTabularView()">PREDJI NA TABELARNI PRIKAZ MENIJA</button>
 </div>

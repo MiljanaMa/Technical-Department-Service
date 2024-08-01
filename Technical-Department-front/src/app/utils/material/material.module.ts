@@ -23,7 +23,8 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatTab, MatTabGroup, MatTabLabel, MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogActions, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
-import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/grid-list';
+import { MatGridList, MatGridListModule, MatGridTile} from '@angular/material/grid-list';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
  
 @NgModule({
   declarations: [],
@@ -53,7 +54,8 @@ import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/gri
     MatTabsModule,
     MatDialogModule,
     MatGridListModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatSnackBarModule
   ],
   exports: [
     MatInput,
@@ -99,7 +101,8 @@ import {MatGridList, MatGridListModule, MatGridTile} from '@angular/material/gri
     MatRow,
     MatTableModule,
     MatError,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatSnackBarModule
   ]
 })
 export class MaterialModule { }

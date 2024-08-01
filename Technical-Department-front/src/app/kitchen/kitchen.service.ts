@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Meal } from './model/meal.model';
@@ -27,8 +27,10 @@ export class KitchenService {
     return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu', weeklyMenu);
   }
 
-  getDraftMenu(id: number): Observable<WeeklyMenu> {
-    return this.http.get<WeeklyMenu>(environment.apiHost + 'weekly-menu/draft')
+  getMenu(menuStatus: string): Observable<WeeklyMenu> {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("status", menuStatus);
+    return this.http.get<WeeklyMenu>(environment.apiHost + `weekly-menu/status`, {params: queryParams})
   }
 
   getMeal(mealId: number): Observable<Meal> {

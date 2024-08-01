@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-menu',
@@ -7,5 +8,10 @@ import { Component } from '@angular/core';
 })
 export class NewMenuComponent {
 
+constructor(private router: Router){}
 
+
+  showTabularView(): void {
+      this.router.navigate(['/tabular-menu/default']);
+  }
 }

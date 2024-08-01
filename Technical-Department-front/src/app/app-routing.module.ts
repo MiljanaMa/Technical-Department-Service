@@ -12,7 +12,7 @@ const routes: Routes = [
   {path: 'meals', component: MealsComponent},
   {path: 'ingredients', component: IngredientsComponent},
   {path: 'custom-menu', component: CustomMenuComponent},
-  {path: 'tabular-menu', component: TabularMenuComponent},
+  {path: 'tabular-menu/:status', component: TabularMenuComponent},
   {path: 'meal-form/:id', component: MealFormComponent},
 ];
 

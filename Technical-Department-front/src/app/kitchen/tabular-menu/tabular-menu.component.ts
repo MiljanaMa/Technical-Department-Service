@@ -5,6 +5,7 @@ import { KitchenService } from '../kitchen.service';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { EditMealDialogComponent } from '../edit-meal-dialog/edit-meal-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabular-menu',
@@ -13,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class TabularMenuComponent implements OnInit {
 
+  routeParamMenuStatus: string = "";
   weeklyMenu: WeeklyMenu | undefined;
   mealOffers: MealOffer[] = [];
   dataSource: any[] = [];
@@ -41,30 +43,36 @@ export class TabularMenuComponent implements OnInit {
 
   displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
-  constructor(private service: KitchenService, private dialog: MatDialog) { }
+  constructor(private service: KitchenService, private dialog: MatDialog, private route: ActivatedRoute ) { }
 
   ngOnInit(): void {
-    this.service.getDraftMenu(1).subscribe({
-      next: (result: WeeklyMenu) => {
-        this.weeklyMenu = result;
-             
-        if (this.weeklyMenu.menu && this.weeklyMenu.menu.length > 0) {
-          this.selectedDailyMenu = this.weeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);
-          if (!this.selectedDailyMenu) {
-            console.log("No monday")
-            this.selectedDailyMenu = this.weeklyMenu.menu[0];
+    this.route.paramMap.subscribe(params => {
+      this.routeParamMenuStatus = params.get('status') || 'DRAFT'; 
+
+      this.service.getMenu(this.routeParamMenuStatus).subscribe({
+        next: (result: WeeklyMenu) => {
+          this.weeklyMenu = result;
+               
+          if (this.weeklyMenu.menu && this.weeklyMenu.menu.length > 0) {
+            this.selectedDailyMenu = this.weeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);
+            if (!this.selectedDailyMenu) {
+              console.log("No monday")
+              this.selectedDailyMenu = this.weeklyMenu.menu[0];
+            }
+            this.updateDataSource();
           }
-          this.updateDataSource();
+          console.log("Weekly menu:", result);
+      },
+        error: (error) => {
+          console.error('Error fetching weekly menu:', error);
+          if (error.error && error.error.errors) {
+            console.log('Validation errors:', error.error.errors);
+          }
         }
-        console.log("Weekly menu:", result);
-    },
-      error: (error) => {
-        console.error('Error fetching weekly menu:', error);
-        if (error.error && error.error.errors) {
-          console.log('Validation errors:', error.error.errors);
-        }
-      }
+      });
     });
+
+    
   }
 
   updateDataSource(): void {
@@ -165,5 +173,20 @@ export class TabularMenuComponent implements OnInit {
     this.updateDataSource();
   }
   
+  getDayDate(dayIndex: number): string {
+    if (!this.weeklyMenu?.from) return '';
+
+    const fromDate = new Date(this.weeklyMenu.from);
+    fromDate.setDate(fromDate.getDate() + dayIndex);
+    return this.formatToDayMonthYear(fromDate);
+  }
+
+  formatToDayMonthYear(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}/${month}/${year}`;
+  }
   
+  confirmMenu() : void {}
 }

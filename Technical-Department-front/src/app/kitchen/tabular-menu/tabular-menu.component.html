@@ -2,19 +2,17 @@
     <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
       <ng-template mat-tab-label>
         <div>
-          <div>{{day.name}}</div>
-          <!--ICONS-->
+          <div>{{day.name}} </div>
+          <div>({{ getDayDate(dayIndex) }})</div>
         </div>
       </ng-template>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <!-- Consumer Type Column -->
     <ng-container matColumnDef="consumerType">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element"><b>{{ element.consumerType }}</b></td>
     </ng-container>
   
-    <!-- Meal Type Columns -->
     <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
       <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
       <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
@@ -30,11 +28,14 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-
   </mat-tab>
 </mat-tab-group>
 
-<div *ngIf="!weeklyMenu">
-Nema unetog nacrta nedeljnog menija za sledecu nedelju.
+<div *ngIf="weeklyMenu" class="button">
+  <button class="confirm-button mat-button" (click)="confirmMenu()">POTVRDI NEDELJNI MENI</button>
+</div>
+
+<div *ngIf="!weeklyMenu" class="no-menu-message">
+Nema zeljenog unetog menija u bazi.
 </div>
   
