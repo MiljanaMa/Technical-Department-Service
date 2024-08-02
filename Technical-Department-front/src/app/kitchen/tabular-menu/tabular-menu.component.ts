@@ -194,7 +194,7 @@ export class TabularMenuComponent implements OnInit {
 
     this.weeklyMenu!.status = WeeklyMenuStatus.NEW;
 
-    this.service.updateMenuStatus(this.weeklyMenu!).subscribe({
+    this.service.confirmWeeklyMenu(this.weeklyMenu!).subscribe({
       next: (result: WeeklyMenu) => {
         this.router.navigate(['/menus']);
     },
