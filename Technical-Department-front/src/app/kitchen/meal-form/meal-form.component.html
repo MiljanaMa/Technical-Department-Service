@@ -27,9 +27,9 @@
   </mat-form-field>
 
   <div formArrayName="types" class="dish-types">
-    <div *ngFor="let type of dishTypes; let i = index" class="checkbox-container">
+    <div *ngFor="let type of types.controls; let i = index" class="checkbox-container">
       <input type="checkbox" [formControlName]="i" id="type{{i}}">
-      <label for="type{{i}}">{{ type }}</label>
+      <label for="type{{i}}">{{ dishTypes[i] }}</label>
     </div>
   </div>
 
@@ -40,7 +40,7 @@
         <input type="text" matInput formControlName="ingredient" [matAutocomplete]="auto">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">
           <mat-option *ngFor="let option of ingredientFilteredOptions[i] | async" [value]="option">
-            {{ option.name }}
+            {{ option.name }} ({{ option.unit.shortName }})
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -49,12 +49,9 @@
         <mat-label>Količina</mat-label>
         <input matInput type="number" formControlName="quantity" placeholder="Unesi količinu">
       </mat-form-field>
-      <div class="ingredient-field">
-        <span>{{ getIngredientUnit(i) | async}}</span>
-      </div>
-        <button mat-icon-button color="warn" (click)="removeIngredient(i)">
-          <mat-icon>delete</mat-icon>
-        </button>
+      <button mat-icon-button color="warn" (click)="removeIngredient(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </div>
   <button mat-button (click)="addNewIngredient()">Dodaj namirnicu</button>
