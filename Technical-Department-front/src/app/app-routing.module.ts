@@ -6,6 +6,7 @@ import { IngredientsComponent } from './kitchen/ingredients/ingredients.componen
 import { MenusComponent } from './kitchen/menus/menus.component';
 import { TabularMenuComponent } from './kitchen/tabular-menu/tabular-menu.component';
 import { MealFormComponent } from './kitchen/meal-form/meal-form.component';
+import { ConsumerQuantityComponent } from './kitchen/consumer-quantity/consumer-quantity.component';
 
 const routes: Routes = [
   {path: 'menus', component: MenusComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'custom-menu', component: CustomMenuComponent},
   {path: 'tabular-menu/:status', component: TabularMenuComponent},
   {path: 'meal-form/:id', component: MealFormComponent},
+  {path: 'consumer-quantity', component: ConsumerQuantityComponent},
 ];
 
 @NgModule({
