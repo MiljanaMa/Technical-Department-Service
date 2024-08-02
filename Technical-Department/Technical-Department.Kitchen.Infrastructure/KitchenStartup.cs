@@ -29,7 +29,6 @@ public static class KitchenStartup
     {
         services.AddScoped<IIngredientService, IngredientService>();
         services.AddScoped<IMealService, MealService>();
-        services.AddScoped<IDailyMenuService, DailyMenuService>();
         services.AddScoped<IWeeklyMenuService, WeeklyMenuService>();
         services.AddScoped<IMeasurementUnitService, MeasurementUnitService>();
 

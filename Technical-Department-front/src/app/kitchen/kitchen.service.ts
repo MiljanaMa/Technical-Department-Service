@@ -19,20 +19,20 @@ export class KitchenService {
     return this.http.get<Meal[]>(environment.apiHost + 'meal');
   }
 
-  addMealOffer(mealOffer: MealOffer): Observable<DailyMenu> {
-    return this.http.post<DailyMenu>(`${environment.apiHost}daily-menu/add-meal-offer`, mealOffer);
+  addMealOffer(mealOffer: MealOffer): Observable<Boolean> {
+    return this.http.post<Boolean>(`${environment.apiHost}weekly-menu/add-meal-offer`, mealOffer);
   }
   
   createOrFetchWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
-    return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu', weeklyMenu);
+    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu`, weeklyMenu);
   }
 
   createDraftFromDefaultMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
-    return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu/default', weeklyMenu);
+    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/default`, weeklyMenu);
   }
 
-  updateMenuStatus(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
-    return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/${weeklyMenu.id}`, weeklyMenu)
+  confirmWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
+    return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/confirm`, weeklyMenu)
   }
 
   getMenu(menuStatus: string): Observable<WeeklyMenu> {
