@@ -12,6 +12,7 @@ import { map, Observable, startWith, of } from 'rxjs';
   styleUrls: ['./meal-form.component.css']
 })
 export class MealFormComponent implements OnInit {
+  public meal: Meal | undefined;
   public mealForm: FormGroup;
   public allIngredients: Ingredient[] = [];
   ingredientFilteredOptions: Observable<Ingredient[]>[] = [];
@@ -32,27 +33,39 @@ export class MealFormComponent implements OnInit {
       types: this.fb.array([]),
       ingredients: this.fb.array([])
     });
-    this.addCheckboxes();
-    this.initializeIngredients(5);
+    //this.initializeIngredients(5);
 
   }
 
   private addCheckboxes() {
-    this.dishTypes.forEach(() => this.typesFormArray.push(this.fb.control(false)));
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id === "null")
+      this.dishTypes.forEach(() => this.types.push(new FormControl(false)));
+    else {
+      this.dishTypes.forEach((type, index) => {
+        const isChecked = this.meal?.types.includes(index)
+        this.types.push(new FormControl(isChecked))
+      });
+    }
   }
 
-  get typesFormArray() {
+  get types() {
     return this.mealForm.controls['types'] as FormArray;
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id !== "null") {
-      this.loadMeal(parseInt(id || ''));
-    }
     this.service.getAllIngredients().subscribe({
       next: (result: any) => {
+
         this.allIngredients = result.results;
+
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id !== "null") {
+          this.loadMeal(parseInt(id || ''));
+        } else {
+          this.addCheckboxes();
+          this.initializeIngredients(5);
+        }
         this.initializeIngredientFilteredOptions();
       },
       error: () => {
@@ -63,13 +76,16 @@ export class MealFormComponent implements OnInit {
 
   loadMeal(id: number): void {
     this.service.getMeal(id).subscribe({
-      next: (result: any) => {
+      next: (result: Meal) => {
+        this.meal = result;
         this.mealForm.patchValue({
           name: result.name,
-          date: result.date
+          date: result.standardizationDate,
+          code: result.code
         });
+        this.addCheckboxes();
         result.ingredients.forEach((ingredient: any) => {
-          this.addIngredient(ingredient);
+          this.addExistingIngredient(ingredient);
         });
       },
       error: () => {
@@ -78,10 +94,11 @@ export class MealFormComponent implements OnInit {
     });
   }
 
-  addIngredient(ingredient = { ingredient: '', quantity: 0 }): void {
+  addExistingIngredient(iq: IngredientQuantity): void {
+    var existingIngredient = this.allIngredients.filter(ingredient => ingredient.id === iq.ingredientId);
     const ingredientGroup = this.fb.group({
-      ingredient: [ingredient.ingredient, Validators.required],
-      quantity: [ingredient.quantity, Validators.required]
+      ingredient: [existingIngredient[0], Validators.required],
+      quantity: [iq.quantity, Validators.required]
     });
 
     this.ingredients.push(ingredientGroup);
@@ -111,15 +128,16 @@ export class MealFormComponent implements OnInit {
 
       let dateTime = new Date(this.mealForm.value.date);
       let standardizedDate = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate());
-
-      const newMeal: Meal = {
+      const id = this.route.snapshot.paramMap.get('id');
+      const meal: Meal = {
+        id: 0,
         name: this.mealForm.value.name,
         standardizationDate: standardizedDate,
         code: this.mealForm.value.code,
         calories: 0.0,
         types: this.mealForm.value.types
-                      .map((checked : boolean, i: number) => checked ? this.dishTypeMapping[this.dishTypes[i]] : null)
-                      .filter((v: DishType | null)=> v !== null),
+          .map((checked: boolean, i: number) => checked ? this.dishTypeMapping[this.dishTypes[i]] : null)
+          .filter((v: DishType | null) => v !== null),
         ingredients: this.mealForm.value.ingredients.map((i: any) => ({
           ingredientId: i.ingredient.id,
           ingredientName: i.ingredient.name,
@@ -127,14 +145,28 @@ export class MealFormComponent implements OnInit {
           unitShortName: ''
         }))
       };
-      this.service.createMeal(newMeal).subscribe({
-        next: () => {
-          this.router.navigate([`meals`]);
-        },
-        error: () => {
-          // Handle error
-        }
-      });
+
+      if (id !== "null") {
+        meal.id = parseInt(id || '0')
+        this.service.updateMeal(meal).subscribe({
+          next: () => {
+            this.router.navigate([`meals`]);
+          },
+          error: () => {
+            // Handle error
+          }
+        });
+      } else {
+        this.service.createMeal(meal).subscribe({
+          next: () => {
+            this.router.navigate([`meals`]);
+          },
+          error: (error: any) => {
+            console.log(error)
+            // Handle error
+          }
+        });
+      }
     }
   }
 
@@ -164,27 +196,12 @@ export class MealFormComponent implements OnInit {
   }
 
   displayName(option: Ingredient): string {
-    return option ? option.name : '';
+    return option ? option.name + " (" + option.unit.shortName + ")" : '';
   }
 
   private initializeIngredientFilteredOptions(): void {
     this.ingredients.controls.forEach((_, index) => {
       this.setupIngredientAutocomplete(this.ingredients.at(index) as FormGroup, index);
     });
-  }
-  getIngredientUnit(index: number): Observable<string> {
-    const selectedIngredientName = this.ingredients.controls[index].get('ingredient')?.value;
-
-    if (selectedIngredientName) {
-      return this.ingredientFilteredOptions[index].pipe(
-        map((options: Ingredient[]) => {
-          const ingredient = options.find(opt => opt.name === selectedIngredientName);
-          return ingredient ? ingredient.unit.shortName : 'N/A';
-        }),
-        startWith('N/A') // Default value while waiting for data
-      );
-    }
-
-    return of('N/A');
   }
 }
