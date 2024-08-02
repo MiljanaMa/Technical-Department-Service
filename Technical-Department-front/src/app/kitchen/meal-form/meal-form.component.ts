@@ -129,8 +129,8 @@ export class MealFormComponent implements OnInit {
       let dateTime = new Date(this.mealForm.value.date);
       let standardizedDate = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate());
       const id = this.route.snapshot.paramMap.get('id');
-      const newMeal: Meal = {
-        id: parseInt(id || '0'),
+      const meal: Meal = {
+        id: 0,
         name: this.mealForm.value.name,
         standardizationDate: standardizedDate,
         code: this.mealForm.value.code,
@@ -147,7 +147,8 @@ export class MealFormComponent implements OnInit {
       };
 
       if (id !== "null") {
-        this.service.updateMeal(newMeal).subscribe({
+        meal.id = parseInt(id || '0')
+        this.service.updateMeal(meal).subscribe({
           next: () => {
             this.router.navigate([`meals`]);
           },
@@ -156,11 +157,12 @@ export class MealFormComponent implements OnInit {
           }
         });
       } else {
-        this.service.createMeal(newMeal).subscribe({
+        this.service.createMeal(meal).subscribe({
           next: () => {
             this.router.navigate([`meals`]);
           },
-          error: () => {
+          error: (error: any) => {
+            console.log(error)
             // Handle error
           }
         });
