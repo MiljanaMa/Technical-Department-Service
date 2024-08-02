@@ -1,0 +1,65 @@
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;  
+    margin: 10px;       
+}
+  
+form {
+    background-color: white;   
+    padding: 10px;            
+    border-radius: 8px;      
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);                    
+}
+  
+.checked {
+    margin: 5px;
+    color: green; 
+  }
+  
+.not-checked {
+    margin: 5px;
+    color: orange;
+  }
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.next-button.mat-button {
+    padding: 16px;
+    font-size: large;
+}
+
+.confirm-button.mat-button {
+    background-color: #003B6D;
+    color: white; 
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+    padding: 16px;
+   font-size: large;
+}
+
+.form-field-margin {
+  width: 100%;
+}
+
+.form-fields-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+
+.title-card {
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+
