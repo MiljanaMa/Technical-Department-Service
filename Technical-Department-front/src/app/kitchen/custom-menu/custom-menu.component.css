@@ -1,0 +1,85 @@
+.tab-content{
+    margin: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;  
+    margin: 10px;       
+  }
+  
+  form {
+    background-color: white;   
+    padding: 10px;            
+    border-radius: 8px;      
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);                    
+  }
+  
+  .checked {
+    margin: 5px;
+    color: green; 
+  }
+  
+  .not-checked {
+    margin: 5px;
+    color: orange;
+  }
+  
+  .tab-content {
+    padding: 10px; 
+  }
+
+  .button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .next-button.mat-button {
+    padding: 16px;
+    font-size: large;
+}
+
+  .confirm-button.mat-button {
+    background-color: #003B6D;
+    color: white; 
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+    padding: 16px;
+   font-size: large;
+}
+
+.form-field-margin {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 100%;
+}
+
+.form-fields-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.date-range-container {
+  padding: 10px;
+  background-color: #f0f0f0; /* Light grey background */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  margin-bottom: 20px; /* Spacing below the date range */
+  text-align: center; /* Center-align the text */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.date-range {
+  font-size: 15px; /* Larger font size */
+  font-weight: 600; /* Semi-bold text */
+  color: #333; /* Darker text color for contrast */
+}
+
+
+
+
+

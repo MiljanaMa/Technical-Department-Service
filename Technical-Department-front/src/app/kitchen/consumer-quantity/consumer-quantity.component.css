@@ -1,41 +1,40 @@
-.tab-content{
-    margin: 10px;
-}
 
 .container {
     display: flex;
     justify-content: center;
     padding: 10px;  
     margin: 10px;       
-  }
+}
   
-  form {
+form {
     background-color: white;   
     padding: 10px;            
     border-radius: 8px;      
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);                    
-  }
+}
   
-  .checked {
+.checked {
+    margin: 5px;
     color: green; 
   }
   
-  .not-checked {
+.not-checked {
+    margin: 5px;
     color: orange;
   }
-  
-  .tab-content {
-    padding: 10px; 
-  }
 
-  .button{
+.button{
     display: flex;
     justify-content: center;
     align-items: center;
-    
-  }
+}
 
-  .confirm-button.mat-button {
+.next-button.mat-button {
+    padding: 16px;
+    font-size: large;
+}
+
+.confirm-button.mat-button {
     background-color: #003B6D;
     color: white; 
     border-radius: 10px;
@@ -46,6 +45,21 @@
 }
 
 .form-field-margin {
-  margin-left: 5px;
-  margin-right: 5px;
+  width: 100%;
 }
+
+.form-fields-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+
+.title-card {
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+

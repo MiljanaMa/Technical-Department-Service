@@ -29,6 +29,8 @@ public static class KitchenStartup
     {
         services.AddScoped<IIngredientService, IngredientService>();
         services.AddScoped<IMealService, MealService>();
+        services.AddScoped<IDailyMenuService, DailyMenuService>();
+        services.AddScoped<IWeeklyMenuService, WeeklyMenuService>();
         services.AddScoped<IMeasurementUnitService, MeasurementUnitService>();
 
     }
@@ -37,6 +39,8 @@ public static class KitchenStartup
     {
         services.AddScoped(typeof(IIngredientRepository), typeof(IngredientRepository));
         services.AddScoped(typeof(IMealRepository), typeof(MealRepository));
+        services.AddScoped(typeof(IDailyMenuRepository), typeof(DailyMenuRepository));
+        services.AddScoped(typeof(IWeeklyMenuRepository), typeof(WeeklyMenuRepository));
         services.AddScoped(typeof(IMeasurementUnitRepository), typeof(MeasurementUnitRepository));
 
         services.AddDbContext<KitchenContext>(opt =>

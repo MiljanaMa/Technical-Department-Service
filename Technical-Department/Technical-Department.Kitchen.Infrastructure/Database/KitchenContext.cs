@@ -43,8 +43,8 @@ public class KitchenContext: DbContext
 
         modelBuilder.Entity<DailyMenu>().Property(item => item.Menu).HasColumnType("jsonb");
         modelBuilder.Entity<DailyMenu>()
-           .HasOne<WeeklyMenu>()
-           .WithMany()
-           .HasForeignKey(k => k.WeeklyMenuId);
+           .HasOne(dm => dm.WeeklyMenu)
+           .WithMany(wm => wm.Menu)
+           .HasForeignKey(dm => dm.WeeklyMenuId);
     }
 }
