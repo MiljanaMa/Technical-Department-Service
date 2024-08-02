@@ -26,7 +26,7 @@ import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity
     EditMealDialogComponent,
     IngredientModalComponent,
     MealFormComponent,
-    ConsumerQuantityComponent
+    ConsumerQuantityComponent,
   ],
   imports: [
     CommonModule,
