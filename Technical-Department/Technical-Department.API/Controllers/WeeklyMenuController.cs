@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
+using Technical_Department.Kitchen.Core.UseCases;
 
 namespace Technical_Department.API.Controllers
 {
@@ -24,8 +25,9 @@ namespace Technical_Department.API.Controllers
 
         [HttpPost("")]
         public ActionResult<WeeklyMenuDto> Create([FromBody] WeeklyMenuDto weeklyMenu)
+        
         {
-            var result = _weeklyMenuService.Create(weeklyMenu);
+            var result = _weeklyMenuService.CreateOrFetch(weeklyMenu);
             return CreateResponse(result);
         }
 
@@ -36,10 +38,17 @@ namespace Technical_Department.API.Controllers
             return CreateResponse(result);
         }
 
-        [HttpPut("{id:long}")]
-        public ActionResult<WeeklyMenuDto> Update([FromBody] WeeklyMenuDto weeklyMenu)
+        [HttpPut("confirm")]
+        public ActionResult<WeeklyMenuDto> ConfirmWeeklyMenu([FromBody] WeeklyMenuDto weeklyMenu)
         {
-            var result = _weeklyMenuService.Update(weeklyMenu);
+            var result = _weeklyMenuService.ConfirmWeeklyMenu(weeklyMenu);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("add-meal-offer")]
+        public ActionResult<Boolean> AddMealOffer([FromBody] MealOfferDto mealOffer)
+        {
+            var result = _weeklyMenuService.AddMealOffer(mealOffer);
             return CreateResponse(result);
         }
 
