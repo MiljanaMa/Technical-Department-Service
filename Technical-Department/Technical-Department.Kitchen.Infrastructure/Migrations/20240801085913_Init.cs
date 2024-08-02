@@ -59,7 +59,8 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     From = table.Column<DateOnly>(type: "date", nullable: false),
-                    To = table.Column<DateOnly>(type: "date", nullable: false)
+                    To = table.Column<DateOnly>(type: "date", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,8 +104,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DayOfWeek = table.Column<int>(type: "integer", nullable: false),
                     Menu = table.Column<ICollection<MealOffer>>(type: "jsonb", nullable: false),
-                    WeeklyMenuId = table.Column<long>(type: "bigint", nullable: false),
-                    WeeklyMenuId1 = table.Column<long>(type: "bigint", nullable: true)
+                    WeeklyMenuId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,12 +116,6 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                         principalTable: "WeeklyMenus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DailyMenus_WeeklyMenus_WeeklyMenuId1",
-                        column: x => x.WeeklyMenuId1,
-                        principalSchema: "kitchen",
-                        principalTable: "WeeklyMenus",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -129,12 +123,6 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                 schema: "kitchen",
                 table: "DailyMenus",
                 column: "WeeklyMenuId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DailyMenus_WeeklyMenuId1",
-                schema: "kitchen",
-                table: "DailyMenus",
-                column: "WeeklyMenuId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ingredients_UnitId",

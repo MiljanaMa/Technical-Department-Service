@@ -1,8 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Meal } from './model/meal.model';
 import { environment } from 'src/env/environment';
+import { DailyMenu } from './model/daily-menu.model';
+import { WeeklyMenu } from './model/weekly-menu.model';
+import { MealOffer } from './model/meal-offer.model';
 import { Ingredient } from './model/ingredient.model';
 import { MeasurementUnit } from './model/measurementUnit.model';
 
@@ -15,6 +18,29 @@ export class KitchenService {
   getMeals(): Observable<Meal[]> {
     return this.http.get<Meal[]>(environment.apiHost + 'meal');
   }
+
+  addMealOffer(mealOffer: MealOffer): Observable<DailyMenu> {
+    return this.http.post<DailyMenu>(`${environment.apiHost}daily-menu/add-meal-offer`, mealOffer);
+  }
+  
+  createOrFetchWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
+    return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu', weeklyMenu);
+  }
+
+  createDraftFromDefaultMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
+    return this.http.post<WeeklyMenu>(environment.apiHost + 'weekly-menu/default', weeklyMenu);
+  }
+
+  updateMenuStatus(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
+    return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/${weeklyMenu.id}`, weeklyMenu)
+  }
+
+  getMenu(menuStatus: string): Observable<WeeklyMenu> {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("status", menuStatus);
+    return this.http.get<WeeklyMenu>(environment.apiHost + `weekly-menu/status`, {params: queryParams})
+  }
+
   getMeal(mealId: number): Observable<Meal> {
     return this.http.get<Meal>(environment.apiHost + 'meal/' + mealId);
   }

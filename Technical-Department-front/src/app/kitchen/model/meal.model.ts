@@ -13,6 +13,7 @@ export interface IngredientQuantity{
     unitShortName?: string;
     quantity: number;
 }
+
 export enum DishType
 {
     BREAKFAST,

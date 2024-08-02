@@ -43,14 +43,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<long>("WeeklyMenuId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("WeeklyMenuId1")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("WeeklyMenuId");
-
-                    b.HasIndex("WeeklyMenuId1");
 
                     b.ToTable("DailyMenus", "kitchen");
                 });
@@ -162,6 +157,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<DateOnly>("From")
                         .HasColumnType("date");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<DateOnly>("To")
                         .HasColumnType("date");
 
@@ -172,15 +170,13 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
 
             modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.DailyMenu", b =>
                 {
-                    b.HasOne("Technical_Department.Kitchen.Core.Domain.WeeklyMenu", null)
-                        .WithMany()
+                    b.HasOne("Technical_Department.Kitchen.Core.Domain.WeeklyMenu", "WeeklyMenu")
+                        .WithMany("Menu")
                         .HasForeignKey("WeeklyMenuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Technical_Department.Kitchen.Core.Domain.WeeklyMenu", null)
-                        .WithMany("Menu")
-                        .HasForeignKey("WeeklyMenuId1");
+                    b.Navigation("WeeklyMenu");
                 });
 
             modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.Ingredient", b =>

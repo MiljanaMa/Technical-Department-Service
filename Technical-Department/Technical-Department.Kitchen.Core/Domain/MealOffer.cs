@@ -10,18 +10,31 @@ namespace Technical_Department.Kitchen.Core.Domain
         public MealType Type { get; init; }
         public ConsumerType ConsumerType { get; init; }
         public long MealId { get; init; }
+        public string MealName { get; init; }
         public int ConsumerQuantity { get; init; }
         public long DailyMenuId { get; init; }
         public MealOffer() { }
         [JsonConstructor]
-        public MealOffer(MealType type, ConsumerType consumerType, long mealId, int consumerQuantity, long dailyMenuId)
+        public MealOffer(MealType type, ConsumerType consumerType, long mealId, string mealName, int consumerQuantity, long dailyMenuId)
         {
             Type = type;
             ConsumerType = consumerType;
             MealId = mealId;
+            MealName = mealName;
             ConsumerQuantity = consumerQuantity;
             DailyMenuId = dailyMenuId;
         }
+
+        public MealOffer(MealOffer mealOffer, long dailyMenuId)
+        {
+            Type = mealOffer.Type;
+            ConsumerType = mealOffer.ConsumerType;
+            MealId = mealOffer.MealId;
+            MealName = mealOffer.MealName;
+            ConsumerQuantity = mealOffer.ConsumerQuantity;
+            DailyMenuId = dailyMenuId;
+        }
+
         protected override bool EqualsCore(MealOffer mealOffer)
         {
             return MealId == mealOffer.MealId &&
