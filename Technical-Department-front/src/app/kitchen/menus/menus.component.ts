@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { KitchenService } from '../kitchen.service';
-import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
+import { WeeklyMenu, WeeklyMenuStatus, WeeklyMenuStatusLabels } from '../model/weekly-menu.model';
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 
@@ -12,7 +12,10 @@ import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels }
 })
 export class MenusComponent implements OnInit {
 
-  weeklyMenu: WeeklyMenu | undefined;
+  currentWeeklyMenu: WeeklyMenu | undefined;
+  newWeeklyMenu: WeeklyMenu | undefined;
+  selectedWeeklyMenu: WeeklyMenu | undefined;
+  selectedMenuTabIndex: number | null = 0;
   mealOffers: MealOffer[] = [];
   dataSource: any[] = [];
 
@@ -38,25 +41,47 @@ export class MenusComponent implements OnInit {
       value: MealType[key as keyof typeof MealType]
     }));
 
-    displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
+  weeklyMenuStatuses = Object.keys(WeeklyMenuStatus)
+  .filter(key => !isNaN(Number(WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus])))
+  .map(key => ({
+    name: WeeklyMenuStatusLabels[WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus] as keyof typeof WeeklyMenuStatusLabels],
+    value: WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus]
+  })).filter(weeklyMenuStatus => ![WeeklyMenuStatus.PREVIOUS, WeeklyMenuStatus.DRAFT, WeeklyMenuStatus.DEFAULT].includes(weeklyMenuStatus.value));
+
+  displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
   constructor(private router: Router, private service: KitchenService){}
 
   ngOnInit(): void {
-    this.service.getMenu('NEW').subscribe({
+    this.getCurrentMenu();
+    this.getNewMenu();
+  }
+
+  getCurrentMenu(): void {
+    this.service.getMenu('CURRENT').subscribe({
       next: (result: WeeklyMenu) => {
-        this.weeklyMenu = result;
+        this.currentWeeklyMenu = result;
+        this.selectedWeeklyMenu = this.currentWeeklyMenu;
              
-        if (this.weeklyMenu.menu && this.weeklyMenu.menu.length > 0) {
-          this.selectedDailyMenu = this.weeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);
-          console.log(this.selectedDailyMenu);
-          if (!this.selectedDailyMenu) {
-            console.log("No monday")
-            this.selectedDailyMenu = this.weeklyMenu.menu[0];
-          }
+        if (this.currentWeeklyMenu && this.currentWeeklyMenu.menu && this.currentWeeklyMenu.menu.length > 0) {
+          this.selectedDailyMenu = this.currentWeeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);      
           this.updateDataSource();
         }
         console.log("Weekly menu:", result);
+    },
+      error: (error) => {
+        console.error('Error fetching weekly menu:', error);
+        if (error.error && error.error.errors) {
+          console.log('Validation errors:', error.error.errors);
+        }
+      }
+    });
+  }
+
+  getNewMenu(): void {
+    this.service.getMenu('NEW').subscribe({
+      next: (result: WeeklyMenu) => {
+        this.newWeeklyMenu = result;    
     },
       error: (error) => {
         console.error('Error fetching weekly menu:', error);
@@ -83,11 +108,27 @@ export class MenusComponent implements OnInit {
     });
   }
 
+  onSelectedMenuStatusTabChange(event: any): void {
+    const selectedWeeklyMenuStatus = this.weeklyMenuStatuses[event.index].value;
+    if(selectedWeeklyMenuStatus == WeeklyMenuStatus.CURRENT){
+      this.selectedWeeklyMenu = this.currentWeeklyMenu;
+    }else{
+      this.selectedWeeklyMenu = this.newWeeklyMenu;
+    }
+    if (this.selectedWeeklyMenu && this.selectedWeeklyMenu.menu && this.selectedWeeklyMenu.menu.length > 0) {
+      this.selectedDailyMenu = this.selectedWeeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);      
+      this.updateDataSource();
+    }
+    console.log("SELEKTOVANI MENI:")
+    console.log( this.selectedWeeklyMenu)
+    this.selectedMenuTabIndex = event.index;
+  } 
+
   onSelectedDayTabChange(event: any): void {
     const selectedDayOfWeek = this.daysOfWeek[event.index].value;
     console.log("Selected day of week tab: " + selectedDayOfWeek);
-    if (this.weeklyMenu && this.weeklyMenu.menu) {
-      for (const dailyMenu of this.weeklyMenu.menu) {
+    if (this.selectedWeeklyMenu && this.selectedWeeklyMenu.menu) {
+      for (const dailyMenu of this.selectedWeeklyMenu.menu) {
         if (dailyMenu.dayOfWeek === selectedDayOfWeek) {
           this.selectedDailyMenu = dailyMenu;
           this.updateDataSource();
@@ -115,9 +156,9 @@ export class MenusComponent implements OnInit {
   }
 
   getDayDate(dayIndex: number): string {
-    if (!this.weeklyMenu?.from) return '';
+    if (!this.selectedWeeklyMenu?.from) return '';
 
-    const fromDate = new Date(this.weeklyMenu.from);
+    const fromDate = new Date(this.selectedWeeklyMenu.from);
     fromDate.setDate(fromDate.getDate() + dayIndex);
     return this.formatToDayMonthYear(fromDate);
   }
@@ -130,15 +171,15 @@ export class MenusComponent implements OnInit {
   }
 
 
-  showTabularView(): void {
+  showTabularDefaultMenu(): void {
     const menus: DailyMenu[] = [];
-    this.weeklyMenu = {
+    this.newWeeklyMenu = {
       from: this.formatDate(this.getNextMonday()),
       to: this.formatDate(this.getNextMondayPlusWeek()),
       menu: menus,
       status: WeeklyMenuStatus.DRAFT
     };
-    this.service.createDraftFromDefaultMenu(this.weeklyMenu).subscribe({
+    this.service.createDraftFromDefaultMenu(this.newWeeklyMenu).subscribe({
       next: (result: WeeklyMenu) => {
         console.log("Weekly menu:", result);
         this.router.navigate(['/tabular-menu/draft']);
@@ -172,4 +213,9 @@ export class MenusComponent implements OnInit {
     nextMondayPlusWeek.setDate(nextMondayPlusWeek.getDate() + 7);
     return nextMondayPlusWeek;
   }
+
+  changeNewMenu(): void {
+    this.router.navigate(['/tabular-menu/new']);
+  }
+
 }
