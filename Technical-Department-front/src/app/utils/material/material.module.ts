@@ -10,7 +10,7 @@ import { MatButton, MatButtonModule } from "@angular/material/button"
 import { MatBadge, MatBadgeModule } from "@angular/material/badge"
 import { MatDrawer, MatDrawerContainer, MatDrawerContent, MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule } from "@angular/material/sidenav"
 import { MatList, MatListItem, MatListModule, MatNavList } from "@angular/material/list"
-import { MatCard, MatCardModule } from "@angular/material/card"
+import { MatCard, MatCardModule, MatCardTitle } from "@angular/material/card"
 import { MatSlider, MatSliderModule } from "@angular/material/slider"
 import { MatColumnDef, MatHeaderRowDef, MatRow, MatTable, MatTableModule } from "@angular/material/table"
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator"
@@ -102,7 +102,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatTableModule,
     MatError,
     MatDatepickerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardTitle
   ]
 })
 export class MaterialModule { }

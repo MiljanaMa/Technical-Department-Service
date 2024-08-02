@@ -271,6 +271,7 @@ validateMeal(control: AbstractControl): ValidationErrors | null {
     if (!this.mealFormGroup.valid) {
       this.snackBar.open('Proverite da li su sve forme validno popunjene.', 'OK', {
         duration: 3000, 
+        verticalPosition: 'top',
         panelClass: ['mat-warn'] 
       });
       return;
