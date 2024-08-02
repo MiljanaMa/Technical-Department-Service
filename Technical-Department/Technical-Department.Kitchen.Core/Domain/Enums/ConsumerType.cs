@@ -10,7 +10,6 @@ namespace Technical_Department.Kitchen.Core.Domain.Enums
         DOCTOR,
         CHILDREN_2_4,
         CHILDREN_4_14,
-        DIABETIC,
-        ALL
+        DIABETIC
     }
 }
