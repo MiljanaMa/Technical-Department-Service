@@ -1,8 +1,8 @@
 .meals-container {
   display: flex;
-  flex-wrap: wrap; /* Allows cards to wrap to the next line */
-  gap: 15px; /* Space between meal cards */
-  justify-content: center; /* Center the cards in the container */
+  flex-wrap: wrap; 
+  gap: 15px; 
+  justify-content: center;
 }
 
 .meal-card {
@@ -11,48 +11,48 @@
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 500px; /* Set a fixed width for the cards */
-  max-width: 100%; /* Ensure cards don't exceed container width */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: 500px; 
+  max-width: 100%; 
+  box-sizing: border-box; 
 }
 
 .meal-name {
-  font-size: 1.25rem; /* Slightly smaller font size */
+  font-size: 1.25rem; 
   color: #333;
   margin-bottom: 10px;
   text-align: center;
 }
 .meal-calories {
-  font-size: 1rem; /* Adjust the font size as needed */
-  color: #333; /* Text color */
-  margin: 15px 0; /* Adjust top and bottom margin for spacing */
-  padding: 5px 0; /* Padding for additional spacing */
+  font-size: 1rem;
+  color: #333; 
+  margin: 15px 0;
+  padding: 5px 0; 
   text-align: center;
 }
 
 .meal-calories::before {
   content: "Kalorije:      ";
-  font-weight: bold; /* Make the label bold */
+  font-weight: bold; 
 }
 
 .ingredients-list {
-  display: grid; /* Use grid layout */
-  grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
-  gap: 10px; /* Space between grid items */
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 10px; 
   margin-bottom: 10px;
 }
 
 .ingredient-item {
-  display: contents; /* Makes the item elements act like grid cells */
+  display: contents;
 }
 
 .ingredient-name, 
 .ingredient-quantity, 
 .ingredient-unit {
-  display: flex; /* Ensures content aligns correctly within grid cells */
-  align-items: center; /* Center content vertically */
-  justify-content: center; /* Center content horizontally */
-  font-size: 0.9rem; /* Slightly smaller font size */
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 0.9rem; 
   color: #333;
 }
 
@@ -66,7 +66,7 @@
 
 .ingredient-unit {
   font-style: italic;
-  color: #666; /* Adjust color for better visibility */
+  color: #666;
 }
 
 .styled-heading {
@@ -82,4 +82,20 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-transform: uppercase;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-button.mat-button {
+background-color: #003B6D;
+color: white; 
+border-radius: 10px;
+margin: 16px;
+margin-left: 32px;
+padding: 16px;
+font-size: large;
 }
