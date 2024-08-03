@@ -124,7 +124,9 @@ VALUES
 	(128, 'Tjestenina bez glutena', 360, 7, 72, 1.5, 0, 2, 11),
 	(129, 'Plazma keks', 400, 6, 60, 18, 20, 5, 11),
 	(130, 'Panirani kolutici lignje', 250, 15, 20, 12, 0, 4, 11),
-	(132, 'Panirani riblji štapići', 250, 15, 20, 12, 0, 4, 11);
+	(132, 'Panirani riblji štapići', 250, 15, 20, 12, 0, 4, 11),
+	(133, 'Salama', 336, 22.6, 2.4, 27.8, 0.3, 4, 11),
+	(134, 'Virsle', 305, 12.5, 1.5, 28.0, 1.2, 4, 11);
 
 INSERT INTO kitchen."Meals" VALUES (-1, 1, 'Pita sa sirom', 628.2, '1980-01-01 00:00:00+01', '[{"Quantity": 0.01, "IngredientId": 13}, {"Quantity": 0.08, "IngredientId": 14}, {"Quantity": 0.5, "IngredientId": 9}, {"Quantity": 0.1, "IngredientId": 15}, {"Quantity": 0.001, "IngredientId": 16}]', 'BREAKFAST,DINNER');
 INSERT INTO kitchen."Meals" VALUES (-2, 2, 'Pita sa mesom', 712.4000000000001, '1980-01-01 00:00:00+01', '[{"Quantity": 0.05, "IngredientId": 17}, {"Quantity": 0.5, "IngredientId": 9}, {"Quantity": 0.02, "IngredientId": 18}, {"Quantity": 0.01, "IngredientId": 3}, {"Quantity": 0.1, "IngredientId": 15}, {"Quantity": 0.02, "IngredientId": 8}]', 'BREAKFAST,DINNER');
