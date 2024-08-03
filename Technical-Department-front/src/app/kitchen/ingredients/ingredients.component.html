@@ -1,14 +1,14 @@
 <h1 class="styled-heading">Namirnice</h1>
-<div class="search-container">
+
+<div class="search-container center">
   <mat-form-field class="full-width">
-    <mat-label>Pretraži namirnice</mat-label>
+    <mat-label >Pretraži namirnice</mat-label>
     <input matInput [formControl]="searchControl" placeholder="Unesite ime namirnice" change>
   </mat-form-field>
+  <button class="confirm-button mat-button" (click)="addIngredient()">Dodaj novu namirnicu</button>
 </div>
-<div class="action-container">
-  <button (click)="addIngredient()">Dodaj</button>
-</div>
-<div class="ingredients-container">
+
+<div class="ingredients-container center">
   <div class="ingredient-card" *ngFor="let ingredient of filteredIngredients">
     <span class="name">{{ ingredient.name }}</span>
     <div class="ingredient-item">
