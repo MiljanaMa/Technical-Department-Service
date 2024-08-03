@@ -228,7 +228,7 @@ export class MenusComponent implements OnInit {
     });
   }
 
-  async exportToPDF(type: string) {
+  async exportToPDF(type: number) {
     if (!this.menuStatusTabGroup || !this.dayTabGroups) {
       console.error('Tab groups are not defined');
       return;
@@ -246,13 +246,10 @@ export class MenusComponent implements OnInit {
     const today = new Date();
     const day = today.getDay();
     const diff = (day === 0 ? -6 : 1) - day;
-    const monday = new Date(today.setDate(today.getDate() + diff));
+    const monday = type === 0 ? new Date(today.setDate(today.getDate() + diff)) : new Date(today.setDate(today.getDate() + diff + 7));
     var mondayCounter = 0;
-    var start = 0;
-    var end = 1;
-    
-    if(type !== 'CURRENT')
-      start = 1
+    var start = type;
+    var end = type + 1;
   
     for (let i = start; i < end; i++) {
       this.menuStatusTabGroup.selectedIndex = i;
