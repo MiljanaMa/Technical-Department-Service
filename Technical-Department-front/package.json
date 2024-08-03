@@ -23,6 +23,8 @@
     "@material/chips": "^15.0.0-canary.bc9ae6c9c.0",
     "@ngneat/until-destroy": "^10.0.0",
     "cdk": "^2.146.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "material": "^0.9.11",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

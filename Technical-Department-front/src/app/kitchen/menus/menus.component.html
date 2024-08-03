@@ -1,51 +1,45 @@
-<br>
-<mat-tab-group  (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
+<button (click)="exportToPDF()">Export to PDF</button>
+
+<mat-tab-group #menuStatusTabGroup (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
   <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
-  <ng-template mat-tab-label>
-      <div>
-      <div>{{ menuStatus.name }}</div>    
-      </div>   
-  </ng-template>
+    <ng-template mat-tab-label>
+      <div>{{ menuStatus.name }}</div>
+    </ng-template>
 
-  <div class="tab-content">
-    <mat-tab-group *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)">
-      <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
-        <ng-template mat-tab-label>
-          <div>
-            <div>{{day.name}} </div>
-            <div>({{ getDayDate(dayIndex) }})</div>
-          </div>
-        </ng-template>
+    <div class="tab-content">
+      <mat-tab-group #dayTabGroups *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)">
+        <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
+          <ng-template mat-tab-label>
+            <div>{{ day.name }} <br> ({{ getDayDate(dayIndex) }})</div>
+          </ng-template>
 
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="consumerType">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element"><b>{{ element.consumerType }}</b></td>
-      </ng-container>
-    
-      <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
-        <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
-        <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
-          <div class="center">{{ element[mealType.value.toString()] }}</div>
-        </td>
-      </ng-container>
-    
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    </mat-tab>
-    </mat-tab-group>
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="consumerType">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element"><b>{{ element.consumerType }}</b></td>
+            </ng-container>
 
-    <div *ngIf="!selectedWeeklyMenu" class="no-menu-message">Zeljeni meni ne postoji u bazi. </div>
-    <div *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
-      <div><button [routerLink]="'/custom-menu'" class="confirm-button mat-button">Novi meni</button></div> 
-      <div><button class="confirm-button mat-button" (click)="showTabularDefaultMenu()">Meni po sablonu</button></div> 
+            <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
+              <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
+              <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
+                <div class="center">{{ element[mealType.value.toString()] }}</div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-tab>
+      </mat-tab-group>
+
+      <div *ngIf="!selectedWeeklyMenu" class="no-menu-message">Zeljeni meni ne postoji u bazi.</div>
+      <div *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
+        <button [routerLink]="'/custom-menu'" class="confirm-button mat-button">Novi meni</button>
+        <button class="confirm-button mat-button" (click)="showTabularDefaultMenu()">Meni po sablonu</button>
+      </div>
+      <div *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
+        <button class="confirm-button mat-button" (click)="changeNewMenu()">Izmeni meni</button>
+      </div>
     </div>
-    <div *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
-      <div><button class="confirm-button mat-button" (click)="changeNewMenu()">Izmeni meni</button></div> 
-    </div>
-
-  </div>
-
-</mat-tab>
+  </mat-tab>
 </mat-tab-group>
