@@ -57,13 +57,22 @@ export class CustomMenuComponent implements OnInit {
     this.createInitialWeeklyMenu();
   }
 
+  shouldRenderSnackInput(mealType: MealType, consumerType: ConsumerType): boolean {
+    const snackEligibleConsumerTypes = [ConsumerType.DIABETIC, ConsumerType.PREGNANT, ConsumerType.CHILDREN_2_4, ConsumerType.CHILDREN_4_14];
+    const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
+    const otherMealTypes = [MealType.BREAKFAST, MealType.DINNER, MealType.DINNER_SALAD, MealType.LUNCH, MealType.LUNCH_SALAD]
+    return  otherMealTypes.includes(mealType) || (snackMealTypes.includes(mealType) && snackEligibleConsumerTypes.includes(consumerType));
+  }
+
   initializeEmptyFormGroup() {
     this.daysOfWeek.forEach(day => {
       this.mealTypes.forEach(mealType => {
         this.consumerTypes.forEach(consumerType => {
+          if (this.shouldRenderSnackInput(mealType.value, consumerType.value)) {
           const controlName = this.getFormControlName(day.value, mealType.value, consumerType.value);
           this.mealFormGroup.addControl(controlName, new FormControl('', [this.validateMeal.bind(this)]));
           this.filteredOptions[controlName] = of([]);
+          }
         });
       });
     });
@@ -125,30 +134,32 @@ validateMeal(control: AbstractControl): ValidationErrors | null {
     this.weeklyMenu.menu.forEach((dailyMenu, dayIndex) => {
       this.mealTypes.forEach((mealType, mealTypeIndex) => {
         this.consumerTypes.forEach(consumerType => {
-          const controlName = this.getFormControlName(dailyMenu.dayOfWeek, mealType.value, consumerType.value);
-          const formControl = this.mealFormGroup.get(controlName);
-  
-          if (formControl) {
-            const existingMealOffer = dailyMenu.menu?.find(offer =>
-              offer.consumerType === consumerType.value && offer.type === mealType.value
-            );
-  
-            if (existingMealOffer) {
-              const selectedMeal = this.allMeals.find(meal => meal.id === existingMealOffer.mealId);
-              if (selectedMeal) {
-                formControl.setValue(selectedMeal);
+          if (this.shouldRenderSnackInput(mealType.value, consumerType.value)) {
+            const controlName = this.getFormControlName(dailyMenu.dayOfWeek, mealType.value, consumerType.value);
+            const formControl = this.mealFormGroup.get(controlName);
+    
+            if (formControl) {
+              const existingMealOffer = dailyMenu.menu?.find(offer =>
+                offer.consumerType === consumerType.value && offer.type === mealType.value
+              );
+    
+              if (existingMealOffer) {
+                const selectedMeal = this.allMeals.find(meal => meal.id === existingMealOffer.mealId);
+                if (selectedMeal) {
+                  formControl.setValue(selectedMeal);
+                }
               }
+    
+              formControl.valueChanges.subscribe(value => {
+                console.log("Form control value changed:", value);
+                this.onFieldChange(consumerType.value, dailyMenu.dayOfWeek, mealType.value);
+              });
+    
+              this.filteredOptions[controlName] = formControl.valueChanges.pipe(
+                startWith(''),
+                map(value => this._filter(value, mealType.value))
+              );
             }
-  
-            formControl.valueChanges.subscribe(value => {
-              console.log("Form control value changed:", value);
-              this.onFieldChange(consumerType.value, dailyMenu.dayOfWeek, mealType.value);
-            });
-  
-            this.filteredOptions[controlName] = formControl.valueChanges.pipe(
-              startWith(''),
-              map(value => this._filter(value, mealType.value))
-            );
           }
         });
       });
@@ -319,5 +330,17 @@ validateMeal(control: AbstractControl): ValidationErrors | null {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString().slice(-2);
     return `${day}/${month}/${year}`;
+  }
+
+  getColumnsClass(mealType: MealType, consumerTypes: any[]): string {
+    const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
+
+    if (snackMealTypes.includes(mealType)) {
+     // console.log("one-column");
+      return 'form-fields-container one-column';
+    } else {
+      //console.log("two-column");
+      return 'form-fields-container two-columns';
+    }
   }
 }
