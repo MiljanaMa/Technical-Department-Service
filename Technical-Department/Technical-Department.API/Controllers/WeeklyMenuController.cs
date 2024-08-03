@@ -51,6 +51,12 @@ namespace Technical_Department.API.Controllers
             var result = _weeklyMenuService.AddMealOffer(mealOffer);
             return CreateResponse(result);
         }
+        [HttpPost("get-ingredients-requirements")]
+        public ActionResult<List<IngredientQuantityDto>> GetIngredientsRequirements([FromBody] WeeklyMenuDto weeklyMenu)
+        {
+            var result = _weeklyMenuService.GetIngredientsRequirements(weeklyMenu);
+            return CreateResponse(result);
+        }
 
     }
 }

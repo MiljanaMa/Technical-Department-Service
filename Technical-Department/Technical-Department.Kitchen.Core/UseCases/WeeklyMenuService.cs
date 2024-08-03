@@ -19,10 +19,17 @@ namespace Technical_Department.Kitchen.Core.UseCases
     {
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
         private readonly ICrudRepository<DailyMenu> _dailyMenuRepository;
-        public WeeklyMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository,IMapper mapper) : base(weeklyMenuRepository, mapper)
+        private readonly ICrudRepository<Meal> _mealRepository;
+        private readonly IIngredientRepository _ingredientRepository;
+        private readonly IMapper _mapper;
+        public WeeklyMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository
+            , IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base(weeklyMenuRepository, mapper)
         {
             _weeklyMenuRepository = weeklyMenuRepository;
             _dailyMenuRepository = dailyMenuRepository;
+            _mealRepository = mealRepository;
+            _ingredientRepository = ingredientRepository;
+            _mapper = mapper;
         }
 
         public Result<WeeklyMenuDto> CreateOrFetch(WeeklyMenuDto weeklyMenuDto)
@@ -135,12 +142,12 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
         }
 
-        public Result<WeeklyMenuDto> ConfirmWeeklyMenu(WeeklyMenuDto weekluMenuDto)
+        public Result<WeeklyMenuDto> ConfirmWeeklyMenu(WeeklyMenuDto weeklyMenuDto)
         {
             try
             {
-                weekluMenuDto.Status = API.Dtos.Enums.WeeklyMenuStatus.NEW;
-                var result = _weeklyMenuRepository.Update(MapToDomain(weekluMenuDto));
+                weeklyMenuDto.Status = API.Dtos.Enums.WeeklyMenuStatus.NEW;
+                var result = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
@@ -151,6 +158,36 @@ namespace Technical_Department.Kitchen.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+        }
+        public Result<List<IngredientQuantityDto>> GetIngredientsRequirements(WeeklyMenuDto weeklyMenuDto)
+        {
+            List<IngredientQuantity> ingredientQuantities = new List<IngredientQuantity>();
+
+            var weeklyMenu = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
+
+            int tomorrowsDayOfWeek = (int) DateTime.Today.AddDays(1).DayOfWeek;
+            tomorrowsDayOfWeek = tomorrowsDayOfWeek == 0 ? 6 : (tomorrowsDayOfWeek - 1);
+            var tomorrowsDailyMenu = weeklyMenu.Menu.FirstOrDefault(menu => (int)menu.DayOfWeek == tomorrowsDayOfWeek);
+
+            if (tomorrowsDailyMenu == null)
+                return Result.Fail(FailureCode.NotFound).WithError("Tomorrow's menu not found");
+
+            foreach (var mealOffer in tomorrowsDailyMenu.Menu)
+            {
+                var meal = _mealRepository.Get(mealOffer.MealId);
+                foreach(var ingredientQuantity in meal.Ingredients)
+                {
+                        var newIngredientQuantity = new IngredientQuantity(ingredientQuantity.IngredientId, ingredientQuantity.Quantity * mealOffer.ConsumerQuantity);
+                        var newIngredientQuantityDto = _mapper.Map<IngredientQuantityDto>(newIngredientQuantity);
+
+                        ingredientQuantities.Add(newIngredientQuantity);
+
+                }
+            }
+            var mergedIngredientQuantities = ingredientQuantities.GroupBy(i => i.IngredientId)
+                                             .Select(g => new IngredientQuantityDto((int)g.Key, _ingredientRepository.Get(g.Key).Name,
+                                             _ingredientRepository.Get(g.Key).Unit.ShortName, g.Sum(x => x.Quantity))).ToList();
+            return mergedIngredientQuantities;
         }
     }
 
