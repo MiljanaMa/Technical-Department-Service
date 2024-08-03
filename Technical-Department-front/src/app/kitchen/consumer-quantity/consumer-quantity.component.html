@@ -17,9 +17,9 @@
             <mat-card class="title-card">
                 <mat-card-title>Unesite brojno stanje:</mat-card-title>
             </mat-card>
-        <div class="form-fields-container">
+        <div [ngClass]="getColumnsClass(mealType.value, consumerTypes)">
             <div *ngFor="let consumerType of consumerTypes">
-            <mat-form-field class="form-field-margin">
+            <mat-form-field  *ngIf="shouldRenderSnackInput(mealType.value, consumerType.value)">
                 <mat-label>{{ consumerType.name }}:</mat-label>
                 <input type="number" matInput [formControlName]="getFormControlName(mealType.value, consumerType.value)">
 
