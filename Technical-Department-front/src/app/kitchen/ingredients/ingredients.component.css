@@ -1,49 +1,49 @@
 .ingredient-details {
-    line-height: 1.5; /* Adjust line spacing */
+    line-height: 1.5; 
   }
   
   .ingredient-item {
-    margin-bottom: 2px; /* Space between each label-value pair */
+    margin-bottom: 2px;
   }
   
   .label {
-    display: inline-block; /* Ensure labels are aligned with values */
-    width: 150px; /* Fixed width for labels, adjust as needed */
-    font-weight: normal; /* Make labels bold */
+    display: inline-block; 
+    width: 150px; 
+    font-weight: normal;
   }
   
   .value {
-    display: inline; /* Values are displayed inline with the label */
+    display: inline; 
   }
   .name {
-    text-align: center; /* Values are displayed inline with the label */
+    text-align: center; 
     font-weight: bold;
     display: inline;
     margin-bottom: 8px;
   }
   .styled-heading {
-    text-align: center; /* Center the text */
-    font-size: 2rem; /* Adjust font size */
-    color: #333; /* Dark gray color */
-    font-family: 'Arial', sans-serif; /* Font family */
-    font-weight: 500; /* Bold font weight */
-    margin: 10px 0; /* Vertical margin for spacing */
-    padding: 10px; /* Padding around the text */
-    border-bottom: 2px solid #007bff; /* Bottom border with color */
-    background-color: #f8f9fa; /* Light background color */
-    border-radius: 8px; /* Rounded corners for the background */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    text-transform: uppercase; /* Uppercase text */
+    text-align: center; 
+    font-size: 2rem; 
+    color: #333; 
+    font-family: 'Arial', sans-serif; 
+    font-weight: 500; 
+    margin: 10px 0; 
+    padding: 10px; 
+    border-bottom: 2px solid #007bff; 
+    background-color: #f8f9fa; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    text-transform: uppercase; 
   }
   
   h3 {
-    text-align: center; /* Center align headings */
+    text-align: center; 
     font-size: 1.2rem;
   }
   .ingredients-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Space between ingredient cards */
+    gap: 10px;
   }
   
   .ingredient-card {
@@ -70,3 +70,18 @@
     margin-bottom: 10px;
   }
   
+  .center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-button.mat-button {
+  background-color: #003B6D;
+  color: white; 
+  border-radius: 10px;
+  margin: 16px;
+  margin-left: 32px;
+  padding: 16px;
+ font-size: large;
+}
