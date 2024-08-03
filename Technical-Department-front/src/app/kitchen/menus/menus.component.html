@@ -1,5 +1,5 @@
-<button (click)="exportToPDF()">Export to PDF</button>
-
+<button (click)="exportToPDF('CURRENT')">Exportuj Trenutni jelovnik</button>
+<button (click)="exportToPDF('')">Exportuj Sledeći jelovnik</button>
 <mat-tab-group #menuStatusTabGroup (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
   <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
     <ng-template mat-tab-label>

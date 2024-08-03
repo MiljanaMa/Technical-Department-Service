@@ -228,13 +228,16 @@ export class MenusComponent implements OnInit {
     });
   }
 
-  async exportToPDF() {
+  async exportToPDF(type: string) {
     if (!this.menuStatusTabGroup || !this.dayTabGroups) {
       console.error('Tab groups are not defined');
       return;
     }
   
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({
+      format: 'a4', // or 'letter', or custom size
+      unit: 'mm',   // unit of measurement
+    });
     pdf.setFontSize(10);
     let position = 0;
     const menuStatusTabs = this.menuStatusTabGroup._tabs.toArray();
@@ -244,10 +247,14 @@ export class MenusComponent implements OnInit {
     const day = today.getDay();
     const diff = (day === 0 ? -6 : 1) - day;
     const monday = new Date(today.setDate(today.getDate() + diff));
-    const i = 0;
+    var mondayCounter = 0;
+    var start = 0;
+    var end = 1;
     
+    if(type !== 'CURRENT')
+      start = 1
   
-    for (let i = 0; i < menuStatusTabs.length; i++) {
+    for (let i = start; i < end; i++) {
       this.menuStatusTabGroup.selectedIndex = i;
       await this.sleep(500); // Wait for the content to render
   
@@ -270,8 +277,8 @@ export class MenusComponent implements OnInit {
             pdf.addPage(); // Add a new page
             position = 0; // Reset position to the top of the new page
           }
-          monday.setDate(monday.getDate() + i);
-          i = 1;
+          monday.setDate(monday.getDate() + mondayCounter);
+          mondayCounter = 1;
           if (this.formatDate(monday)) {
             pdf.text(`Datum: ${this.formatDateIntoSrb(monday)}`, 0, position + 10);
             position += 20;
