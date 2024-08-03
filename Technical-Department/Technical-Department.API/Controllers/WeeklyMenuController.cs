@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
-using Technical_Department.Kitchen.Core.UseCases;
 
 namespace Technical_Department.API.Controllers
 {

@@ -12,5 +12,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
     public interface IWeeklyMenuRepository : ICrudRepository<WeeklyMenu>
     {
         WeeklyMenu GetMenuByStatus(WeeklyMenuStatus status);
+        WeeklyMenu GetMenuByDate(DateOnly date);
     }
 }
