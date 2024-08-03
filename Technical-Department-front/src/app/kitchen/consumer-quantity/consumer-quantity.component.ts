@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { KitchenService } from '../kitchen.service';
 import { ConsumerQuantity } from '../model/consumer-quantity.model';
+import { WeeklyMenu } from '../model/weekly-menu.model';
+import { IngredientQuantity } from '../model/meal.model';
 
 @Component({
   selector: 'app-consumer-quantity',
@@ -13,6 +15,7 @@ import { ConsumerQuantity } from '../model/consumer-quantity.model';
 })
 export class ConsumerQuantityComponent {
   selectedMealTabIndex: number = 0;
+  currentWeeklyMenu?: WeeklyMenu;
 
   mealFormGroup: FormGroup = new FormGroup({});
   canConfirm: boolean = false;
@@ -36,7 +39,17 @@ export class ConsumerQuantityComponent {
     this.initializeEmptyFormGroup();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.service.getMenu('CURRENT').subscribe({
+      next: (result: WeeklyMenu) => {
+        this.currentWeeklyMenu = result;
+      },
+      error: (error: any) => {
+        console.log(error)
+        // Handle error
+      }
+    });
+  }
 
   initializeEmptyFormGroup() {
     const positiveIntegerPattern = '^[0-9]+$';
@@ -84,7 +97,7 @@ export class ConsumerQuantityComponent {
     console.log("Meal type: " + this.selectedMealType)
     this.selectedMealTabIndex = event.index;
     console.log("Tab index: " + this.selectedMealTabIndex)
-  }  
+  }
 
   createConsumerQuantityList(): void {
     if (!this.mealFormGroup.valid) {
@@ -109,36 +122,81 @@ export class ConsumerQuantityComponent {
 
   generateConsumerQuantities(): ConsumerQuantity[] {
     const consumerQuantities: ConsumerQuantity[] = [];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowsDayOfWeek = (tomorrow.getDay() === 0 ? 6 : (tomorrow.getDay() - 1));
+
+    const tomorrowsDailyMenu = this.currentWeeklyMenu?.menu?.find(menu => menu.dayOfWeek === tomorrowsDayOfWeek);
+
+    if (tomorrowsDailyMenu === null) {
+      console.error("Tomorrow's menu not found");
+      return consumerQuantities;
+    }
 
     this.mealTypes.forEach(mealType => {
       this.consumerTypes.forEach(consumerType => {
         const controlName = this.getFormControlName(mealType.value, consumerType.value);
         const control = this.mealFormGroup.get(controlName);
         if (control) {
-          consumerQuantities.push({
+          const mealOffer = tomorrowsDailyMenu?.menu.find(
+            offer => offer.consumerType === consumerType.value &&
+              offer.type === mealType.value
+          );
+
+          if (mealOffer) {
+            mealOffer.consumerQuantity = control.value;
+          }
+          /*consumerQuantities.push({
             consumerType: consumerType.value,
             mealType: mealType.value,
             quantity: control.value
-          });
+          });*/
 
           // Add salad types with the same values as their corresponding main meals
           if (mealType.value === MealType.LUNCH) {
-            consumerQuantities.push({
+            const mealOffer = tomorrowsDailyMenu?.menu.find(
+              offer => offer.consumerType === consumerType.value &&
+                offer.type === MealType.LUNCH_SALAD
+            );
+
+            if (mealOffer) {
+              mealOffer.consumerQuantity = control.value;
+            }
+            /*consumerQuantities.push({
               consumerType: consumerType.value,
               mealType: MealType.LUNCH_SALAD,
               quantity: control.value
-            });
+            });*/
           }
           if (mealType.value === MealType.DINNER) {
-            consumerQuantities.push({
+            const mealOffer = tomorrowsDailyMenu?.menu.find(
+              offer => offer.consumerType === consumerType.value &&
+                offer.type === MealType.DINNER_SALAD
+            );
+
+            if (mealOffer) {
+              mealOffer.consumerQuantity = control.value;
+            }
+            /*consumerQuantities.push({
               consumerType: consumerType.value,
               mealType: MealType.DINNER_SALAD,
               quantity: control.value
-            });
+            });*/
           }
         }
       });
     });
+    if(this.currentWeeklyMenu != undefined){
+      this.service.updateConsumerQuantities(this.currentWeeklyMenu).subscribe({
+        next: (result: IngredientQuantity[]) => {
+          var IngredientQuantity : IngredientQuantity[] = result
+        },
+        error: (error: any) => {
+          console.log(error)
+          // Handle error
+        }
+      });
+    }
 
     return consumerQuantities;
   }
