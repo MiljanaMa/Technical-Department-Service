@@ -165,6 +165,7 @@ export class MenusComponent implements OnInit {
     if (!this.selectedWeeklyMenu?.from) return '';
 
     const fromDate = new Date(this.selectedWeeklyMenu.from);
+    fromDate.setDate(fromDate.getDate() + dayIndex);
     const date = fromDate.toLocaleDateString('sr-RS', {
       day: '2-digit',
       month: '2-digit',

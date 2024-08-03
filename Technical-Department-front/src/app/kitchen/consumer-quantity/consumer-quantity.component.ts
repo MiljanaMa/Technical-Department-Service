@@ -146,13 +146,7 @@ export class ConsumerQuantityComponent {
           if (mealOffer) {
             mealOffer.consumerQuantity = control.value;
           }
-          /*consumerQuantities.push({
-            consumerType: consumerType.value,
-            mealType: mealType.value,
-            quantity: control.value
-          });*/
 
-          // Add salad types with the same values as their corresponding main meals
           if (mealType.value === MealType.LUNCH) {
             const mealOffer = tomorrowsDailyMenu?.menu.find(
               offer => offer.consumerType === consumerType.value &&
@@ -162,11 +156,6 @@ export class ConsumerQuantityComponent {
             if (mealOffer) {
               mealOffer.consumerQuantity = control.value;
             }
-            /*consumerQuantities.push({
-              consumerType: consumerType.value,
-              mealType: MealType.LUNCH_SALAD,
-              quantity: control.value
-            });*/
           }
           if (mealType.value === MealType.DINNER) {
             const mealOffer = tomorrowsDailyMenu?.menu.find(
@@ -177,19 +166,14 @@ export class ConsumerQuantityComponent {
             if (mealOffer) {
               mealOffer.consumerQuantity = control.value;
             }
-            /*consumerQuantities.push({
-              consumerType: consumerType.value,
-              mealType: MealType.DINNER_SALAD,
-              quantity: control.value
-            });*/
           }
         }
       });
     });
-    if(this.currentWeeklyMenu != undefined){
+    if (this.currentWeeklyMenu != undefined) {
       this.service.updateConsumerQuantities(this.currentWeeklyMenu).subscribe({
         next: (result: IngredientQuantity[]) => {
-          var IngredientQuantity : IngredientQuantity[] = result
+          var IngredientQuantity: IngredientQuantity[] = result
         },
         error: (error: any) => {
           console.log(error)
