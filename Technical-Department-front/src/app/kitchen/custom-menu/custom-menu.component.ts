@@ -336,10 +336,8 @@ validateMeal(control: AbstractControl): ValidationErrors | null {
     const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
 
     if (snackMealTypes.includes(mealType)) {
-     // console.log("one-column");
       return 'form-fields-container one-column';
     } else {
-      //console.log("two-column");
       return 'form-fields-container two-columns';
     }
   }
