@@ -22,6 +22,7 @@ public static class KitchenStartup
         services.AddAutoMapper(typeof(KitchenProfile).GetTypeInfo().Assembly);
         SetupCore(services);
         SetupInfrastructure(services);
+
         return services;
     }
 
