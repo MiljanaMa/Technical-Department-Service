@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { IngredientQuantity, Meal } from './model/meal.model';
@@ -34,8 +34,8 @@ export class KitchenService {
   confirmWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
     return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/confirm`, weeklyMenu)
   }
-  updateConsumerQuantities(weeklyMenu: WeeklyMenu): Observable<IngredientQuantity[]>{
-    return this.http.post<IngredientQuantity[]>(environment.apiHost + `weekly-menu/get-ingredients-requirements`, weeklyMenu)
+  getIngredientsRequirements(weeklyMenu: WeeklyMenu): Observable<IngredientQuantity[]>{
+    return this.http.put<IngredientQuantity[]>(environment.apiHost + `weekly-menu/get-ingredients-requirements`, weeklyMenu)
   }
 
   getMenu(menuStatus: string): Observable<WeeklyMenu> {
