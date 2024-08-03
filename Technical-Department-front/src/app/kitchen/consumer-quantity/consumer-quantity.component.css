@@ -44,16 +44,19 @@ form {
    font-size: large;
 }
 
-.form-field-margin {
+.form-fields-container {
   width: 100%;
+  display: grid;
 }
 
-.form-fields-container {
-  display: grid;
+.form-fields-container.one-column {
+  grid-template-columns: 1fr;
+}
+
+.form-fields-container.two-columns {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-
 
 .title-card {
     margin-bottom: 10px;

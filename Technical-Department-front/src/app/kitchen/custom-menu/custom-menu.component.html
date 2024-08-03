@@ -22,9 +22,9 @@
 
           <div class="container">
             <form [formGroup]="mealFormGroup">
-              <div class="form-fields-container">
+              <div [ngClass]="getColumnsClass(mealType.value, consumerTypes)">
                 <div *ngFor="let consumerType of consumerTypes">
-                  <mat-form-field class="form-field-margin">
+                  <mat-form-field *ngIf="shouldRenderSnackInput(mealType.value, consumerType.value)">
                     <mat-label>{{ consumerType.name }}:</mat-label>
                     <input type="text" matInput [formControlName]="getFormControlName(day.value, mealType.value, consumerType.value)" [matAutocomplete]="auto">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">

@@ -55,11 +55,13 @@ export class ConsumerQuantityComponent {
     const positiveIntegerPattern = '^[0-9]+$';
     this.mealTypes.forEach(mealType => {
       this.consumerTypes.forEach(consumerType => {
+        if (this.shouldRenderSnackInput(mealType.value, consumerType.value)){
         const controlName = this.getFormControlName(mealType.value, consumerType.value);
         this.mealFormGroup.addControl(controlName, new FormControl('', [
           Validators.required,
           Validators.pattern(positiveIntegerPattern)
         ]));
+      }
       });
     });
 
@@ -183,5 +185,22 @@ export class ConsumerQuantityComponent {
     }
 
     return consumerQuantities;
+  }
+
+  shouldRenderSnackInput(mealType: MealType, consumerType: ConsumerType): boolean {
+    const snackEligibleConsumerTypes = [ConsumerType.DIABETIC, ConsumerType.PREGNANT, ConsumerType.CHILDREN_2_4, ConsumerType.CHILDREN_4_14];
+    const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
+    const otherMealTypes = [MealType.BREAKFAST, MealType.DINNER, MealType.DINNER_SALAD, MealType.LUNCH, MealType.LUNCH_SALAD]
+    return  otherMealTypes.includes(mealType) || (snackMealTypes.includes(mealType) && snackEligibleConsumerTypes.includes(consumerType));
+  }
+
+  getColumnsClass(mealType: MealType, consumerTypes: any[]): string {
+    const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
+
+    if (snackMealTypes.includes(mealType)) {
+      return 'form-fields-container one-column';
+    } else {
+      return 'form-fields-container two-columns';
+    }
   }
 }
