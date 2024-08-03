@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks.Core\BuildingBlocks.Core.csproj" />
     <ProjectReference Include="..\Technical-Department.Kitchen.API\Technical-Department.Kitchen.API.csproj" />
   </ItemGroup>

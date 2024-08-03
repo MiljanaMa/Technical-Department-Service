@@ -7,6 +7,7 @@ import { KitchenService } from '../kitchen.service';
 import { ConsumerQuantity } from '../model/consumer-quantity.model';
 import { WeeklyMenu } from '../model/weekly-menu.model';
 import { IngredientQuantity } from '../model/meal.model';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-consumer-quantity',
@@ -171,9 +172,9 @@ export class ConsumerQuantityComponent {
       });
     });
     if (this.currentWeeklyMenu != undefined) {
-      this.service.updateConsumerQuantities(this.currentWeeklyMenu).subscribe({
+      this.service.getIngredientsRequirements(this.currentWeeklyMenu).subscribe({
         next: (result: IngredientQuantity[]) => {
-          var IngredientQuantity: IngredientQuantity[] = result
+          this.downloadExcel(result)
         },
         error: (error: any) => {
           console.log(error)
@@ -183,5 +184,17 @@ export class ConsumerQuantityComponent {
     }
 
     return consumerQuantities;
+  }
+  downloadExcel(data: IngredientQuantity[]): void {
+    const transformedData = data.map(({ ingredientName, quantity, unitShortName }) => ({
+      "Namirnica": ingredientName,
+      "Količina": quantity,
+      "Jedinica mere": unitShortName
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(transformedData, { header: ["Namirnica", "Količina", "Jedinica mere"] });
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Namirnice');
+    XLSX.writeFile(wb, 'Trebovanje-Kuhinja.xlsx');
   }
 }
