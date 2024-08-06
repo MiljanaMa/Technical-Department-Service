@@ -12,6 +12,7 @@ using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Core.Domain;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
+using DocumentFormat.OpenXml.InkML;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
@@ -188,6 +189,26 @@ namespace Technical_Department.Kitchen.Core.UseCases
                                              .Select(g => new IngredientQuantityDto((int)g.Key, _ingredientRepository.Get(g.Key).Name,
                                              _ingredientRepository.Get(g.Key).Unit.ShortName, g.Sum(x => x.Quantity))).ToList();
             return mergedIngredientQuantities;
+        }
+
+        public async Task WeeklyMenuStartupCheck()
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+
+            var currentWeeklyMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.CURRENT);
+            if (currentWeeklyMenu != null)
+            {
+                if(currentWeeklyMenu.To < today)
+                {
+                    _weeklyMenuRepository.Delete(currentWeeklyMenu.Id);
+                    var newCurrentWeeklyMenu = _weeklyMenuRepository.GetMenuByDate(today);
+                    if(newCurrentWeeklyMenu != null)
+                    {
+                        newCurrentWeeklyMenu.Status = WeeklyMenuStatus.CURRENT;
+                        _weeklyMenuRepository.Update(newCurrentWeeklyMenu);
+                    }
+                }
+            }
         }
     }
 

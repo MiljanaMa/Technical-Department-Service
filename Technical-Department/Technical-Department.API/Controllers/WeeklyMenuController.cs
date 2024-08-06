@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
-using Technical_Department.Kitchen.Core.UseCases;
 
 namespace Technical_Department.API.Controllers
 {
@@ -51,7 +50,7 @@ namespace Technical_Department.API.Controllers
             var result = _weeklyMenuService.AddMealOffer(mealOffer);
             return CreateResponse(result);
         }
-        [HttpPost("get-ingredients-requirements")]
+        [HttpPut("get-ingredients-requirements")]
         public ActionResult<List<IngredientQuantityDto>> GetIngredientsRequirements([FromBody] WeeklyMenuDto weeklyMenu)
         {
             var result = _weeklyMenuService.GetIngredientsRequirements(weeklyMenu);
