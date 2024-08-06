@@ -1,6 +1,6 @@
 <h1 class="styled-heading">Jela</h1>
 <div class="search-container center">
-  <mat-form-field class="full-width">
+  <mat-form-field class="margin">
     <mat-label>Pretraži jela</mat-label>
     <input matInput [formControl]="searchControl" placeholder="Unesite ime jela" change>
   </mat-form-field>
@@ -18,11 +18,11 @@
         <span class="ingredient-unit">{{ iq.unitShortName }}</span>
       </div>
     </div>
-    <div>
-      <button mat-icon-button (click)="updateMeal(meal)">
+    <div class="center">
+      <button class="button mat-button" mat-icon-button (click)="updateMeal(meal)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteMeal(meal.id || 0)">
+      <button  class="button mat-button" mat-icon-button (click)="deleteMeal(meal.id || 0)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

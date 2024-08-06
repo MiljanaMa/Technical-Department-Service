@@ -80,8 +80,18 @@
   background-color: #003B6D;
   color: white; 
   border-radius: 10px;
-  margin: 16px;
   margin-left: 32px;
   padding: 16px;
- font-size: large;
+  font-size: large;
+}
+
+.margin {
+  margin-top: 20px;
+}
+
+.button.mat-button {
+  background-color: #003B6D;
+  color: white; 
+  border-radius: 10px;
+  margin: 10px;
 }

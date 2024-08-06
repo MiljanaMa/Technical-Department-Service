@@ -1,8 +1,8 @@
 <h1 class="styled-heading">Namirnice</h1>
 
 <div class="search-container center">
-  <mat-form-field class="full-width">
-    <mat-label >Pretraži namirnice</mat-label>
+  <mat-form-field class="margin" >
+    <mat-label>Pretraži namirnice</mat-label>
     <input matInput [formControl]="searchControl" placeholder="Unesite ime namirnice" change>
   </mat-form-field>
   <button class="confirm-button mat-button" (click)="addIngredient()">Dodaj novu namirnicu</button>
@@ -31,11 +31,11 @@
       <span class="label">Šećeri:</span>
       <span class="value">{{ ingredient.sugar }} g</span>
     </div>
-    <div class="ingredient-actions">
-      <button mat-icon-button (click)="updateIngredient(ingredient)">
+    <div class="center">
+      <button class="button mat-button" at-icon-button (click)="updateIngredient(ingredient)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteIngredient(ingredient.id)">
+      <button class="button mat-button" mat-icon-button (click)="deleteIngredient(ingredient.id)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
