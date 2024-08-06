@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DishType, IngredientQuantity, Meal } from '../model/meal.model';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { KitchenService } from '../kitchen.service';
 import { Ingredient } from '../model/ingredient.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, startWith, of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-meal-form',
@@ -25,7 +26,8 @@ export class MealFormComponent implements OnInit {
     'UŽINA': DishType.SNACK
   };
 
-  constructor(private fb: FormBuilder, private service: KitchenService, private route: ActivatedRoute, private router: Router) {
+  constructor(private fb: FormBuilder, private service: KitchenService, private route: ActivatedRoute, 
+              private router: Router, private snackBar: MatSnackBar) {
     this.mealForm = this.fb.group({
       name: ['', Validators.required],
       code: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -73,6 +75,13 @@ export class MealFormComponent implements OnInit {
       }
     });
   }
+  validateIngredient(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return { required: true }; 
+    return this.isString(control.value) ? { invalidMeal: true } : null; 
+  }
+  private isString(variable: any) {
+    return typeof variable === "string";
+  }
 
   loadMeal(id: number): void {
     this.service.getMeal(id).subscribe({
@@ -97,7 +106,7 @@ export class MealFormComponent implements OnInit {
   addExistingIngredient(iq: IngredientQuantity): void {
     var existingIngredient = this.allIngredients.filter(ingredient => ingredient.id === iq.ingredientId);
     const ingredientGroup = this.fb.group({
-      ingredient: [existingIngredient[0], Validators.required],
+      ingredient: [existingIngredient[0], [this.validateIngredient.bind(this)]],
       quantity: [iq.quantity, Validators.required]
     });
 
@@ -111,7 +120,7 @@ export class MealFormComponent implements OnInit {
 
   addNewIngredient(): void {
     const ingredientGroup = this.fb.group({
-      ingredient: ['', Validators.required],
+      ingredient: ['', [this.validateIngredient.bind(this)]],
       quantity: [0, [Validators.required, Validators.min(0)]]
     });
     this.ingredients.push(ingredientGroup);
@@ -167,6 +176,12 @@ export class MealFormComponent implements OnInit {
           }
         });
       }
+    }else{
+      this.snackBar.open('Proverite da li su sva polja forme validno popunjene.', 'OK', {
+        duration: 3000, 
+        verticalPosition: 'top',
+        panelClass: ['mat-warn'] 
+      });
     }
   }
 
