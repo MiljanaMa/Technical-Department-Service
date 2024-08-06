@@ -11,7 +11,7 @@ import { Route, Router } from '@angular/router';
 })
 export class MealsComponent implements OnInit {
   meals: Meal[] = [];
-  filtereMeals: Meal[] = []; 
+  filteredMeals: Meal[] = []; 
   searchControl = new FormControl();
   
   constructor(private service: KitchenService, private router: Router){}
@@ -24,6 +24,7 @@ export class MealsComponent implements OnInit {
     this.service.getMeals().subscribe({
       next: (result: any) => {
         this.meals = result;
+        this.filteredMeals = result;
       },
       error: () => {
         //add some toast
@@ -32,7 +33,7 @@ export class MealsComponent implements OnInit {
   }
   searchMeals(query: string): void {
     const lowerCaseQuery = query.toLowerCase();
-    this.filtereMeals = this.meals.filter(meal =>
+    this.filteredMeals = this.meals.filter(meal =>
       meal.name.toLowerCase().includes(lowerCaseQuery));
   }
   addMeal(): void {
