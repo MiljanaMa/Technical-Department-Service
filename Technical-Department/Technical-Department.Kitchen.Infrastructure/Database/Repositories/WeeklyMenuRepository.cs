@@ -30,6 +30,13 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
                                .FirstOrDefault();
             return entity;
         }
+        public WeeklyMenu GetMenuByDate(DateOnly date)
+        {
+            var entity = _dbSet.Where(m => m.From <= date && m.To > date)
+                               .Include(m => m.Menu)
+                               .FirstOrDefault();
+            return entity;
+        }
 
     }
 }

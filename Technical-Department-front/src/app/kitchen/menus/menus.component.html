@@ -1,3 +1,5 @@
+<button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF(0)">Preuzmi Trenutni Jelovnik</button>
+<button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF(1)">Preuzmi Sledeći Jelovnik</button>
 <mat-tab-group #menuStatusTabGroup (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
   <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
     <ng-template mat-tab-label>
@@ -37,7 +39,6 @@
       </div>
       <div  class="center">
         <button *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 1" class="confirm-button mat-button" (click)="changeNewMenu()">Izmeni meni</button>
-        <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF()">Preuzmi PDF</button>
       </div>
     </div>
   </mat-tab>
