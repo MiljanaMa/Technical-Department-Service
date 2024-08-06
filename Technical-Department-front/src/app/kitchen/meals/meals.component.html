@@ -8,7 +8,7 @@
 </div>
 
 <div class="meals-container">
-  <div class="meal-card" *ngFor="let meal of meals">
+  <div class="meal-card" *ngFor="let meal of filteredMeals">
     <h2 class="meal-name">{{ meal.name }}</h2>
     <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
     <div class="ingredients-list">
