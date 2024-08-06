@@ -1,13 +1,12 @@
 <h1 class="styled-heading">Jela</h1>
-<div class="search-container">
+<div class="search-container center">
   <mat-form-field class="full-width">
     <mat-label>Pretraži jela</mat-label>
     <input matInput [formControl]="searchControl" placeholder="Unesite ime jela" change>
   </mat-form-field>
+  <button class="confirm-button mat-button" (click)="addMeal()">Dodaj novo jelo</button>
 </div>
-<div class="action-container">
-  <button (click)="addMeal()">Dodaj</button>
-</div>
+
 <div class="meals-container">
   <div class="meal-card" *ngFor="let meal of meals">
     <h2 class="meal-name">{{ meal.name }}</h2>
