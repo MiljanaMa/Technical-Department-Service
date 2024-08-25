@@ -162,6 +162,8 @@ namespace Technical_Department.Kitchen.Core.UseCases
         }
         public Result<List<IngredientQuantityDto>> GetIngredientsRequirements(WeeklyMenuDto weeklyMenuDto)
         {
+            int whiteBread = 0;
+            int blackBread = 0;
             List<IngredientQuantity> ingredientQuantities = new List<IngredientQuantity>();
 
             var weeklyMenu = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
@@ -176,7 +178,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
             foreach (var mealOffer in tomorrowsDailyMenu.Menu)
             {
                 var meal = _mealRepository.Get(mealOffer.MealId);
-                foreach(var ingredientQuantity in meal.Ingredients)
+                if (mealOffer.ConsumerType == ConsumerType.DIABETIC && meal.IsBreadIncluded)
+                    blackBread++;
+                else if (meal.IsBreadIncluded)
+                    whiteBread++;
+                foreach (var ingredientQuantity in meal.Ingredients)
                 {
                         var newIngredientQuantity = new IngredientQuantity(ingredientQuantity.IngredientId, ingredientQuantity.Quantity * mealOffer.ConsumerQuantity);
                         var newIngredientQuantityDto = _mapper.Map<IngredientQuantityDto>(newIngredientQuantity);
@@ -188,6 +194,8 @@ namespace Technical_Department.Kitchen.Core.UseCases
             var mergedIngredientQuantities = ingredientQuantities.GroupBy(i => i.IngredientId)
                                              .Select(g => new IngredientQuantityDto((int)g.Key, _ingredientRepository.Get(g.Key).Name,
                                              _ingredientRepository.Get(g.Key).Unit.ShortName, g.Sum(x => x.Quantity))).ToList();
+            mergedIngredientQuantities.Add(new IngredientQuantityDto(0, "Hljeb bijeli", "kg", whiteBread * 2 * 0.04));
+            mergedIngredientQuantities.Add(new IngredientQuantityDto(0, "Hljeb integralni", "kg", blackBread * 2 * 0.04));
             return mergedIngredientQuantities;
         }
 

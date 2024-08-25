@@ -12,6 +12,7 @@ namespace Technical_Department.Kitchen.Core.Domain
         public required string Name { get; init; }
         public double Calories { get; init; }
         public DateTime StandardizationDate { get; init; }
+        public bool IsBreadIncluded { get; init; }
         public string DishTypes;
 
         [NotMapped]
