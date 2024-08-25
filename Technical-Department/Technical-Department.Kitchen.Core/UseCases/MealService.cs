@@ -17,10 +17,13 @@ namespace Technical_Department.Kitchen.Core.UseCases
     {
         private readonly IMealRepository _mealRepository;
         private readonly ICrudRepository<Ingredient> _ingredientRepository;
-        public MealService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base(mealRepository, mapper)
+        private readonly IDailyMenuRepository _dailyMenuRepository;
+        public MealService(IMealRepository mealRepository, IIngredientRepository ingredientRepository,
+            IDailyMenuRepository dailyMenuRepository, IMapper mapper) : base(mealRepository, mapper)
         {
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;
+            _dailyMenuRepository = dailyMenuRepository;
         }
 
         public Result<ICollection<MealDto>> GetAll(int page, int pageSize)
@@ -57,6 +60,14 @@ namespace Technical_Department.Kitchen.Core.UseCases
 
             var result = _mealRepository.Create(MapToDomain(meal));
             return MapToDto(result);
+        }
+        public Result Delete(int mealId)
+        {
+            DailyMenu menu = _dailyMenuRepository.FindFirstMenuByMealId(mealId);
+            if (menu != null)
+                return Result.Fail(FailureCode.Forbidden).WithError("It is not allowed to delete meal, it is connected to menu.");
+            _mealRepository.Delete(mealId);
+            return Result.Ok();
         }
 
     }

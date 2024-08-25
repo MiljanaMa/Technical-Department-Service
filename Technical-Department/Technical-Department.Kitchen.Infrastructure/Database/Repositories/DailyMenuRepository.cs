@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Core.Domain;
+using Npgsql;
 
 namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 {
@@ -24,6 +25,23 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             var entity = _dbSet.AsNoTracking().FirstOrDefault(dm => dm.Id == id);
             if (entity == null) throw new KeyNotFoundException("Not found: " + id);
             return entity;
+        }
+        public DailyMenu FindFirstMenuByMealId(int mealId)
+        {
+            var sql = @"
+                SELECT * 
+                FROM kitchen.""DailyMenus""
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(""Menu""::jsonb) AS menu
+                    WHERE (menu->>'MealId')::bigint = @mealId
+                )";
+
+            var task = _dbSet
+                .FromSqlRaw(sql, new NpgsqlParameter("@mealId", mealId))
+                .FirstOrDefaultAsync();
+            task.Wait();
+            return task.Result;
         }
     }
 }
