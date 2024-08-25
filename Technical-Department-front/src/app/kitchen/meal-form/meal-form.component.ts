@@ -121,7 +121,7 @@ export class MealFormComponent implements OnInit {
   addNewIngredient(): void {
     const ingredientGroup = this.fb.group({
       ingredient: ['', [this.validateIngredient.bind(this)]],
-      quantity: [0, [Validators.required, Validators.min(0)]]
+      quantity: [null, [Validators.required,  Validators.pattern(/^(?!0(\.0+)?$)\d+(\.\d+)?$/)]]
     });
     this.ingredients.push(ingredientGroup);
     this.setupIngredientAutocomplete(ingredientGroup, this.ingredients.length - 1);

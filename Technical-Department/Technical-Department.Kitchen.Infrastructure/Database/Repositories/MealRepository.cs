@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Core.Domain;
 using AutoMapper;
+using DocumentFormat.OpenXml.InkML;
+using Npgsql;
 
 namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 {
@@ -23,6 +25,23 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         public List<Meal> GetAll()
         {
             return _dbSet.ToList();
+        }
+        public Meal FindFirstMealByIngredientId(int ingredientId)
+        {
+            var sql = @"
+                SELECT * 
+                FROM kitchen.""Meals""
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(""Ingredients""::jsonb) AS ingredient
+                    WHERE (ingredient->>'IngredientId')::bigint = @ingredientId
+                )";
+
+            var task = _dbSet
+                .FromSqlRaw(sql, new NpgsqlParameter("@ingredientId", ingredientId))
+                .FirstOrDefaultAsync();
+            task.Wait();
+            return task.Result;
         }
     }
 }

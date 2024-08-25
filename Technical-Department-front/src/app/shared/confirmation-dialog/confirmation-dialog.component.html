@@ -1,0 +1,8 @@
+<h1 mat-dialog-title style="text-align: center;">Potvrdi</h1>
+<div mat-dialog-content style="text-align: center; font-size: 24px; margin: 28px;">
+  <p>{{confirmMessage}}</p>
+</div>
+<div mat-dialog-actions style="display: flex; justify-content: center;">
+  <button mat-button style="color: #fff; background-color: #153961; margin: 0 8px; font-size: 16px;" (click)="dialogRef.close(true)">Potvrdi</button>
+  <button mat-button style="margin: 0 8px; font-size: 16px;" (click)="dialogRef.close(false)">Otkaži</button>
+</div>
