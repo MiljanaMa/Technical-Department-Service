@@ -14,7 +14,7 @@ using Technical_Department.Kitchen.Infrastructure.Database;
 namespace Technical_Department.Kitchen.Infrastructure.Migrations
 {
     [DbContext(typeof(KitchenContext))]
-    [Migration("20240803063529_Init")]
+    [Migration("20240825173734_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -115,6 +115,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<ICollection<IngredientQuantity>>("Ingredients")
                         .IsRequired()
                         .HasColumnType("jsonb");
+
+                    b.Property<bool>("IsBreadIncluded")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()

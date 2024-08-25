@@ -142,6 +142,7 @@ export class MealFormComponent implements OnInit {
         id: 0,
         name: this.mealForm.value.name,
         standardizationDate: standardizedDate,
+        isBreadIncluded: true,
         code: this.mealForm.value.code,
         calories: 0.0,
         types: this.mealForm.value.types
