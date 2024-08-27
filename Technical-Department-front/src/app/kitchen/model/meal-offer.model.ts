@@ -31,23 +31,21 @@ export const MealTypeLabels = {
 };
 
 export enum ConsumerType{
-    PREGNANT = 0,
-    OPERATED_PATIENT = 1,
-    MILD_PATIENT = 2,
-    STANDARD_PATIENT = 3,
-    DOCTOR = 4,
-    CHILDREN_2_4 = 5,
-    CHILDREN_4_14 = 6,
-    DIABETIC = 7
+    DOCTOR = 0,
+    PREGNANT = 1,
+    DIABETIC = 2,
+    CHILDREN_2_4 = 3,
+    CHILDREN_4_14 = 4,
+    MILD_PATIENT = 5,
+    OPERATED_PATIENT = 6
 } 
 
 export const ConsumerTypeLabels = {
-    [ConsumerType.PREGNANT]: "PORODILJE",
-    [ConsumerType.OPERATED_PATIENT]: "OPERISANI PACIJENTI",
-    [ConsumerType.MILD_PATIENT]: "TESKI PACIJENTI",
-    [ConsumerType.STANDARD_PATIENT]: "STANDARDNI PACIJENTI",
     [ConsumerType.DOCTOR]: "DOKTORI",
+    [ConsumerType.PREGNANT]: "PORODILJE",
+    [ConsumerType.DIABETIC]: "DIJABETICARI",   
     [ConsumerType.CHILDREN_2_4]: "DECA(2-4)",
     [ConsumerType.CHILDREN_4_14]: "DECA(4-14)",
-    [ConsumerType.DIABETIC]: "DIJABETICARI"
+    [ConsumerType.MILD_PATIENT]: "BLAGI PACIJENTI",
+    [ConsumerType.OPERATED_PATIENT]: "OPERISANI PACIJENTI"
 }

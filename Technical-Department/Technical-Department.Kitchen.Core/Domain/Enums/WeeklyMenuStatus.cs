@@ -8,7 +8,6 @@ namespace Technical_Department.Kitchen.Core.Domain.Enums
 {
     public enum WeeklyMenuStatus
     {
-       PREVIOUS,
        CURRENT,
        DRAFT,
        NEW,
