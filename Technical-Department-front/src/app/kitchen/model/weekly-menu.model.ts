@@ -17,7 +17,6 @@ export enum WeeklyMenuStatus {
 }
 
 export const WeeklyMenuStatusLabels = {
-    [WeeklyMenuStatus.PREVIOUS]: "PRETHODNI",
     [WeeklyMenuStatus.CURRENT]: "TRENUTNI",
     [WeeklyMenuStatus.DRAFT]: "U IZRADI",
     [WeeklyMenuStatus.NEW]: "NOVI",
