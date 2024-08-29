@@ -57,5 +57,11 @@ namespace Technical_Department.API.Controllers
             return CreateResponse(result);
         }
 
+        [HttpPut("reset-draft-menu")]
+        public ActionResult<WeeklyMenuDto> ResetDraftMenu([FromBody] WeeklyMenuDto weeklyMenu)
+        {
+            var result = _weeklyMenuService.ResetDraftMenu(weeklyMenu);
+            return CreateResponse(result);
+        }
     }
 }

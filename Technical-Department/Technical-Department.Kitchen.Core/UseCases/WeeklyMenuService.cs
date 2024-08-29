@@ -211,6 +211,27 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 }
             }
         }
+
+        public Result<WeeklyMenuDto> ResetDraftMenu(WeeklyMenuDto weeklyMenuDto)
+        {
+            try
+            {
+                var weeklyMenu = MapToDomain(weeklyMenuDto);
+
+                foreach (var dailyMenu in weeklyMenu.Menu)
+                {
+                    dailyMenu.ClearMenu();
+                    _dailyMenuRepository.Update(dailyMenu);
+                }
+                var result = _weeklyMenuRepository.Update(weeklyMenu);
+                return MapToDto(result);
+
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 
  }

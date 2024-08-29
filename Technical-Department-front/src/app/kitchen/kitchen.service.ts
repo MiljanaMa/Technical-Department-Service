@@ -71,5 +71,9 @@ export class KitchenService {
   getAllMeasurementUnits(): Observable<MeasurementUnit[]> {
     return this.http.get<MeasurementUnit[]>(environment.apiHost + 'measurementUnit');
   }
+
+  resetDraftMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
+    return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/reset-draft-menu`, weeklyMenu)
+  }
   
 }
