@@ -32,6 +32,7 @@ export class MealFormComponent implements OnInit {
       name: ['', Validators.required],
       code: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       date: ['', Validators.required],
+      isBreadIncluded: [],
       types: this.fb.array([]),
       ingredients: this.fb.array([])
     });
@@ -90,7 +91,8 @@ export class MealFormComponent implements OnInit {
         this.mealForm.patchValue({
           name: result.name,
           date: result.standardizationDate,
-          code: result.code
+          code: result.code,
+          isBreadIncluded: result.isBreadIncluded
         });
         this.addCheckboxes();
         result.ingredients.forEach((ingredient: any) => {
@@ -121,7 +123,7 @@ export class MealFormComponent implements OnInit {
   addNewIngredient(): void {
     const ingredientGroup = this.fb.group({
       ingredient: ['', [this.validateIngredient.bind(this)]],
-      quantity: [0, [Validators.required, Validators.min(0)]]
+      quantity: [null, [Validators.required,  Validators.pattern(/^(?!0(\.0+)?$)\d+(\.\d+)?$/)]]
     });
     this.ingredients.push(ingredientGroup);
     this.setupIngredientAutocomplete(ingredientGroup, this.ingredients.length - 1);
@@ -142,6 +144,7 @@ export class MealFormComponent implements OnInit {
         id: 0,
         name: this.mealForm.value.name,
         standardizationDate: standardizedDate,
+        isBreadIncluded: this.mealForm.value.isBreadIncluded,
         code: this.mealForm.value.code,
         calories: 0.0,
         types: this.mealForm.value.types

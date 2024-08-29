@@ -162,13 +162,13 @@ namespace Technical_Department.Kitchen.Core.UseCases
         }
         public Result<List<IngredientQuantityDto>> GetIngredientsRequirements(WeeklyMenuDto weeklyMenuDto)
         {
+            double whiteBreadQuantity = 0;
+            double blackBreadQuantity = 0;
             List<IngredientQuantity> ingredientQuantities = new List<IngredientQuantity>();
 
             var weeklyMenu = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
 
-            int tomorrowsDayOfWeek = (int) DateTime.Today.AddDays(1).DayOfWeek;
-            tomorrowsDayOfWeek = tomorrowsDayOfWeek == 0 ? 6 : (tomorrowsDayOfWeek - 1);
-            var tomorrowsDailyMenu = weeklyMenu.Menu.FirstOrDefault(menu => (int)menu.DayOfWeek == tomorrowsDayOfWeek);
+            DailyMenu? tomorrowsDailyMenu = getTomorrowsDailyMenu(weeklyMenu);
 
             if (tomorrowsDailyMenu == null)
                 return Result.Fail(FailureCode.NotFound).WithError("Tomorrow's menu not found");
@@ -176,19 +176,46 @@ namespace Technical_Department.Kitchen.Core.UseCases
             foreach (var mealOffer in tomorrowsDailyMenu.Menu)
             {
                 var meal = _mealRepository.Get(mealOffer.MealId);
-                foreach(var ingredientQuantity in meal.Ingredients)
-                {
-                        var newIngredientQuantity = new IngredientQuantity(ingredientQuantity.IngredientId, ingredientQuantity.Quantity * mealOffer.ConsumerQuantity);
-                        var newIngredientQuantityDto = _mapper.Map<IngredientQuantityDto>(newIngredientQuantity);
 
-                        ingredientQuantities.Add(newIngredientQuantity);
-
-                }
+                increaseBreadQuantity(ref whiteBreadQuantity, ref blackBreadQuantity, mealOffer, meal);
+                AddIngredientQuantities(ref ingredientQuantities, mealOffer, meal);
             }
+
             var mergedIngredientQuantities = ingredientQuantities.GroupBy(i => i.IngredientId)
                                              .Select(g => new IngredientQuantityDto((int)g.Key, _ingredientRepository.Get(g.Key).Name,
                                              _ingredientRepository.Get(g.Key).Unit.ShortName, g.Sum(x => x.Quantity))).ToList();
+
+            mergedIngredientQuantities.Add(new IngredientQuantityDto(0, "Hljeb bijeli", "kg", whiteBreadQuantity));
+            mergedIngredientQuantities.Add(new IngredientQuantityDto(0, "Hljeb integralni", "kg", blackBreadQuantity));
             return mergedIngredientQuantities;
+        }
+
+        private void AddIngredientQuantities(ref List<IngredientQuantity> ingredientQuantities, MealOffer mealOffer, Meal meal)
+        {
+            foreach (var ingredientQuantity in meal.Ingredients)
+            {
+                var newIngredientQuantity = new IngredientQuantity(ingredientQuantity.IngredientId, ingredientQuantity.Quantity * mealOffer.ConsumerQuantity);
+                var newIngredientQuantityDto = _mapper.Map<IngredientQuantityDto>(newIngredientQuantity);
+
+                ingredientQuantities.Add(newIngredientQuantity);
+
+            }
+        }
+
+        private void increaseBreadQuantity(ref double whiteBreadQuantity, ref double blackBreadQuantity, MealOffer mealOffer, Meal meal)
+        {
+            if (mealOffer.ConsumerType == ConsumerType.DIABETIC && meal.IsBreadIncluded)
+                blackBreadQuantity = blackBreadQuantity * 2 * 0.04;
+            else if (meal.IsBreadIncluded)
+                whiteBreadQuantity = whiteBreadQuantity * 2 * 0.04;
+        }
+
+        private DailyMenu? getTomorrowsDailyMenu(WeeklyMenu weeklyMenu)
+        {
+            int tomorrowsDayOfWeek = (int)DateTime.Today.AddDays(1).DayOfWeek;
+            tomorrowsDayOfWeek = tomorrowsDayOfWeek == 0 ? 6 : (tomorrowsDayOfWeek - 1);
+            var tomorrowsDailyMenu = weeklyMenu.Menu.FirstOrDefault(menu => (int)menu.DayOfWeek == tomorrowsDayOfWeek);
+            return tomorrowsDailyMenu;
         }
 
         public async Task WeeklyMenuStartupCheck()

@@ -11,6 +11,6 @@ public class IngredientDto
     public double Fats { get; set; }
     public double Sugar { get; set; }
     public IngredientType Type { get; set; }
-    public long UnitId { get; set; }
+    public int UnitId { get; set; }
     public MeasurementUnitDto Unit { get; set; }
 }
