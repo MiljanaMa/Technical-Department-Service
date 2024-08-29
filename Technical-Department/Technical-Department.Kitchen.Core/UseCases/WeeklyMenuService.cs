@@ -71,6 +71,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
 
             var createdMenu = _weeklyMenuRepository.Create(weeklyMenu);
+            createdMenu.SetNextWeekDates();
 
             for (int i = 0; i < 7; i++)
             {
