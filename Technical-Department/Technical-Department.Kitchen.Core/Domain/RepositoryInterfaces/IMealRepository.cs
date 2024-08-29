@@ -6,6 +6,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
     {
         List<Meal> GetAll();
         Meal FindFirstWithIngredient(int ingredientId);
-        List<Meal> FindAllWithIngredient(int ingredientId);
+        void UpdateMealCalories(Ingredient dbIngredient, double newIngredientCalories);
     }
 }

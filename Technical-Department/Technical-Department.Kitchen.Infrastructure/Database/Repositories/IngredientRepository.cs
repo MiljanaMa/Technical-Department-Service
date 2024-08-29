@@ -27,7 +27,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         }
         public Ingredient Get(long ingredientId)
         {
-            return _dbSet.Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);
+            return _dbSet.AsNoTracking().Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);
         }
     }
 }

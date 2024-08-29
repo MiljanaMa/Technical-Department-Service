@@ -42,6 +42,33 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
     }
+    public Result<IngredientDto> Update(IngredientDto ingredient)
+    {
+        try
+        {
+            MeasurementUnit measurementUnit = _measurementUnitRepository.Get(ingredient.UnitId);
+            if (measurementUnit == null)
+                Result.Fail(FailureCode.NotFound).WithError("Merna jedinica ne postoji");
+
+            Ingredient updatedIngredient = MapToDomain(ingredient);
+            updatedIngredient.SetMeasurementUnit(measurementUnit);
+
+            var dbIngredient = _ingredientRepository.Get(ingredient.Id);
+            if (dbIngredient.Calories != updatedIngredient?.Calories)
+            {
+                var newCalories = measurementUnit.Name.Equals("Komad") ? (updatedIngredient.Calories * 0.6) : updatedIngredient.Calories * 10;
+                _mealRepository.UpdateMealCalories(dbIngredient, newCalories);
+            }
+                _mealRepository.UpdateMealCalories(dbIngredient, updatedIngredient.Calories);
+            var result = _ingredientRepository.Update(updatedIngredient);
+            return MapToDto(result);
+
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+        }
+    }
     public Result<PagedResult<IngredientDto>> GetPagedWithMeasurementUnit(int page, int pageSize)
     {
         var result = _ingredientRepository.GetPagedWithMeasurementUnit(page, pageSize);

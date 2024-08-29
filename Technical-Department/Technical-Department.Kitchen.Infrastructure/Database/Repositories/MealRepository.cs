@@ -43,7 +43,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             task.Wait();
             return task.Result;
         }
-        public List<Meal> FindAllWithIngredient(int ingredientId)
+        public void UpdateMealCalories(Ingredient dbIngredient, double newIngredientCalories)
         {
             var sql = @"
                 SELECT * 
@@ -55,9 +55,15 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
                 )";
 
             var task = _dbSet
-                .FromSqlRaw(sql, new NpgsqlParameter("@ingredientId", ingredientId)).ToListAsync();
+                .FromSqlRaw(sql, new NpgsqlParameter("@ingredientId", dbIngredient.Id)).ToListAsync();
             task.Wait();
-            return task.Result;
+            var meals = task.Result;
+
+            foreach (var meal in meals)
+            {
+                meal.UpdateCalories(dbIngredient, newIngredientCalories);
+                _dbSet.Update(meal);
+            }
         }
     }
 }
