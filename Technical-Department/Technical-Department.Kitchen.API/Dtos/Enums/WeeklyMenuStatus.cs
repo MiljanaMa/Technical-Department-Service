@@ -8,7 +8,6 @@ namespace Technical_Department.Kitchen.API.Dtos.Enums
 {
     public enum WeeklyMenuStatus
     {
-        PREVIOUS,
         CURRENT,
         DRAFT,
         NEW,

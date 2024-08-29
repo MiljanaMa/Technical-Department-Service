@@ -343,4 +343,26 @@ export class CustomMenuComponent implements OnInit {
       return 'form-fields-container two-columns';
     }
   }
+
+  resetDraftMenu(): void {
+    const confirmation = window.confirm("Da li ste sigurni da zelite da izbrisete sve do sad unete obroke i krenete iz pocetka?");
+  
+    if (confirmation) {
+      this.service.resetDraftMenu(this.weeklyMenu!).subscribe({
+        next: (result: WeeklyMenu) => {
+          location.reload();
+          this.selectedDayTabIndex = 0;
+          this.selectedMealTabIndex = 0;
+        },
+        error: (error) => {
+          console.error('Error resetting draft menu:', error);
+          if (error.error && error.error.errors) {
+            console.log('Validation errors:', error.error.errors);
+          }
+        }
+      });
+    }
+  }
+  
+
 }

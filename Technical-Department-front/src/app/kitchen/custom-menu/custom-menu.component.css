@@ -46,6 +46,18 @@ form {
   margin-left: 32px;
   padding: 16px;
   font-size: large;
+  width: 250px;
+}
+
+.cancel-button.mat-button {
+  background-color: orange;
+  color: white; 
+  border-radius: 10px;
+  margin: 16px;
+  margin-left: 32px;
+  padding: 16px;
+  font-size: large;
+  width: 250px;
 }
 
 .form-fields-container {

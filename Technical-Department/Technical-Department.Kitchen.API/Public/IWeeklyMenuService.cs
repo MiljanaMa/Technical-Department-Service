@@ -17,5 +17,6 @@ namespace Technical_Department.Kitchen.API.Public
         Result<Boolean> AddMealOffer(MealOfferDto mealOfferDto);
         Result<List<IngredientQuantityDto>> GetIngredientsRequirements(WeeklyMenuDto weeklyMenuDto);
         Task WeeklyMenuStartupCheck();
+        Result<WeeklyMenuDto> ResetDraftMenu(WeeklyMenuDto weeklyMenu);
     }
 }
