@@ -41,7 +41,10 @@ export class ConsumerQuantityComponent {
   }
 
   ngOnInit() {
-    this.service.getMenu('CURRENT').subscribe({
+    let status = 'CURRENT'
+    if(new Date().getDay() === 0)
+      status = 'NEW'
+    this.service.getMenu(status).subscribe({
       next: (result: WeeklyMenu) => {
         this.currentWeeklyMenu = result;
       },

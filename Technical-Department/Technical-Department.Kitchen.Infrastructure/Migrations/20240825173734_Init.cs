@@ -28,6 +28,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Calories = table.Column<double>(type: "double precision", nullable: false),
                     StandardizationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsBreadIncluded = table.Column<bool>(type: "boolean", nullable: false),
                     Ingredients = table.Column<ICollection<IngredientQuantity>>(type: "jsonb", nullable: false),
                     DishTypes = table.Column<string>(type: "text", nullable: false)
                 },

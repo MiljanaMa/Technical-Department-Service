@@ -28,11 +28,9 @@ import { MatChipsModule } from '@angular/material/chips';
     MatDialogModule, 
     HttpClientModule,
     ReactiveFormsModule,
-    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatChipsModule  
-    
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
