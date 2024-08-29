@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
 using BuildingBlocks.Core.UseCases;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
-using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Core.Domain;
+using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
@@ -46,21 +41,25 @@ namespace Technical_Department.Kitchen.Core.UseCases
         public Result<MealDto> Create(MealDto meal)
         {
             double calories = 0;
-            foreach(var i in meal.Ingredients)
+            foreach(var ingredientQuantity in meal.Ingredients)
             {
-                var ingredient = _ingredientRepository.Get(i.IngredientId);
-
-                if(ingredient.Unit.Name.Equals("Komad"))
-                    calories += (ingredient.Calories * i.Quantity * 60)/100;
-                else
-                    calories += ingredient.Calories * i.Quantity * 10;
+                var ingredient = _ingredientRepository.Get(ingredientQuantity.IngredientId);
+                calories += addCalories(ingredientQuantity, ingredient);
             }
 
-            meal.Calories = calories;
+            meal.Calories = Math.Round(calories, 2);
 
             var result = _mealRepository.Create(MapToDomain(meal));
             return MapToDto(result);
         }
+
+        private static double addCalories(IngredientQuantityDto i, Ingredient ingredient)
+        {
+            if (ingredient.Unit.Name.Equals("Komad"))
+                return (ingredient.Calories * i.Quantity * 60) / 100;
+            return ingredient.Calories * i.Quantity * 10;
+        }
+
         public Result Delete(int mealId)
         {
             DailyMenu menu = _dailyMenuRepository.FindFirstMenuByMealId(mealId);
@@ -68,6 +67,20 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 return Result.Fail(FailureCode.Forbidden).WithError("It is not allowed to delete meal, it is connected to menu.");
             _mealRepository.Delete(mealId);
             return Result.Ok();
+        }
+        public Result<MealDto> Update(MealDto meal)
+        {
+            double calories = 0;
+            foreach (var ingredientQuantity in meal.Ingredients)
+            {
+                var ingredient = _ingredientRepository.Get(ingredientQuantity.IngredientId);
+                calories += addCalories(ingredientQuantity, ingredient);
+            }
+
+            meal.Calories = Math.Round(calories, 2);
+
+            var result = _mealRepository.Update(MapToDomain(meal));
+            return MapToDto(result);
         }
 
     }
