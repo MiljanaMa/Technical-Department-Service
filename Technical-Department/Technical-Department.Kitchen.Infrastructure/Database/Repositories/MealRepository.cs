@@ -26,7 +26,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         {
             return _dbSet.ToList();
         }
-        public Meal FindFirstMealByIngredientId(int ingredientId)
+        public Meal FindFirstWithIngredient(int ingredientId)
         {
             var sql = @"
                 SELECT * 
@@ -40,6 +40,22 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             var task = _dbSet
                 .FromSqlRaw(sql, new NpgsqlParameter("@ingredientId", ingredientId))
                 .FirstOrDefaultAsync();
+            task.Wait();
+            return task.Result;
+        }
+        public List<Meal> FindAllWithIngredient(int ingredientId)
+        {
+            var sql = @"
+                SELECT * 
+                FROM kitchen.""Meals""
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(""Ingredients""::jsonb) AS ingredient
+                    WHERE (ingredient->>'IngredientId')::bigint = @ingredientId
+                )";
+
+            var task = _dbSet
+                .FromSqlRaw(sql, new NpgsqlParameter("@ingredientId", ingredientId)).ToListAsync();
             task.Wait();
             return task.Result;
         }

@@ -42,14 +42,14 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
     }
-    Result<PagedResult<IngredientDto>> IIngredientService.GetPagedWithMeasurementUnit(int page, int pageSize)
+    public Result<PagedResult<IngredientDto>> GetPagedWithMeasurementUnit(int page, int pageSize)
     {
         var result = _ingredientRepository.GetPagedWithMeasurementUnit(page, pageSize);
         return MapToDto(result);
     }
     public Result Delete(int ingredientId)
     {
-        Meal meal = _mealRepository.FindFirstMealByIngredientId(ingredientId);
+        Meal meal = _mealRepository.FindFirstWithIngredient(ingredientId);
         if (meal != null)
             return Result.Fail(FailureCode.Forbidden).WithError("It is not allowed to delete ingredient, it is connected to meal.");
         _ingredientRepository.Delete(ingredientId);
