@@ -167,7 +167,7 @@ INSERT INTO kitchen."Meals" VALUES (-38, 400002, 'Paradajz i krastavac salata', 
 INSERT INTO kitchen."Meals" VALUES (-39, 400023, 'Kupus salata', 25.6, '1980-01-01 00:00:00+01', '[{"Quantity": 0.1, "IngredientId": 23}, {"Quantity": 0.01, "IngredientId": 12}]', 'SALAD');
 INSERT INTO kitchen."Meals" VALUES (-40, 400012, 'Jabuka', 62.400000000000006, '1980-01-01 00:00:00+01', '[{"Quantity": 0.12, "IngredientId": 54}]', 'SNACK');
 INSERT INTO kitchen."Meals" VALUES (-41, 400023, 'Kruška', 46.8, '1980-01-01 00:00:00+01', '[{"Quantity": 0.12, "IngredientId": 50}]', 'SNACK');
-INSERT INTO kitchen."Meals" VALUES (-42, 4000523, 'Šljive', 46.8, '1980-01-01 00:00:00+01', '[{"Quantity": 0.12, "IngredientId": 50}]', 'SNACK');
+INSERT INTO kitchen."Meals" VALUES (-42, 4000523, 'Šljive', 46.8, '1980-01-01 00:00:00+01', '[{"Quantity": 0.12, "IngredientId": 52}]', 'SNACK');
 INSERT INTO kitchen."Meals" VALUES (1, 400012, 'Pržena jaja', 271.6, '1980-01-01 00:00:00+01', '[{"Quantity": 2, "IngredientId": 9}, {"Quantity": 0.05, "IngredientId": 60}]', 'BREAKFAST');
 INSERT INTO kitchen."Meals" VALUES (2, 4000152, 'Virsle i pavlaka', 466, '1980-01-01 00:00:00+01', '[{"Quantity": 0.12, "IngredientId": 134}, {"Quantity": 0.05, "IngredientId": 60}]', 'BREAKFAST');
 INSERT INTO kitchen."Meals" VALUES (3, 40001523, 'Salama, sir i pavlaka', 476.6, '1980-01-01 00:00:00+01', '[{"Quantity": 0.06, "IngredientId": 133}, {"Quantity": 0.05, "IngredientId": 60}, {"Quantity": 0.05, "IngredientId": 14}]', 'BREAKFAST');
