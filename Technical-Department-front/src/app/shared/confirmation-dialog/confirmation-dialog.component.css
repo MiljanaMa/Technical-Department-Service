@@ -1,0 +1,19 @@
+.custom-dialog-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center the dialog content vertically */
+}
+
+.mat-dialog-content {
+  text-align: center; /* Center text inside the dialog content */
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  padding: 16px; /* Optional: adjust padding */
+}
+
+.mat-dialog-actions button {
+  margin: 0 8px; /* Space buttons apart */
+}

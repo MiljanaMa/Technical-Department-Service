@@ -9,6 +9,7 @@ public class MealDto
     public string Name { get; set; }
     public double Calories { get; set; }
     public DateTime StandardizationDate { get; set; }
+    public bool IsBreadIncluded { get; set; }
     public ICollection<DishType> Types { get; set; }
     public ICollection<IngredientQuantityDto> Ingredients { get; set; }
 }

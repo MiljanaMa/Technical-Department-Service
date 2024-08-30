@@ -26,6 +26,11 @@
     </mat-error>
   </mat-form-field>
 
+  <div style="margin: 15px;">
+    <mat-label for="breadCheckbox" style="font-size: larger;">Da li se hleb poslužuje uz jelo?</mat-label>
+    <mat-checkbox id="breadCheckbox" formControlName="isBreadIncluded"></mat-checkbox>
+  </div>
+
   <div formArrayName="types" class="dish-types">
     <div *ngFor="let type of types.controls; let i = index" class="checkbox-container">
       <input type="checkbox" [formControlName]="i" id="type{{i}}">

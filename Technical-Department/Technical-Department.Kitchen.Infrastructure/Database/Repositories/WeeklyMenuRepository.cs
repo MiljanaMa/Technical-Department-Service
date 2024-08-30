@@ -11,6 +11,7 @@ using BuildingBlocks.Core.Domain;
 using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using Npgsql;
 
 namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 {

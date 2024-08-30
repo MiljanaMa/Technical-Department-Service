@@ -10,5 +10,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
     public interface IDailyMenuRepository : ICrudRepository<DailyMenu>
     { 
         DailyMenu Get(long id);
+        DailyMenu FindFirstMenuByMealId(int mealId);
     }
 }

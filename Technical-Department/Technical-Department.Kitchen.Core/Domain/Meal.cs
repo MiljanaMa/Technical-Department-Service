@@ -6,12 +6,13 @@ using Technical_Department.Kitchen.Core.Domain.Enums;
 
 namespace Technical_Department.Kitchen.Core.Domain
 {
-    public class Meal: Entity
+    public class Meal : Entity
     {
         public int Code { get; init; }
         public required string Name { get; init; }
-        public double Calories { get; init; }
+        public double Calories { get; set; }
         public DateTime StandardizationDate { get; init; }
+        public bool IsBreadIncluded { get; init; }
         public string DishTypes;
 
         [NotMapped]
@@ -23,5 +24,17 @@ namespace Technical_Department.Kitchen.Core.Domain
             set => DishTypes = string.Join(",", value.Select(dt => dt.ToString()));
         }
         public ICollection<IngredientQuantity> Ingredients { get; init; }
+        public void UpdateCalories(Ingredient ingredient, double newIngredientCalories)
+        {
+            var existingIngredientQuantity = Ingredients.FirstOrDefault(iq => iq.IngredientId == ingredient.Id);
+
+            if (existingIngredientQuantity != null)
+            {
+                double oldCalories = existingIngredientQuantity.Quantity * ingredient.Calories;
+                double newCalories = existingIngredientQuantity.Quantity * newIngredientCalories;
+                this.Calories -= (oldCalories - newCalories);
+
+            }
+        }
     }
 }
