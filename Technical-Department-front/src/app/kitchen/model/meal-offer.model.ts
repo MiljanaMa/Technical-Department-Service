@@ -1,7 +1,6 @@
 import { Meal } from "./meal.model";
 
 export interface MealOffer{
-    id?: number;
     type: MealType;
     consumerType: ConsumerType;
     mealId: number;
