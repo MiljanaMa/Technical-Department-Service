@@ -17,7 +17,7 @@
       <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
       <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
         <div class="center">{{ element[mealType.value.toString()] }}</div>
-        <div class="center" *ngIf="shouldRenderSnackInput(mealType.value, element.consumerType)">
+        <div class="center" *ngIf="shouldRenderInput(mealType.value, element.consumerType)">
             <button mat-button (click)="openModal(mealType.value, element.consumerType)"> 
                 <mat-icon>edit</mat-icon>
             </button>
