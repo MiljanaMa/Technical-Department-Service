@@ -4,6 +4,7 @@ export interface Meal{
     name: string;
     calories: number;
     standardizationDate: Date;
+    isBreadIncluded: boolean;
     types: DishType[];
     ingredients: IngredientQuantity[];
 }
