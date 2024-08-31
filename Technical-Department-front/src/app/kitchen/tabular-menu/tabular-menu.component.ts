@@ -208,12 +208,14 @@ export class TabularMenuComponent implements OnInit {
     
   }
 
-  
-  shouldRenderSnackInput(mealType: MealType, consumerTypeName: string): boolean {
+  shouldRenderInput(mealType: MealType, consumerTypeName: string): boolean {
     const consumerType = this.getConsumerTypeByName(consumerTypeName);
     const snackEligibleConsumerTypes = [ConsumerType.DIABETIC, ConsumerType.PREGNANT, ConsumerType.CHILDREN_2_4, ConsumerType.CHILDREN_4_14];
     const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
-    const otherMealTypes = [MealType.BREAKFAST, MealType.DINNER, MealType.DINNER_SALAD, MealType.LUNCH, MealType.LUNCH_SALAD]
-    return  otherMealTypes.includes(mealType) || (snackMealTypes.includes(mealType) && snackEligibleConsumerTypes.includes(consumerType!));
+    const saladEligibleConsumerTypes = [ConsumerType.PREGNANT, ConsumerType.MILD_PATIENT, ConsumerType.DOCTOR, ConsumerType.CHILDREN_2_4, ConsumerType.CHILDREN_4_14, ConsumerType.DIABETIC];
+    const saladMealTypes = [MealType.LUNCH_SALAD, MealType.DINNER_SALAD];
+    const otherMealTypes = [MealType.BREAKFAST, MealType.DINNER, MealType.LUNCH]
+    return  otherMealTypes.includes(mealType) || (snackMealTypes.includes(mealType) && snackEligibleConsumerTypes.includes(consumerType!)) || (saladMealTypes.includes(mealType) && saladEligibleConsumerTypes.includes(consumerType!));
   }
+
 }

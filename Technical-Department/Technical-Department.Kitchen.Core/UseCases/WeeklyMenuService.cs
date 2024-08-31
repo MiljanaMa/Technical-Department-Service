@@ -13,6 +13,8 @@ using Technical_Department.Kitchen.Core.Domain;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
@@ -39,7 +41,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             {
                 var weeklyMenu = MapToDomain(weeklyMenuDto);
                 var result = CreateWeeklyMenu(weeklyMenu);
-                return MapToDto(result);
+                return ReturnMenuWithMealNames(result);
             }
             catch (ArgumentException e)
             {
@@ -53,7 +55,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             {
                 var newDraftMenu = MapToDomain(weeklyMenuDto);
                 var result = CreateDraftFromDefaultMenuLogic(newDraftMenu);
-                return MapToDto(result);
+                return ReturnMenuWithMealNames(result);
             }
             catch (ArgumentException e)
             {
@@ -66,16 +68,17 @@ namespace Technical_Department.Kitchen.Core.UseCases
             var existingDraftMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DRAFT);
 
             if (existingDraftMenu != null)
-            {
+            {             
                 return existingDraftMenu;
             }
 
             var createdMenu = _weeklyMenuRepository.Create(weeklyMenu);
+            createdMenu.SetNextWeekDates();
 
             for (int i = 0; i < 7; i++)
             {
                 var dayOfWeek = (DayOfWeek)i;
-                var dailyMenu = new DailyMenu(dayOfWeek, createdMenu.Id, createdMenu);
+                var dailyMenu = new DailyMenu(dayOfWeek, createdMenu.Id, createdMenu);           
                 createdMenu.Menu.Add(dailyMenu);
             }
 
@@ -120,7 +123,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             var typeDomain = (Domain.Enums.MealType)mealOfferDto.Type;
             var consumerTypeDomain = (Domain.Enums.ConsumerType)mealOfferDto.ConsumerType;
 
-            MealOffer mealOffer = new MealOffer(typeDomain, consumerTypeDomain, mealOfferDto.MealId, mealOfferDto.MealName, mealOfferDto.ConsumerQuantity, mealOfferDto.DailyMenuId);
+            MealOffer mealOffer = new MealOffer(typeDomain, consumerTypeDomain, mealOfferDto.MealId, mealOfferDto.ConsumerQuantity, mealOfferDto.DailyMenuId);
             dailyMenu.AddMealOffer(mealOffer);
             return _dailyMenuRepository.Update(dailyMenu) != null ? true : false;
         }
@@ -135,7 +138,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 }
 
                 var result = _weeklyMenuRepository.GetMenuByStatus(parsedStatus);
-                return MapToDto(result);
+                return ReturnMenuWithMealNames(result);
             }
             catch (KeyNotFoundException e)
             {
@@ -149,7 +152,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             {
                 weeklyMenuDto.Status = API.Dtos.Enums.WeeklyMenuStatus.NEW;
                 var result = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
-                return MapToDto(result);
+                return ReturnMenuWithMealNames(result);
             }
             catch (KeyNotFoundException e)
             {
@@ -236,6 +239,45 @@ namespace Technical_Department.Kitchen.Core.UseCases
                     }
                 }
             }
+        }
+
+        public Result<WeeklyMenuDto> ResetDraftMenu(WeeklyMenuDto weeklyMenuDto)
+        {
+            try
+            {
+                var weeklyMenu = MapToDomain(weeklyMenuDto);
+
+                foreach (var dailyMenu in weeklyMenu.Menu)
+                {
+                    dailyMenu.ClearMenu();
+                    _dailyMenuRepository.Update(dailyMenu);
+                }
+                var result = _weeklyMenuRepository.Update(weeklyMenu);
+                return MapToDto(result);
+
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        private WeeklyMenuDto ReturnMenuWithMealNames(WeeklyMenu weeklyMenu)
+        {
+            if (weeklyMenu != null)
+            {
+                WeeklyMenuDto menuDto = MapToDto(weeklyMenu);
+                foreach (var dailyMenu in menuDto.Menu)
+                {
+                    foreach (var mealOffer in dailyMenu.Menu)
+                    {
+                        var meal = _mealRepository.Get(mealOffer.MealId);
+                        mealOffer.MealName = meal.Name;
+                    }
+                }
+                return menuDto;
+            }
+            return MapToDto(weeklyMenu);
         }
     }
 
