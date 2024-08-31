@@ -9,15 +9,13 @@ export interface WeeklyMenu {
 }
 
 export enum WeeklyMenuStatus {
-    PREVIOUS = 0,
-    CURRENT = 1,
-    DRAFT = 2,
-    NEW = 3,
-    DEFAULT = 4
+    CURRENT = 0,
+    DRAFT = 1,
+    NEW = 2,
+    DEFAULT = 3
 }
 
 export const WeeklyMenuStatusLabels = {
-    [WeeklyMenuStatus.PREVIOUS]: "PRETHODNI",
     [WeeklyMenuStatus.CURRENT]: "TRENUTNI",
     [WeeklyMenuStatus.DRAFT]: "U IZRADI",
     [WeeklyMenuStatus.NEW]: "NOVI",

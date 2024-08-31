@@ -52,7 +52,7 @@ export class MenusComponent implements OnInit {
   .map(key => ({
     name: WeeklyMenuStatusLabels[WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus] as keyof typeof WeeklyMenuStatusLabels],
     value: WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus]
-  })).filter(weeklyMenuStatus => ![WeeklyMenuStatus.PREVIOUS, WeeklyMenuStatus.DRAFT, WeeklyMenuStatus.DEFAULT].includes(weeklyMenuStatus.value));
+  })).filter(weeklyMenuStatus => ![WeeklyMenuStatus.DRAFT, WeeklyMenuStatus.DEFAULT].includes(weeklyMenuStatus.value));
 
   displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
