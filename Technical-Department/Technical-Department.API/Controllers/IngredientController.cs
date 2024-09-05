@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
 
@@ -17,9 +16,15 @@ public class IngredientController : BaseApiController
     }
 
     [HttpGet("")]
-    public ActionResult<IngredientDto> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public ActionResult<IngredientDto> GetAllPaged([FromQuery] int page, [FromQuery] int pageSize)
     {
         var result = _ingredientService.GetPagedWithMeasurementUnit(page, pageSize);
+        return CreateResponse(result);
+    }
+    [HttpGet("all")]
+    public ActionResult<IngredientDto> GetAll()
+    {
+        var result = _ingredientService.GetAll();
         return CreateResponse(result);
     }
     [HttpPost("")]

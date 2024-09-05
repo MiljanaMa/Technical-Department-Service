@@ -7,6 +7,7 @@ import { MenusComponent } from './kitchen/menus/menus.component';
 import { TabularMenuComponent } from './kitchen/tabular-menu/tabular-menu.component';
 import { MealFormComponent } from './kitchen/meal-form/meal-form.component';
 import { ConsumerQuantityComponent } from './kitchen/consumer-quantity/consumer-quantity.component';
+import { YearlyExcelImportComponent } from './kitchen/yearly-excel-import/yearly-excel-import.component';
 
 const routes: Routes = [
   {path: 'menus', component: MenusComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'tabular-menu/:status', component: TabularMenuComponent},
   {path: 'meal-form/:id', component: MealFormComponent},
   {path: 'consumer-quantity', component: ConsumerQuantityComponent},
+  {path: 'yearly-excel-import', component: YearlyExcelImportComponent},
 ];
 
 @NgModule({

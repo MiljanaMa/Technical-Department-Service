@@ -13,4 +13,6 @@ public class IngredientDto
     public IngredientType Type { get; set; }
     public int UnitId { get; set; }
     public MeasurementUnitDto Unit { get; set; }
+    public string WarehouseLabel { get; set; }
+    public bool IsActive { get; set; }
 }

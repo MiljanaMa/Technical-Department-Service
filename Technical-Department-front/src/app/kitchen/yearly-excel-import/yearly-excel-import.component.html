@@ -1,0 +1,50 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>upload</mat-icon> Započnite novu poslovnu godinu (ubacite excel fajl)
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <input type="file" (change)="onFileChange($event)" />
+    <mat-form-field>
+      <mat-label>Sheet name</mat-label>
+      <input matInput type="text" [(ngModel)]="sheetName" placeholder="Sheet Name"  />
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="uploadFile()">
+      <mat-icon>cloud_upload</mat-icon> Započni
+    </button>
+  </mat-card-content>
+</mat-card>
+
+<table class="ingredient-table" *ngIf="this.warehouseIngredients.length > 0">
+  <thead>
+    <tr>
+      <th>Namirnica-magacin</th>
+      <th>Namirnica-kuhinja</th>
+      <th>Skaliranje</th>
+      <th>Jedinica mjere magacin</th>
+      <th>Potvrdi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ingredient of warehouseIngredients" [ngClass]="{'confirmed-row': ingredient.isConfirmed}">
+      <td>{{ ingredient.name }}</td>
+      <td>
+        <ng-container *ngIf="findMatchingIngredient(ingredient) as matchedIngredient; else noMatch">
+          {{ matchedIngredient.name }} ({{ matchedIngredient.unit.shortName }})
+        </ng-container>
+        <ng-template #noMatch>
+          Nije pronađeno
+          <button mat-raised-button color="accent" (click)="openAddIngredientDialog(ingredient)">Dodaj</button>
+        </ng-template>
+      </td>
+      <td>
+        <input type="number" [(ngModel)]="ingredient.scale" [disabled]="ingredient.isConfirmed"  />
+      </td>
+      <td>{{ ingredient.warehouseUnitShortName }}</td>
+      <td>
+        <button mat-raised-button color="primary" (click)="confirmRow(ingredient)">{{ ingredient.isConfirmed ? 'Otkazati' : 'Potvrdi' }}</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
