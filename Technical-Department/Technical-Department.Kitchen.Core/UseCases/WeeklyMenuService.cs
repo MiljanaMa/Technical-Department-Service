@@ -22,7 +22,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
     {
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
         private readonly ICrudRepository<DailyMenu> _dailyMenuRepository;
-        private readonly ICrudRepository<Meal> _mealRepository;
+        private readonly IMealRepository _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
         public WeeklyMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository
@@ -65,11 +65,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
 
         private WeeklyMenu CreateWeeklyMenu(WeeklyMenu weeklyMenu)
         {
-            var existingDraftMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DRAFT);
+            var existingMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DRAFT);
 
-            if (existingDraftMenu != null)
+            if (existingMenu != null)
             {             
-                return existingDraftMenu;
+                return existingMenu;
             }
 
             var createdMenu = _weeklyMenuRepository.Create(weeklyMenu);
@@ -278,6 +278,69 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 return menuDto;
             }
             return MapToDto(weeklyMenu);
+        }
+
+        public Result<WeeklyMenuDto> CreateCustomWeeklyMenu(int totalCalories)
+        {
+            var customMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.CUSTOM);
+            if (customMenu == null)
+            {
+                var weeklyMenu = new WeeklyMenu();
+                weeklyMenu.Status = WeeklyMenuStatus.CUSTOM;
+                weeklyMenu.SetNextWeekDates();
+                customMenu = _weeklyMenuRepository.Create(weeklyMenu);
+            }
+
+            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                var dailyMenu = GenerateCustomDailyMenu(day, totalCalories, customMenu);
+                customMenu.Menu.Add(dailyMenu);
+            }
+
+            return ReturnMenuWithMealNames(customMenu);
+        }
+
+        private DailyMenu GenerateCustomDailyMenu(DayOfWeek dayOfWeek, double totalCalories, WeeklyMenu weeklyMenu)
+        {
+            var dailyMenu = new DailyMenu(dayOfWeek, weeklyMenu.Id, weeklyMenu);
+
+            var calorieDistribution = new Dictionary<MealType, double>
+            {
+                { MealType.BREAKFAST, totalCalories * 0.25 },
+                { MealType.MORNING_SNACK, totalCalories * 0.05 },
+                { MealType.LUNCH, totalCalories * 0.4 },
+                { MealType.DINNER_SNACK, totalCalories * 0.05 },
+                { MealType.DINNER, totalCalories * 0.25 }
+            };
+
+            foreach (var (mealType, calories) in calorieDistribution)
+            {
+                var mealOffer = CreateMealOffer(mealType, calories, dailyMenu.Id);
+                if (mealOffer != null)
+                {
+                    dailyMenu.AddMealOffer(mealOffer);
+                }
+            }
+
+            return dailyMenu;
+        }
+
+        private MealOffer CreateMealOffer(MealType mealType, double requiredCalories, long dailyMenuId)
+        {
+
+            var availableMeals = _mealRepository.GetAll();
+
+            var selectedMeal = availableMeals
+                .Where(meal => meal.Types.Contains((DishType)mealType))
+                .OrderBy(meal => Math.Abs(meal.Calories - requiredCalories))
+                .FirstOrDefault();
+
+            if (selectedMeal != null)
+            {
+                return new MealOffer(mealType, ConsumerType.MILD_PATIENT, selectedMeal.Id, 1, dailyMenuId);
+            }
+
+            return null;
         }
     }
 

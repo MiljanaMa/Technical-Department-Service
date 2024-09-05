@@ -1,0 +1,62 @@
+.center{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+  
+  .main-meal {
+    background-color: #CCE6FF;
+  }
+  
+  .salad {
+    background-color: #E6FFE6;
+  }
+  
+  .snack {
+    background-color: #FFFACD;
+  }
+
+  .no-menu-message {
+    color: #d9534f; 
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    background-color: #f2dede;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .confirm-button.mat-button {
+    background-color: #003B6D;
+    color: white; 
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+    padding: 16px;
+   font-size: large;
+}
+
+.hide-in-pdf {
+    display: none !important;
+  }
+
+  .confirm-button.mat-button {
+    background-color: #003B6D;
+    color: white; 
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+    padding: 16px;
+    font-size: large;
+    width: 300px;
+}

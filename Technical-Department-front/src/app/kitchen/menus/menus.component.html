@@ -1,6 +1,6 @@
 <div class="center">
-  <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button width" (click)="exportToPDF(0)">Preuzmi Trenutni Jelovnik</button>
-  <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button width" (click)="exportToPDF(1)">Preuzmi Sledeći Jelovnik</button>
+  <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF(0)">Preuzmi Trenutni Jelovnik</button>
+  <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF(1)">Preuzmi Sledeći Jelovnik</button>
 </div>
 <mat-tab-group #menuStatusTabGroup (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
   <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
@@ -8,7 +8,7 @@
       <div>{{ menuStatus.name }}</div>
     </ng-template>
 
-    <div class="tab-content">
+    <div>
       <mat-tab-group #dayTabGroups *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)">
         <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
           <ng-template mat-tab-label>

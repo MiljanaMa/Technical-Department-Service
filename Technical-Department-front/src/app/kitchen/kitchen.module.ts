@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MealFormComponent } from './meal-form/meal-form.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity.component';
+import { CalorieBasedMenuComponent } from './calorie-based-menu/calorie-based-menu.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity
     IngredientModalComponent,
     MealFormComponent,
     ConsumerQuantityComponent,
+    CalorieBasedMenuComponent,
   ],
   imports: [
     CommonModule,

@@ -63,5 +63,13 @@ namespace Technical_Department.API.Controllers
             var result = _weeklyMenuService.ResetDraftMenu(weeklyMenu);
             return CreateResponse(result);
         }
+
+        [HttpPost("custom-menu")]
+        public ActionResult<WeeklyMenuDto> CreateCustomMenu([FromQuery] int calories)
+
+        {
+            var result = _weeklyMenuService.CreateCustomWeeklyMenu(calories);
+            return CreateResponse(result);
+        }
     }
 }
