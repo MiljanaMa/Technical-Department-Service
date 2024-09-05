@@ -11,6 +11,7 @@ export interface Ingredient {
   type: IngredientType;
   unitId: number;
   unit: MeasurementUnit;
+  warehouseLabel: string;
 }
 export enum IngredientType {
     FAT,

@@ -25,6 +25,10 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             task.Wait();
             return task.Result;
         }
+        public List<Ingredient> GetAll()
+        {
+            return _dbSet.Include(i => i.Unit).ToList();
+        }
         public Ingredient Get(long ingredientId)
         {
             return _dbSet.AsNoTracking().Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);

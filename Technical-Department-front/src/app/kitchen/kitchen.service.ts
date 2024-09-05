@@ -8,6 +8,7 @@ import { WeeklyMenu } from './model/weekly-menu.model';
 import { MealOffer } from './model/meal-offer.model';
 import { Ingredient } from './model/ingredient.model';
 import { MeasurementUnit } from './model/measurementUnit.model';
+import { WarehouseIngredient } from './model/warehouse-ingredient';
 
 @Injectable({
   providedIn: 'root'
@@ -56,8 +57,11 @@ export class KitchenService {
   updateMeal(meal: Meal): Observable<Meal> {
     return this.http.put<Meal>(environment.apiHost + `meal/${meal.id}`, meal);
   }
-  getAllIngredients(): Observable<Ingredient[]> {
+  getAllIngredientsPaged(): Observable<Ingredient[]> {
     return this.http.get<Ingredient[]>(environment.apiHost + 'ingredient');
+  }
+  getAllIngredients(): Observable<Ingredient[]> {
+    return this.http.get<Ingredient[]>(environment.apiHost + 'ingredient/all');
   }
   createIngredient(ingredient: Ingredient): Observable<Ingredient> {
     return this.http.post<Ingredient>(environment.apiHost + 'ingredient', ingredient);
@@ -74,6 +78,9 @@ export class KitchenService {
 
   resetDraftMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
     return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/reset-draft-menu`, weeklyMenu)
+  }
+  proceedExcel(formData: FormData): Observable<WarehouseIngredient[]> {
+    return this.http.post<WarehouseIngredient[]>('http://localhost:5000/proceedExcel', formData);
   }
   
 }

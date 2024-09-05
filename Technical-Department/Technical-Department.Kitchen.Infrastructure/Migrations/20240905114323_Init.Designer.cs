@@ -14,7 +14,7 @@ using Technical_Department.Kitchen.Infrastructure.Database;
 namespace Technical_Department.Kitchen.Infrastructure.Migrations
 {
     [DbContext(typeof(KitchenContext))]
-    [Migration("20240830131421_Init")]
+    [Migration("20240905114323_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -70,6 +70,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<double>("Fats")
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -86,11 +89,39 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<long>("UnitId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("WarehouseLabel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UnitId");
 
                     b.ToTable("Ingredients", "kitchen");
+                });
+
+            modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.KitchenWarehouseIngredient", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("IngredientId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("MeasurementUnitScale")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("KitchenWarehouseIngredients", "kitchen");
                 });
 
             modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.Meal", b =>
@@ -194,6 +225,17 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.KitchenWarehouseIngredient", b =>
+                {
+                    b.HasOne("Technical_Department.Kitchen.Core.Domain.Ingredient", "Ingredient")
+                        .WithMany()
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
                 });
 
             modelBuilder.Entity("Technical_Department.Kitchen.Core.Domain.WeeklyMenu", b =>
