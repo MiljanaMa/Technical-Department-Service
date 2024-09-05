@@ -46,7 +46,7 @@ export class YearlyExcelImportComponent implements OnInit{
       this.service.proceedExcel(formData).subscribe({
         next:(result: WarehouseIngredient[]) => {
           this.warehouseIngredients = result;
-          //this.cdRef.detectChanges(); 
+          this.findMatchingIngredients();
 
         },
         error: (error) => {
@@ -66,6 +66,18 @@ export class YearlyExcelImportComponent implements OnInit{
       return warehouseIngredient.ingredient;
     }
     return undefined;
+  }
+  findMatchingIngredients(): void {
+    const kitchenIngredientNames = this.kitchenIngredients.map(kitchenIng => kitchenIng.name);
+    this.warehouseIngredients.forEach(element => {
+      const bestMatch = stringSimilarity.findBestMatch(element.name, kitchenIngredientNames);
+      const bestMatchRating = bestMatch.bestMatch.rating;
+      const similarityThreshold = 0.3;
+      if (bestMatchRating >= similarityThreshold) {
+        const bestMatchName = bestMatch.bestMatch.target;
+        element.ingredient = this.kitchenIngredients.find(kitchenIng => kitchenIng.name === bestMatchName);
+      }
+    });
   }
   confirmRow(ingredient: WarehouseIngredient) {
     ingredient.isConfirmed = !ingredient.isConfirmed; // Mark the ingredient as confirmed

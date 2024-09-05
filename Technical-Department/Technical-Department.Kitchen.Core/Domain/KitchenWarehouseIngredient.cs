@@ -11,6 +11,7 @@ namespace Technical_Department.Kitchen.Core.Domain
     {
         public long IngredientId { get; init; }
         public Ingredient Ingredient { get; init; }
+        public string WarehouseLabel { get; init; }
         public double Quantity { get; init; }
         public double MeasurementUnitScale { get; init; }
 

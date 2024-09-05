@@ -27,23 +27,23 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let ingredient of warehouseIngredients" [ngClass]="{'confirmed-row': ingredient.isConfirmed}">
-      <td>{{ ingredient.name }}</td>
+    <tr *ngFor="let i of warehouseIngredients" [ngClass]="{'confirmed-row': i.isConfirmed}">
+      <td>{{ i.name }}</td>
       <td>
-        <ng-container *ngIf="findMatchingIngredient(ingredient) as matchedIngredient; else noMatch">
-          {{ matchedIngredient.name }} ({{ matchedIngredient.unit.shortName }})
+        <ng-container *ngIf="i.ingredient !== undefined; else noMatch">
+          {{ i.ingredient?.name }} ({{ i.ingredient?.unit?.shortName }})
         </ng-container>
         <ng-template #noMatch>
           Nije pronađeno
-          <button mat-raised-button color="accent" (click)="openAddIngredientDialog(ingredient)">Dodaj</button>
+          <button mat-raised-button color="accent" (click)="openAddIngredientDialog(i)">Dodaj</button>
         </ng-template>
       </td>
       <td>
-        <input type="number" [(ngModel)]="ingredient.scale" [disabled]="ingredient.isConfirmed"  />
+        <input type="number" [(ngModel)]="i.scale" [disabled]="i.isConfirmed"  />
       </td>
-      <td>{{ ingredient.warehouseUnitShortName }}</td>
+      <td>{{ i.warehouseUnitShortName }}</td>
       <td>
-        <button mat-raised-button color="primary" (click)="confirmRow(ingredient)">{{ ingredient.isConfirmed ? 'Otkazati' : 'Potvrdi' }}</button>
+        <button mat-raised-button color="primary" (click)="confirmRow(i)">{{ i.isConfirmed ? 'Otkazati' : 'Potvrdi' }}</button>
       </td>
     </tr>
   </tbody>
