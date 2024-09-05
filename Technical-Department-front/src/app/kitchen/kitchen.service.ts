@@ -31,6 +31,10 @@ export class KitchenService {
     return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/default`, weeklyMenu);
   }
 
+  createCustomMenu(calories: number): Observable<WeeklyMenu> {
+    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/custom-menu`, {params: calories});
+  }
+
   confirmWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
     return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/confirm`, weeklyMenu)
   }

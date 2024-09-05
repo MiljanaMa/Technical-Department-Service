@@ -12,7 +12,8 @@ export enum WeeklyMenuStatus {
     CURRENT = 0,
     DRAFT = 1,
     NEW = 2,
-    DEFAULT = 3
+    DEFAULT = 3,
+    CUSTOM = 4
 }
 
 export const WeeklyMenuStatusLabels = {
@@ -20,5 +21,6 @@ export const WeeklyMenuStatusLabels = {
     [WeeklyMenuStatus.DRAFT]: "U IZRADI",
     [WeeklyMenuStatus.NEW]: "NOVI",
     [WeeklyMenuStatus.DEFAULT]: "DIFOLTNI",
+    [WeeklyMenuStatus.CUSTOM]: "PRILAGODJENI"
 };
 
