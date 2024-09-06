@@ -15,23 +15,33 @@ logger = logging.getLogger(__name__)
 
 @app.route('/proceedExcel', methods=['POST'])
 def proceedExcel():
-    
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+    #if 'foodFile' or 'meatFile' not in request.files:
+    #    return jsonify({'error': 'No file part'}), 400
 
-    file = request.files['file']
-    sheet_name = request.form.get('sheet', None)
-
-    if file.filename == '':
+    foodFile = request.files['foodFile']
+    meatFile = request.files['meatFile']
+    food_sheet_name = request.form.get('foodSheet', None)
+    meat_sheet_name = request.form.get('meatSheet', None)
+    if foodFile.filename == '' or meatFile.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    if file:
+    allIngredients = []
+    if foodFile:
         try:
-            df = pd.read_excel(file, sheet_name=sheet_name)
+            df = pd.read_excel(foodFile, sheet_name=food_sheet_name)
             result = get_ingredients(df)
-            return jsonify(result)
+            allIngredients.extend(result)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+    if meatFile:
+        try:
+            df = pd.read_excel(meatFile, sheet_name=meat_sheet_name)
+            result = get_meats(df)
+            allIngredients.extend(result)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    return jsonify(allIngredients)
+        
 
 @app.route('/proceedDeliveryNote', methods=['POST'])
 def proceedDeliveryNote():
@@ -126,6 +136,42 @@ def get_ingredients(df):
                     'warehouseUnitShortName': row[unitColumn],
                     'scale': number,
                     'unitShortName': unit,
+                    'isConfirmed': False
+                }
+                objects.append(object_data)
+
+        return objects
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def get_meats(df):
+    try:
+
+        nameColumn = find_column_index_in_cell(df, ['VRSTE MESA'])
+        if(nameColumn == None):
+            print("Ne postoji kolona sa imenom mesa.")
+
+        quantityColumn = find_column_index_in_cell(df, ['ugovoreno', 'ugo.količina', 'ugov. Kolicina'])
+        if(quantityColumn == None):
+            print("Ne postoji kolona sa imenom ugovoreno")
+
+        objects = []
+        first_search_term = True
+        
+        for index, row in df.iterrows():
+            if 'VRSTE MESA' in row.values:
+                first_search_term = False
+                continue
+            elif first_search_term:
+                continue
+            
+            if pd.notna(row[nameColumn]) and pd.notna(row[quantityColumn]):
+                object_data = {
+                    'name': row[nameColumn],
+                    'warehouseUnitShortName': 'kg',
+                    'scale': 0,
+                    'unitShortName': 'kg',
                     'isConfirmed': False
                 }
                 objects.append(object_data)

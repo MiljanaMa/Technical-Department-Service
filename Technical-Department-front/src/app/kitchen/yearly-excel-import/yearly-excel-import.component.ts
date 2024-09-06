@@ -17,8 +17,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./yearly-excel-import.component.css']
 })
 export class YearlyExcelImportComponent implements OnInit{
-  selectedFile: File | null = null;
-  sheetName: string = '';
+  selectedFoodFile: File | null = null;
+  selectedMeatFile: File | null = null;
+  foodSheetName: string = '';
+  meatSheetName: string = '';
   warehouseIngredients: WarehouseIngredient[] = []
   kitchenIngredients: Ingredient[] = []
 
@@ -37,17 +39,24 @@ export class YearlyExcelImportComponent implements OnInit{
     });
   }
 
-  onFileChange(event: any) {
+  onFoodFileChange(event: any) {
     if (event.target.files.length > 0) {
-      this.selectedFile = event.target.files[0];
+      this.selectedFoodFile = event.target.files[0];
+    }
+  }
+  onMeatFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedMeatFile = event.target.files[0];
     }
   }
 
   uploadFile() {
-    if (this.selectedFile && this.sheetName) {
+    if (this.selectedFoodFile && this.selectedMeatFile &&  this.foodSheetName &&  this.meatSheetName) {
       const formData = new FormData();
-      formData.append('file', this.selectedFile);
-      formData.append('sheet', this.sheetName);
+      formData.append('foodFile', this.selectedFoodFile);
+      formData.append('foodSheet', this.foodSheetName);
+      formData.append('meatFile', this.selectedMeatFile);
+      formData.append('meatSheet', this.meatSheetName);
 
       this.service.proceedExcel(formData).subscribe({
         next:(result: WarehouseIngredient[]) => {
