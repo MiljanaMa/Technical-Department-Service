@@ -8,7 +8,3 @@ export interface WarehouseIngredient{
     isConfirmed: boolean;
     ingredient?: Ingredient;
 }
-export interface WarehouseDeliveredIngredient{
-    name: string;
-    quantity: number;
-}

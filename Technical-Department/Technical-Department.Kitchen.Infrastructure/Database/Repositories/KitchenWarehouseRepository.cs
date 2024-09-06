@@ -23,11 +23,24 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         {
             return _dbSet.Include(i => i.Ingredient).ThenInclude(ing => ing.Unit).ToList();
         }
-        public void AddNewWarehouse(List<KitchenWarehouseIngredient> ingredients)
+        public KitchenWarehouseIngredient GetByWarehouseLabel(string warehouseLabel)
+        {
+            return _dbSet.Include(i => i.Ingredient).FirstOrDefault(i => i.WarehouseLabel.Equals(warehouseLabel));
+        }
+        public void AddNewWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
         {
             var allIngredients = _dbSet.ToList();
             _dbSet.RemoveRange(allIngredients);
             _dbSet.AddRange(ingredients);
+            DbContext.SaveChanges();
+        }
+        public void UpdateIngredients(List<KitchenWarehouseIngredient> ingredients)
+        {
+            foreach (var ingredient in ingredients)
+            {
+                _dbSet.Update(ingredient);
+            }
+
             DbContext.SaveChanges();
         }
     }

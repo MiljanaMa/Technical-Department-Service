@@ -20,6 +20,15 @@ namespace Technical_Department.Kitchen.Core.Domain
             this.Ingredient = ingredient;
             this.Quantity = Quantity;
         }
+        public void UpdateQuantity(double deliveryNoteQuantity, double requirementQuantity)
+        {
+            double newQuantity;
+            if (this.MeasurementUnitScale != 0)
+            newQuantity = deliveryNoteQuantity * this.MeasurementUnitScale - requirementQuantity;
+            else
+                newQuantity = deliveryNoteQuantity - requirementQuantity;
+            this.Quantity += Math.Max(newQuantity, 0);
+        }
 
     }
 }
