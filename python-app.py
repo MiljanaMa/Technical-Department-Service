@@ -7,7 +7,8 @@ from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
-CORS(app, resources={r"/proceedExcel": {"origins": "http://localhost:4200"}})
+CORS(app, resources={r"/proceedExcel": {"origins": "http://localhost:4200"},
+                      r"/proceedDeliveryNote": {"origins": "http://localhost:4200"}})
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -32,6 +33,25 @@ def proceedExcel():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+@app.route('/proceedDeliveryNote', methods=['POST'])
+def proceedDeliveryNote():
+    
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    if file:
+        try:
+            df = pd.read_excel(file)
+            result = get_delivered_ingredients(df)
+            return jsonify(result)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
 
 def find_column_index_in_cell(df, search_terms):
     try:
@@ -44,6 +64,27 @@ def find_column_index_in_cell(df, search_terms):
 
     except Exception as e:
         return None
+    
+def get_delivered_ingredients(df):
+    try:
+
+        objects = []
+        
+        for index, row in df.iterrows():
+            if row == 0:
+                continue
+            
+            if pd.notna(row[0]) and pd.notna(row[1]):
+                object_data = {
+                    'name': row[0],
+                    'quantity': row[1]
+                }
+                objects.append(object_data)
+
+        return objects
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def get_ingredients(df):
     try:

@@ -8,6 +8,8 @@ import { ConsumerQuantity } from '../model/consumer-quantity.model';
 import { WeeklyMenu } from '../model/weekly-menu.model';
 import { IngredientQuantity } from '../model/meal.model';
 import * as XLSX from 'xlsx';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { WarehouseDeliveredIngredient } from '../model/warehouse-ingredient';
 
 @Component({
   selector: 'app-consumer-quantity',
@@ -16,7 +18,9 @@ import * as XLSX from 'xlsx';
 })
 export class ConsumerQuantityComponent {
   selectedMealTabIndex: number = 0;
+  selectedIndex: number = 0;
   currentWeeklyMenu?: WeeklyMenu;
+  selectedFile: File | null = null;
 
   mealFormGroup: FormGroup = new FormGroup({});
   canConfirm: boolean = false;
@@ -218,6 +222,36 @@ export class ConsumerQuantityComponent {
       return 'form-fields-container one-column';
     } else {
       return 'form-fields-container two-columns';
+    }
+  }
+  onSelectedTabChange(event: MatTabChangeEvent): void {
+    this.selectedIndex = event.index;
+  }
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
+  
+  uploadFile() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      this.service.proceedDeliveryNote(formData).subscribe({
+        next:(result: WarehouseDeliveredIngredient[]) => {
+            this.service.updateKitchenWarehouse(result).subscribe({
+              next:() => {
+                this.router.navigate([`kitchen-warehouse`]);
+              },
+              error: (error) => {
+                // Handle error
+              }
+            });
+        },
+        error: (error) => {
+          // Handle error
+        }
+      });
     }
   }
 }

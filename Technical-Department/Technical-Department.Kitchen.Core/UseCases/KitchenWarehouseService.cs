@@ -60,6 +60,18 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
+    }
+    public Result UpdateKitchenWarehouse(List<WarehouseIngredientDto> warehouseIngredients)
+    {
+        try
+        {
+            var result = _kitchenWarehouseRepository.GetAll();
+            return Result.Ok();
 
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+        }
     }
 }

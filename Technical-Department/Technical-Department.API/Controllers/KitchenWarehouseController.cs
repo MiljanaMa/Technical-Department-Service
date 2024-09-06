@@ -21,6 +21,12 @@ public class KitchenWarehouseController : BaseApiController
         var result = _kitchenWarehouseService.StartNewBusinessYear(ingredients);
         return CreateResponse(result);
     }
+    /*[HttpPost("delieryNote")]
+    public ActionResult UpdateKitchenWarehouse([FromBody] List<WarehouseIngredientDto> ingredients)
+    {
+        var result = _kitchenWarehouseService.StartNewBusinessYear(ingredients);
+        return CreateResponse(result);
+    }*/
     [HttpGet("")]
     public ActionResult<List<KitchenWarehouseIngredientDto>> GetAll()
     {
