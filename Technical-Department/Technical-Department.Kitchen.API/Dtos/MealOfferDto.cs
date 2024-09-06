@@ -8,7 +8,9 @@ public class MealOfferDto
     public ConsumerType ConsumerType { get; set; }
     public long MealId { get; set; }
     public string MealName { get; set; }
+    public double? Calories { get; set; }
     public int ConsumerQuantity { get; set; }
     public long DailyMenuId { get; set; }
+    public ICollection<IngredientQuantityDto>? Ingredients { get; set; }
 
 }

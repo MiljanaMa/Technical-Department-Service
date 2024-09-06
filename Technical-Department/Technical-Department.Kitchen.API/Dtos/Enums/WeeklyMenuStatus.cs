@@ -11,7 +11,6 @@ namespace Technical_Department.Kitchen.API.Dtos.Enums
         CURRENT,
         DRAFT,
         NEW,
-        DEFAULT,
-        CUSTOM
+        DEFAULT
     }
 }
