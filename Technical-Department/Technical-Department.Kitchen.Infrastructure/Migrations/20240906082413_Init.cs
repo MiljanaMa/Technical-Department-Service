@@ -129,6 +129,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IngredientId = table.Column<long>(type: "bigint", nullable: false),
+                    WarehouseLabel = table.Column<string>(type: "text", nullable: false),
                     Quantity = table.Column<double>(type: "double precision", nullable: false),
                     MeasurementUnitScale = table.Column<double>(type: "double precision", nullable: false)
                 },

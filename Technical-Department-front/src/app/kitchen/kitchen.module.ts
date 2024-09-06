@@ -17,6 +17,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity.component';
 import { YearlyExcelImportComponent } from './yearly-excel-import/yearly-excel-import.component';
 import { MatCardModule } from '@angular/material/card';
+import { IngredientsModalComponent } from './ingredients-modal/ingredients-modal.component';
+import { KitchenWarehouseComponent } from './kitchen-warehouse/kitchen-warehouse.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MatCardModule } from '@angular/material/card';
     MealFormComponent,
     ConsumerQuantityComponent,
     YearlyExcelImportComponent,
+    IngredientsModalComponent,
+    KitchenWarehouseComponent,
   ],
   imports: [
     CommonModule,

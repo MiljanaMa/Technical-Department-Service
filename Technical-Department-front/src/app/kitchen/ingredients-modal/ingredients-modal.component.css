@@ -1,0 +1,24 @@
+.ingredient-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .ingredient-card h3 {
+    margin-bottom: 5px;
+    color: #7149b1;
+    font-weight: bold;
+  }
+  
+  .ingredient-card p {
+    margin: 0;
+    color: #3d3b3b;
+  }
+  .ingredient-card.selected {
+    background-color: lightgreen;
+    border: 1px solid green;
+  }

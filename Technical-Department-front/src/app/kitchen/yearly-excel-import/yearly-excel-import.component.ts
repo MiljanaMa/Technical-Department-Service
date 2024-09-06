@@ -3,8 +3,13 @@ import { WarehouseIngredient } from '../model/warehouse-ingredient';
 import { KitchenService } from '../kitchen.service';
 import { Ingredient } from '../model/ingredient.model';
 import * as stringSimilarity from 'string-similarity';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IngredientModalComponent } from '../ingredient-modal/ingredient-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
+import { IngredientsModalComponent } from '../ingredients-modal/ingredients-modal.component';
+import { KitchenWarehouseIngredient } from '../model/kitchen-warehouse-ingredient';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-yearly-excel-import',
@@ -17,7 +22,8 @@ export class YearlyExcelImportComponent implements OnInit{
   warehouseIngredients: WarehouseIngredient[] = []
   kitchenIngredients: Ingredient[] = []
 
-  constructor(private service: KitchenService, private dialog: MatDialog) {}
+  constructor(private service: KitchenService, private dialog: MatDialog, private snackBar: MatSnackBar,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.service.getAllIngredients().subscribe({
@@ -55,18 +61,6 @@ export class YearlyExcelImportComponent implements OnInit{
       });
     }
   }
-  findMatchingIngredient(warehouseIngredient: WarehouseIngredient): Ingredient | undefined {
-    const kitchenIngredientNames = this.kitchenIngredients.map(kitchenIng => kitchenIng.name);
-    const bestMatch = stringSimilarity.findBestMatch(warehouseIngredient.name, kitchenIngredientNames);
-    const bestMatchRating = bestMatch.bestMatch.rating;
-    const similarityThreshold = 0.3;
-    if (bestMatchRating >= similarityThreshold) {
-      const bestMatchName = bestMatch.bestMatch.target;
-      warehouseIngredient.ingredient = this.kitchenIngredients.find(kitchenIng => kitchenIng.name === bestMatchName);
-      return warehouseIngredient.ingredient;
-    }
-    return undefined;
-  }
   findMatchingIngredients(): void {
     const kitchenIngredientNames = this.kitchenIngredients.map(kitchenIng => kitchenIng.name);
     this.warehouseIngredients.forEach(element => {
@@ -84,6 +78,55 @@ export class YearlyExcelImportComponent implements OnInit{
   }
   openAddIngredientDialog(warehouseIngredient: WarehouseIngredient): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
+      width: '450px',
+      height: '800px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        warehouseIngredient.ingredient = result;
+      }
+    });
+  }
+  startNewBusinessYear(): void {
+    if(!this.warehouseIngredients.every(i => i.isConfirmed)){
+      this.snackBar.open('Potvrdite sve redove, pa pokušajte ponovo', 'OK', {
+        duration: 3000, 
+        verticalPosition: 'top',
+        panelClass: ['mat-warn'] 
+      });
+    }else{
+      var kitchenIngredients: KitchenWarehouseIngredient[] = [];
+      this.warehouseIngredients.forEach(element => {
+        kitchenIngredients.push(this.transformToKitchenWarehouseIngredient(element));
+      });
+      this.service.startNewBusinessYear(kitchenIngredients).subscribe({
+        next:(result: KitchenWarehouseIngredient[]) => {
+          this.snackBar.open('Uspjesno ste započeli novu poslovnu godinu', 'OK', {
+            duration: 3000, 
+            verticalPosition: 'top',
+            panelClass: ['mat-warn'] 
+          });
+          this.router.navigate([`kitchen-warehouse`]);
+        },
+        error: (error) => {
+          // Handle error
+        }
+      });
+    }
+  }
+  transformToKitchenWarehouseIngredient(warehouseIngredient: WarehouseIngredient): KitchenWarehouseIngredient {
+    return {
+      measurementUnitScale: warehouseIngredient.scale,
+      quantity: 0,
+      warehouseLabel: warehouseIngredient.name,
+      ingredientId: warehouseIngredient.ingredient?.id || 0,
+      ingredient: warehouseIngredient.ingredient as Ingredient
+    };
+  }
+  openSearchIngredientDialog(warehouseIngredient: WarehouseIngredient): void {
+    const dialogRef = this.dialog.open(IngredientsModalComponent, {
       width: '450px',
       height: '800px',
       data: null

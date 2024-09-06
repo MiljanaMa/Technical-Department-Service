@@ -1,0 +1,18 @@
+<table class="ingredient-table" *ngIf="this.ingredients.length > 0">
+    <thead>
+      <tr>
+        <th>Namirnica-kuhinja</th>
+        <th>Magacinski naziv</th>
+        <th>Količina</th>
+        <th>Jedinica mjere</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of ingredients">
+        <td>{{ i.ingredient.name }}</td>
+        <td>{{ i.warehouseLabel }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.ingredient.unit.shortName }}</td>
+      </tr>
+    </tbody>
+  </table>

@@ -1,0 +1,25 @@
+import { Component, OnInit } from '@angular/core';
+import { KitchenWarehouseIngredient } from '../model/kitchen-warehouse-ingredient';
+import { KitchenService } from '../kitchen.service';
+
+@Component({
+  selector: 'app-kitchen-warehouse',
+  templateUrl: './kitchen-warehouse.component.html',
+  styleUrls: ['./kitchen-warehouse.component.css']
+})
+export class KitchenWarehouseComponent implements OnInit {
+public ingredients: KitchenWarehouseIngredient[] = [];
+
+constructor(private service: KitchenService){}
+ngOnInit(): void {
+  this.service.getKitchenWarehouse().subscribe({
+    next:(result: KitchenWarehouseIngredient[]) => {
+      this.ingredients = result;
+    },
+    error: (error) => {
+      // Handle error
+    }
+  });
+}
+
+}
