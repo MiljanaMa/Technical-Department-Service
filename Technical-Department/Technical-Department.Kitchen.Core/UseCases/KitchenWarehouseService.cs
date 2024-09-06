@@ -11,22 +11,43 @@ namespace Technical_Department.Kitchen.Core.UseCases;
 public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto, KitchenWarehouseIngredient>, IKitchenWarehouseService
 {
     private readonly IKitchenWarehouseRepository _kitchenWarehouseRepository;
-    public KitchenWarehouseService(IKitchenWarehouseRepository kitchenWarehouseRepository, IMapper mapper) : base(kitchenWarehouseRepository, mapper)
+    private readonly IIngredientRepository _ingredientRepository;
+    public KitchenWarehouseService(IKitchenWarehouseRepository kitchenWarehouseRepository, IIngredientRepository ingredientRepository,
+        IMapper mapper) : base(kitchenWarehouseRepository, mapper)
     {
         _kitchenWarehouseRepository = kitchenWarehouseRepository;
+        _ingredientRepository = ingredientRepository;
     }
     public Result<List<KitchenWarehouseIngredientDto>> StartNewBusinessYear(List<KitchenWarehouseIngredientDto> ingredients)
     {
         try
         {
-            return ingredients;
+            var newIngredients = CreateWarehouseIngredients(MapToDomain(ingredients));
+            _kitchenWarehouseRepository.AddNewWarehouse(newIngredients);
+            var ingredientIds = ingredients.Select(i => i.IngredientId).ToList();
+            _ingredientRepository.UpdateIngredientsStatus(ingredientIds);
 
+            var result = _kitchenWarehouseRepository.GetAll();
+            return MapToDto(result);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
     }
+
+    private List<KitchenWarehouseIngredient> CreateWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
+    {
+        var newIngredients = new List<KitchenWarehouseIngredient>();
+        foreach (var ingredient in ingredients)
+        {
+            var dbIngredient = _ingredientRepository.Get(ingredient.IngredientId);
+            ingredient.Create(dbIngredient);
+            newIngredients.Add(ingredient);
+        }
+        return newIngredients;
+    }
+
     public Result<List<KitchenWarehouseIngredientDto>> GetAll()
     {
         try

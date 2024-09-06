@@ -5,5 +5,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
     public interface IKitchenWarehouseRepository: ICrudRepository<KitchenWarehouseIngredient>
     {
         List<KitchenWarehouseIngredient> GetAll();
+        void AddNewWarehouse(List<KitchenWarehouseIngredient> ingredients);
     }
 }
