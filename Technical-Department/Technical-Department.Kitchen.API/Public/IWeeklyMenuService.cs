@@ -12,7 +12,6 @@ namespace Technical_Department.Kitchen.API.Public
     {
         Result<WeeklyMenuDto> CreateOrFetch(WeeklyMenuDto weeklyMenu);
         Result<WeeklyMenuDto> CreateDraftFromDefaultMenu(WeeklyMenuDto weeklyMenu);
-        Result<WeeklyMenuDto> CreateCustomWeeklyMenu(int calories);
         Result<WeeklyMenuDto> ConfirmWeeklyMenu(WeeklyMenuDto weeklyMenu);
         Result<WeeklyMenuDto> GetMenuByStatus(string status);
         Result<Boolean> AddMealOffer(MealOfferDto mealOfferDto);

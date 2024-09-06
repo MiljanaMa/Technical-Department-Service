@@ -1,3 +1,7 @@
+.table {
+  margin: 10px;
+}
+
 .center{
     display: flex;
     justify-content: center;
@@ -46,10 +50,6 @@
    font-size: large;
 }
 
-.hide-in-pdf {
-    display: none !important;
-  }
-
   .confirm-button.mat-button {
     background-color: #003B6D;
     color: white; 
@@ -59,4 +59,87 @@
     padding: 16px;
     font-size: large;
     width: 300px;
+}
+
+.meal-section-title {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  margin: 10px;
+}
+
+.meals-container {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 15px; 
+  justify-content: center;
+  margin: 20px;
+}
+
+.meal-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 500px; 
+  max-width: 100%; 
+  box-sizing: border-box; 
+}
+
+.meal-name {
+  font-size: 1.25rem; 
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.meal-calories {
+  font-size: 1rem;
+  color: #333; 
+  margin: 15px 0;
+  padding: 5px 0; 
+  text-align: center;
+}
+
+.meal-calories::before {
+  content: "Kalorije:      ";
+  font-weight: bold; 
+}
+
+.ingredients-list {
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 10px; 
+  margin-bottom: 10px;
+}
+
+.ingredient-item {
+  display: contents;
+}
+
+.ingredient-name, 
+.ingredient-quantity, 
+.ingredient-unit {
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 0.9rem; 
+  color: #333;
+}
+
+.ingredient-name {
+  font-weight: bold;
+}
+
+.ingredient-quantity {
+  font-style: italic;
+}
+
+.ingredient-unit {
+  font-style: italic;
+  color: #666;
+}
+
+.margin {
+  margin-top: 20px;
 }
