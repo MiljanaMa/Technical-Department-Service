@@ -7,6 +7,8 @@
   <button class="confirm-button mat-button" (click)="addMeal()">Dodaj novo jelo</button>
 </div>
 
+<br>
+
 <div class="meals-container">
   <div class="meal-card" *ngFor="let meal of filteredMeals">
     <h2 class="meal-name">{{ meal.name }}</h2>

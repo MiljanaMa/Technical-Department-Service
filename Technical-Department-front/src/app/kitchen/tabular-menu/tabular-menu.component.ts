@@ -17,7 +17,7 @@ export class TabularMenuComponent implements OnInit {
   routeParamMenuStatus: string = "";
   weeklyMenu: WeeklyMenu | undefined;
   mealOffers: MealOffer[] = [];
-  dataSource: any[] = [];
+  dailyMenu: any[] = [];
 
   selectedDailyMenu: DailyMenu | undefined;
   daysOfWeek = Object.keys(DayOfWeek)
@@ -77,7 +77,7 @@ export class TabularMenuComponent implements OnInit {
   }
 
   updateDataSource(): void {
-    this.dataSource = this.consumerTypes.map(consumerType => {
+    this.dailyMenu = this.consumerTypes.map(consumerType => {
       const row: any = { consumerType: consumerType.name };
 
       if (this.selectedDailyMenu) {

@@ -249,6 +249,7 @@ export class CustomMenuComponent implements OnInit {
           consumerType,
           mealName: selectedMeal.name!,
           mealId: selectedMeal.id!,
+          calories: selectedMeal.calories,
           type: mealType,
           consumerQuantity: 0,
           dailyMenuId: this.selectedDailyMenuId

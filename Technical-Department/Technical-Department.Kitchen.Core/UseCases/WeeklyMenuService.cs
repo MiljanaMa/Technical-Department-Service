@@ -22,7 +22,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
     {
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
         private readonly ICrudRepository<DailyMenu> _dailyMenuRepository;
-        private readonly ICrudRepository<Meal> _mealRepository;
+        private readonly IMealRepository _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
         public WeeklyMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository
@@ -65,11 +65,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
 
         private WeeklyMenu CreateWeeklyMenu(WeeklyMenu weeklyMenu)
         {
-            var existingDraftMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DRAFT);
+            var existingMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DRAFT);
 
-            if (existingDraftMenu != null)
+            if (existingMenu != null)
             {             
-                return existingDraftMenu;
+                return existingMenu;
             }
 
             var createdMenu = _weeklyMenuRepository.Create(weeklyMenu);
@@ -279,8 +279,12 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
             return MapToDto(weeklyMenu);
         }
+
+
+
+
     }
 
- }
+}
 
 
