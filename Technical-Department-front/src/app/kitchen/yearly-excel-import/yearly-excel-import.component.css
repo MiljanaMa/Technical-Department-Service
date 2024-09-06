@@ -55,4 +55,13 @@
   .confirmed-row input {
     background-color: #e9ecef; /* Disabled input background color */
   }
+  .confirm-all-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Optional: Add some space above the button */
+    margin-bottom: 20px;
+  }
+  .button {
+    margin: 10px;
+  }
   

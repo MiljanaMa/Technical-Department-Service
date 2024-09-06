@@ -114,6 +114,10 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("WarehouseLabel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientId");

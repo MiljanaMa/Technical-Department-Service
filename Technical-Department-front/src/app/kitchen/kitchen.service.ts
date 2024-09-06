@@ -8,6 +8,7 @@ import { WeeklyMenu } from './model/weekly-menu.model';
 import { MealOffer } from './model/meal-offer.model';
 import { Ingredient } from './model/ingredient.model';
 import { MeasurementUnit } from './model/measurementUnit.model';
+import { KitchenWarehouseIngredient } from './model/kitchen-warehouse-ingredient';
 import { WarehouseIngredient } from './model/warehouse-ingredient';
 
 @Injectable({
@@ -81,6 +82,12 @@ export class KitchenService {
   }
   proceedExcel(formData: FormData): Observable<WarehouseIngredient[]> {
     return this.http.post<WarehouseIngredient[]>('http://localhost:5000/proceedExcel', formData);
+  }
+  startNewBusinessYear(ingredients: KitchenWarehouseIngredient[]): Observable<KitchenWarehouseIngredient[]> {
+    return this.http.post<KitchenWarehouseIngredient[]>(environment.apiHost + `kitchenWarehouse`, ingredients);
+  }
+  getKitchenWarehouse(): Observable<KitchenWarehouseIngredient[]> {
+    return this.http.get<KitchenWarehouseIngredient[]>(environment.apiHost + `kitchenWarehouse`);
   }
   
 }

@@ -16,6 +16,12 @@
   </mat-card-content>
 </mat-card>
 
+<div class="confirm-all-button">
+  <button mat-raised-button color="primary" (click)="startNewBusinessYear()" *ngIf="this.warehouseIngredients.length !== 0">
+    Započni novu poslovnu godinu
+  </button>
+</div>
+
 <table class="ingredient-table" *ngIf="this.warehouseIngredients.length > 0">
   <thead>
     <tr>
@@ -35,15 +41,16 @@
         </ng-container>
         <ng-template #noMatch>
           Nije pronađeno
-          <button mat-raised-button color="accent" (click)="openAddIngredientDialog(i)">Dodaj</button>
         </ng-template>
+        <button mat-raised-button color="accent" class="button" (click)="openSearchIngredientDialog(i)">Pretraži</button>
+        <button mat-raised-button color="accent" class="button" (click)="openAddIngredientDialog(i)">Dodaj</button>
       </td>
       <td>
-        <input type="number" [(ngModel)]="i.scale" [disabled]="i.isConfirmed"  />
+        <input type="number" [(ngModel)]="i.scale" [disabled]="i.isConfirmed || i.ingredient?.unit?.shortName === i.warehouseUnitShortName"  />
       </td>
       <td>{{ i.warehouseUnitShortName }}</td>
       <td>
-        <button mat-raised-button color="primary" (click)="confirmRow(i)">{{ i.isConfirmed ? 'Otkazati' : 'Potvrdi' }}</button>
+        <button mat-raised-button color="primary" class="button" (click)="confirmRow(i)">{{ i.isConfirmed ? 'Otkazati' : 'Potvrdi' }}</button>
       </td>
     </tr>
   </tbody>

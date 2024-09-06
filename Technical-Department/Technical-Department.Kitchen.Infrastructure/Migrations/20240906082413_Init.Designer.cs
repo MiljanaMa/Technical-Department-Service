@@ -14,7 +14,7 @@ using Technical_Department.Kitchen.Infrastructure.Database;
 namespace Technical_Department.Kitchen.Infrastructure.Migrations
 {
     [DbContext(typeof(KitchenContext))]
-    [Migration("20240905114323_Init")]
+    [Migration("20240906082413_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -116,6 +116,10 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
 
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
+
+                    b.Property<string>("WarehouseLabel")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
