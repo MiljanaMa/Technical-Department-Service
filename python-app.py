@@ -80,13 +80,13 @@ def get_delivered_ingredients(df):
 
         objects = []
         
-        for index, row in df.iterrows():
-            if row == 0:
-                continue
+        for index, row in  df.iloc[1:].iterrows():
             
             if pd.notna(row[0]) and pd.notna(row[1]):
                 object_data = {
-                    'name': row[0],
+                    'IngredientId': 0,
+                    'IngredientName': row[0],
+                    'UnitShortName': 'deafult',
                     'quantity': row[1]
                 }
                 objects.append(object_data)

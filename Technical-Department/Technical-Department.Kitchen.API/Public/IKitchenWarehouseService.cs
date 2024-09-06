@@ -8,5 +8,6 @@ namespace Technical_Department.Kitchen.API.Public
     {
         Result<List<KitchenWarehouseIngredientDto>> StartNewBusinessYear(List<KitchenWarehouseIngredientDto> ingredients);
         Result<List<KitchenWarehouseIngredientDto>> GetAll();
+        Result UpdateKitchenWarehouse(List<IngredientQuantityDto> deliveryNoteIngredients, List<IngredientQuantityDto> requirementIngredients);
     }
 }

@@ -10,10 +10,12 @@ namespace Technical_Department.API.Controllers;
 public class KitchenWarehouseController : BaseApiController
 {
     private readonly IKitchenWarehouseService _kitchenWarehouseService;
+    private readonly IIngredientRequirementService _ingredientRequirementService;
 
-    public KitchenWarehouseController(IKitchenWarehouseService kitchenWarehouseService)
+    public KitchenWarehouseController(IKitchenWarehouseService kitchenWarehouseService, IIngredientRequirementService ingredientRequirementService)
     {
         _kitchenWarehouseService = kitchenWarehouseService;
+        _ingredientRequirementService = ingredientRequirementService;
     }
     [HttpPost("")]
     public ActionResult<IngredientDto> StartNewBusinessYear([FromBody] List<KitchenWarehouseIngredientDto> ingredients)
@@ -21,12 +23,13 @@ public class KitchenWarehouseController : BaseApiController
         var result = _kitchenWarehouseService.StartNewBusinessYear(ingredients);
         return CreateResponse(result);
     }
-    /*[HttpPost("delieryNote")]
-    public ActionResult UpdateKitchenWarehouse([FromBody] List<WarehouseIngredientDto> ingredients)
+    [HttpPost("deliveryNote")]
+    public ActionResult UpdateKitchenWarehouse([FromBody] List<IngredientQuantityDto> deliveryNoteIngredients)
     {
-        var result = _kitchenWarehouseService.StartNewBusinessYear(ingredients);
+        var requirementIngredients = _ingredientRequirementService.GetIngredientRequirements();
+        var result = _kitchenWarehouseService.UpdateKitchenWarehouse(deliveryNoteIngredients, requirementIngredients.Value);
         return CreateResponse(result);
-    }*/
+    }
     [HttpGet("")]
     public ActionResult<List<KitchenWarehouseIngredientDto>> GetAll()
     {

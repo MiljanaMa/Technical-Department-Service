@@ -9,7 +9,6 @@ import { WeeklyMenu } from '../model/weekly-menu.model';
 import { IngredientQuantity } from '../model/meal.model';
 import * as XLSX from 'xlsx';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { WarehouseDeliveredIngredient } from '../model/warehouse-ingredient';
 
 @Component({
   selector: 'app-consumer-quantity',
@@ -238,7 +237,7 @@ export class ConsumerQuantityComponent {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       this.service.proceedDeliveryNote(formData).subscribe({
-        next:(result: WarehouseDeliveredIngredient[]) => {
+        next:(result: IngredientQuantity[]) => {
             this.service.updateKitchenWarehouse(result).subscribe({
               next:() => {
                 this.router.navigate([`kitchen-warehouse`]);

@@ -9,7 +9,7 @@ import { MealOffer } from './model/meal-offer.model';
 import { Ingredient } from './model/ingredient.model';
 import { MeasurementUnit } from './model/measurementUnit.model';
 import { KitchenWarehouseIngredient } from './model/kitchen-warehouse-ingredient';
-import { WarehouseDeliveredIngredient, WarehouseIngredient } from './model/warehouse-ingredient';
+import { WarehouseIngredient } from './model/warehouse-ingredient';
 
 @Injectable({
   providedIn: 'root'
@@ -89,10 +89,10 @@ export class KitchenService {
   getKitchenWarehouse(): Observable<KitchenWarehouseIngredient[]> {
     return this.http.get<KitchenWarehouseIngredient[]>(environment.apiHost + `kitchenWarehouse`);
   }
-  proceedDeliveryNote(formData: FormData): Observable<WarehouseDeliveredIngredient[]> {
-    return this.http.post<WarehouseDeliveredIngredient[]>('http://localhost:5000/proceedDevliveryNote', formData);
+  proceedDeliveryNote(formData: FormData): Observable<IngredientQuantity[]> {
+    return this.http.post<IngredientQuantity[]>('http://localhost:5000/proceedDeliveryNote', formData);
   }
-  updateKitchenWarehouse(ingredients: WarehouseDeliveredIngredient[]): Observable<void> {
+  updateKitchenWarehouse(ingredients: IngredientQuantity[]): Observable<void> {
     return this.http.post<void>(environment.apiHost + `kitchenWarehouse/deliveryNote`, ingredients);
   }
   

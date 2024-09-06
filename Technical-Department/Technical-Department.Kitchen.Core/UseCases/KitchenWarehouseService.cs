@@ -23,7 +23,7 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
         try
         {
             var newIngredients = CreateWarehouseIngredients(MapToDomain(ingredients));
-            _kitchenWarehouseRepository.AddNewWarehouse(newIngredients);
+            _kitchenWarehouseRepository.AddNewWarehouseIngredients(newIngredients);
             var ingredientIds = ingredients.Select(i => i.IngredientId).ToList();
             _ingredientRepository.UpdateIngredientsStatus(ingredientIds);
 
@@ -61,13 +61,33 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
     }
-    public Result UpdateKitchenWarehouse(List<WarehouseIngredientDto> warehouseIngredients)
+    public Result UpdateKitchenWarehouse(List<IngredientQuantityDto> deliveryNoteIngredients, List<IngredientQuantityDto> requirementIngredients)
     {
         try
         {
-            var result = _kitchenWarehouseRepository.GetAll();
-            return Result.Ok();
+            var updatedIngredients = new List<KitchenWarehouseIngredient>();
+            foreach (var deliveryNoteIngredient in deliveryNoteIngredients)
+            {
+                var kitchenWarehouseIngredient = _kitchenWarehouseRepository.GetByWarehouseLabel(deliveryNoteIngredient.IngredientName);
 
+                if (kitchenWarehouseIngredient != null)
+                {
+                    var requirementIngredient = requirementIngredients.FirstOrDefault(r => r.IngredientId == kitchenWarehouseIngredient.IngredientId);
+
+                    if (requirementIngredient != null)
+                    {
+                        kitchenWarehouseIngredient.UpdateQuantity(deliveryNoteIngredient.Quantity, requirementIngredient.Quantity);
+                        updatedIngredients.Add(kitchenWarehouseIngredient);
+                    }
+                }
+                else
+                {
+                    return Result.Fail(FailureCode.NotFound).WithError($"Namirnica sa imenom {deliveryNoteIngredient.IngredientName} ne postoji!");
+                }
+            }
+            _kitchenWarehouseRepository.UpdateIngredients(updatedIngredients);
+
+            return Result.Ok();
         }
         catch (Exception ex)
         {
