@@ -11,6 +11,7 @@ using System.Reflection;
 using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Infrastructure.Database.Repositories;
 using Technical_Department.Kitchen.Core.UseCases;
+using Technical_Department.Kitchen.Core.Domain.DomainServices;
 
 namespace Technical_Department.Kitchen.Infrastructure;
 
@@ -33,6 +34,7 @@ public static class KitchenStartup
         services.AddScoped<IWeeklyMenuService, WeeklyMenuService>();
         services.AddScoped<IMeasurementUnitService, MeasurementUnitService>();
         services.AddScoped<IKitchenWarehouseService, KitchenWarehouseService>();
+        services.AddScoped<IIngredientRequirementService, IngredientRequirementService>();
 
     }
 

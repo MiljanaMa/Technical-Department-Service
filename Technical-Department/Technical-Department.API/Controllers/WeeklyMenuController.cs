@@ -8,10 +8,12 @@ namespace Technical_Department.API.Controllers
     public class WeeklyMenuController : BaseApiController
     {
         private readonly IWeeklyMenuService _weeklyMenuService;
+        private readonly IIngredientRequirementService _ingredientRequirementService;
 
-        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService)
+        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, IIngredientRequirementService ingredientRequirementService)
         {
             _weeklyMenuService = weeklyMenuService;
+            _ingredientRequirementService = ingredientRequirementService;
         }
 
 
@@ -53,7 +55,8 @@ namespace Technical_Department.API.Controllers
         [HttpPut("get-ingredients-requirements")]
         public ActionResult<List<IngredientQuantityDto>> GetIngredientsRequirements([FromBody] WeeklyMenuDto weeklyMenu)
         {
-            var result = _weeklyMenuService.GetIngredientsRequirements(weeklyMenu);
+            _weeklyMenuService.UpdateWeeklyMenu(weeklyMenu);
+            var result = _ingredientRequirementService.GetIngredientRequirements();
             return CreateResponse(result);
         }
 
