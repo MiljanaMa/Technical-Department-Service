@@ -18,5 +18,6 @@ namespace Technical_Department.Kitchen.Core.Domain
         public bool IsActive { get; private set; }
 
         public void SetMeasurementUnit(MeasurementUnit unit) => this.Unit = unit;
+        public void ChangeStatus(bool isActive) => this.IsActive = isActive;
     }
 }
