@@ -4,7 +4,7 @@ import { CustomMenuComponent } from './custom-menu/custom-menu.component';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import { MealsComponent } from './meals/meals.component';
 import { MaterialModule } from '../utils/material/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenusComponent } from './menus/menus.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { TabularMenuComponent } from './tabular-menu/tabular-menu.component';
@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MealFormComponent } from './meal-form/meal-form.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity.component';
+import { CalorieBasedMenuComponent } from './calorie-based-menu/calorie-based-menu.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity
     IngredientModalComponent,
     MealFormComponent,
     ConsumerQuantityComponent,
+    CalorieBasedMenuComponent,
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { ConsumerQuantityComponent } from './consumer-quantity/consumer-quantity
     ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MatChipsModule
+    MatChipsModule,
+    FormsModule
   ],
   exports: [
     CustomMenuComponent,
