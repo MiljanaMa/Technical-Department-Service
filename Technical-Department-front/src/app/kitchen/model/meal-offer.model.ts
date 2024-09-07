@@ -1,12 +1,14 @@
-import { Meal } from "./meal.model";
+import { IngredientQuantity, Meal } from "./meal.model";
 
 export interface MealOffer{
     type: MealType;
     consumerType: ConsumerType;
     mealId: number;
     mealName: string;
-    consumerQuantity: number; //remove ? later
-    dailyMenuId?: number; // remove ?
+    calories?: number;
+    consumerQuantity: number;
+    dailyMenuId?: number; 
+    ingredients?: IngredientQuantity[];
 }
 
 export enum MealType {

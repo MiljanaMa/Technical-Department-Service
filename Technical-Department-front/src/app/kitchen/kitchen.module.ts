@@ -19,6 +19,7 @@ import { YearlyExcelImportComponent } from './yearly-excel-import/yearly-excel-i
 import { MatCardModule } from '@angular/material/card';
 import { IngredientsModalComponent } from './ingredients-modal/ingredients-modal.component';
 import { KitchenWarehouseComponent } from './kitchen-warehouse/kitchen-warehouse.component';
+import { CalorieBasedMenuComponent } from './calorie-based-menu/calorie-based-menu.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { KitchenWarehouseComponent } from './kitchen-warehouse/kitchen-warehouse
     YearlyExcelImportComponent,
     IngredientsModalComponent,
     KitchenWarehouseComponent,
+    CalorieBasedMenuComponent,
   ],
   imports: [
     CommonModule,
