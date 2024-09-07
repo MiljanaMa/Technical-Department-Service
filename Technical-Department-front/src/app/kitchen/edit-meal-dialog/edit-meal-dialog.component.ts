@@ -110,6 +110,7 @@ export class EditMealDialogComponent implements OnInit {
           consumerType: this.data.mealOffer.consumerType,
           mealName: selectedMeal.name!,
           mealId: selectedMeal.id!,
+          calories: selectedMeal.calories,
           type: this.data.mealOffer.type,
           consumerQuantity: 0,
           dailyMenuId: this.data.mealOffer.dailyMenuId

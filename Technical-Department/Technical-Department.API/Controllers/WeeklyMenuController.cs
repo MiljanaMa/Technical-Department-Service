@@ -9,14 +9,16 @@ namespace Technical_Department.API.Controllers
     {
         private readonly IWeeklyMenuService _weeklyMenuService;
         private readonly IIngredientRequirementService _ingredientRequirementService;
+        private readonly ICustomMenuService _cusomMenuService;
 
-        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, IIngredientRequirementService ingredientRequirementService)
+        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, IIngredientRequirementService ingredientRequirementService,
+            ICustomMenuService customMenuService)
         {
             _weeklyMenuService = weeklyMenuService;
             _ingredientRequirementService = ingredientRequirementService;
+            _cusomMenuService = customMenuService;
+
         }
-
-
         [HttpGet("status")]
         public ActionResult<WeeklyMenuDto> GetMenuByStatus([FromQuery] string status)
         {
@@ -64,6 +66,14 @@ namespace Technical_Department.API.Controllers
         public ActionResult<WeeklyMenuDto> ResetDraftMenu([FromBody] WeeklyMenuDto weeklyMenu)
         {
             var result = _weeklyMenuService.ResetDraftMenu(weeklyMenu);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("custom-menu")]
+        public ActionResult<WeeklyMenuDto> CreateCustomMenu([FromQuery] int calories)
+
+        {
+            var result = _cusomMenuService.CreateCustomWeeklyMenu(calories);
             return CreateResponse(result);
         }
     }
