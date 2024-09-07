@@ -60,6 +60,8 @@ export class IngredientModalComponent implements OnInit {
     if (this.ingredientForm.valid) {
       const newIngredient: Ingredient = this.ingredientForm.value;
       newIngredient.unitId = newIngredient.unit.id;
+      newIngredient.warehouseLabel = "";
+      newIngredient.isActive = true;
 
       if (!this.data) {
         this.service.createIngredient(newIngredient).subscribe({
@@ -72,8 +74,8 @@ export class IngredientModalComponent implements OnInit {
         })
       } else {
         this.service.updateIngredient(newIngredient).subscribe({
-          next: (result: any) => {
-            this.dialogRef.close(this.ingredientForm.value);
+          next: (result: Ingredient) => {
+            this.dialogRef.close(result);
           },
           error: () => {
             //add some toast

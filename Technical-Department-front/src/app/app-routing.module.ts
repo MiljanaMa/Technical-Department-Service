@@ -7,6 +7,8 @@ import { MenusComponent } from './kitchen/menus/menus.component';
 import { TabularMenuComponent } from './kitchen/tabular-menu/tabular-menu.component';
 import { MealFormComponent } from './kitchen/meal-form/meal-form.component';
 import { ConsumerQuantityComponent } from './kitchen/consumer-quantity/consumer-quantity.component';
+import { YearlyExcelImportComponent } from './kitchen/yearly-excel-import/yearly-excel-import.component';
+import { KitchenWarehouseComponent } from './kitchen/kitchen-warehouse/kitchen-warehouse.component';
 import { CalorieBasedMenuComponent } from './kitchen/calorie-based-menu/calorie-based-menu.component';
 
 const routes: Routes = [
@@ -17,6 +19,8 @@ const routes: Routes = [
   {path: 'tabular-menu/:status', component: TabularMenuComponent},
   {path: 'meal-form/:id', component: MealFormComponent},
   {path: 'consumer-quantity', component: ConsumerQuantityComponent},
+  {path: 'yearly-excel-import', component: YearlyExcelImportComponent},
+  {path: 'kitchen-warehouse', component: KitchenWarehouseComponent},
   {path: 'calorie-based-menu', component: CalorieBasedMenuComponent},
 ];
 

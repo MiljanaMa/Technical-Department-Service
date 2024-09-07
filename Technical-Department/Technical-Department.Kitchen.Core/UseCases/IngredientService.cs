@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using BuildingBlocks.Core.Domain;
 using BuildingBlocks.Core.UseCases;
-using DocumentFormat.OpenXml.InkML;
 using FluentResults;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
@@ -81,5 +79,11 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
             return Result.Fail(FailureCode.Forbidden).WithError("It is not allowed to delete ingredient, it is connected to meal.");
         _ingredientRepository.Delete(ingredientId);
         return Result.Ok();
+    }
+
+    public Result<List<IngredientDto>> GetAll()
+    {
+        var result = _ingredientRepository.GetAll();
+        return MapToDto(result);
     }
 }

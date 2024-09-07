@@ -25,9 +25,59 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             task.Wait();
             return task.Result;
         }
+        public List<Ingredient> GetAll()
+        {
+            return _dbSet.Include(i => i.Unit).ToList();
+        }
         public Ingredient Get(long ingredientId)
         {
-            return _dbSet.AsNoTracking().Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);
+            return _dbSet.Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);
+        }
+        public bool DoesAllIngredientsExist(List<long> ingredientIds)
+        {
+            var existingIngredients = _dbSet
+                .Where(i => ingredientIds.Contains(i.Id))
+                .Select(i => i.Id)
+                .ToList();
+            return ingredientIds.All(id => existingIngredients.Contains(id));
+        }
+        public void UpdateIngredientsStatus(List<long> ingredientIds)
+        {
+            var allIngredients = _dbSet.ToList();
+
+            var ingredientsToDeactivate = allIngredients
+                .Where(i => !ingredientIds.Contains(i.Id))
+                .ToList();
+
+            var ingredientsToActivate = allIngredients
+                .Where(i => ingredientIds.Contains(i.Id))
+                .ToList();
+
+            foreach (var ingredient in ingredientsToDeactivate)
+            {
+                ingredient.ChangeStatus(false);
+            }
+
+            foreach (var ingredient in ingredientsToActivate)
+            {
+                ingredient.ChangeStatus(true);
+            }
+            _dbSet.UpdateRange(ingredientsToDeactivate);
+            _dbSet.UpdateRange(ingredientsToActivate);
+            DbContext.SaveChanges();
+        }
+        public Ingredient? GetSimilar(Ingredient ingredient)
+        {
+            return _dbSet
+                        .Where(i => i.Type == ingredient.Type && i.IsActive)
+                        .Include(i => i.Unit)
+                        .OrderBy(i =>
+                            Math.Abs(i.Calories - ingredient.Calories) +
+                            Math.Abs(i.Proteins - ingredient.Proteins) +
+                            Math.Abs(i.Carbohydrates - ingredient.Carbohydrates) +
+                            Math.Abs(i.Fats - ingredient.Fats) +
+                            Math.Abs(i.Sugar - ingredient.Sugar))
+                         .FirstOrDefault();
         }
     }
 }

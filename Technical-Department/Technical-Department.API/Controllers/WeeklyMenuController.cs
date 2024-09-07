@@ -8,15 +8,17 @@ namespace Technical_Department.API.Controllers
     public class WeeklyMenuController : BaseApiController
     {
         private readonly IWeeklyMenuService _weeklyMenuService;
+        private readonly IIngredientRequirementService _ingredientRequirementService;
         private readonly ICustomMenuService _cusomMenuService;
 
-        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, ICustomMenuService cusomMenuService)
+        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, IIngredientRequirementService ingredientRequirementService,
+            ICustomMenuService customMenuService)
         {
             _weeklyMenuService = weeklyMenuService;
-            _cusomMenuService = cusomMenuService;
+            _ingredientRequirementService = ingredientRequirementService;
+            _cusomMenuService = customMenuService;
+
         }
-
-
         [HttpGet("status")]
         public ActionResult<WeeklyMenuDto> GetMenuByStatus([FromQuery] string status)
         {
@@ -55,7 +57,8 @@ namespace Technical_Department.API.Controllers
         [HttpPut("get-ingredients-requirements")]
         public ActionResult<List<IngredientQuantityDto>> GetIngredientsRequirements([FromBody] WeeklyMenuDto weeklyMenu)
         {
-            var result = _weeklyMenuService.GetIngredientsRequirements(weeklyMenu);
+            _weeklyMenuService.UpdateWeeklyMenu(weeklyMenu);
+            var result = _ingredientRequirementService.GetIngredientRequirements();
             return CreateResponse(result);
         }
 
