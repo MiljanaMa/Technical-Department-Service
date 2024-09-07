@@ -18,25 +18,26 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
         private readonly ICrudRepository<Meal> _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
+        private readonly IKitchenWarehouseRepository _kitchenWarehouseRepository;
 
         public IngredientRequirementService(IMealRepository mealRepository, IIngredientRepository ingredientRepository,
-            IWeeklyMenuRepository weeklyMenuRepository, IMapper mapper)
+            IWeeklyMenuRepository weeklyMenuRepository, IKitchenWarehouseRepository kitchenWarehouseRepository)
         {
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;
             _weeklyMenuRepository = weeklyMenuRepository;
+            _kitchenWarehouseRepository = kitchenWarehouseRepository;
             
         }
         public Result<List<IngredientQuantityDto>> GetIngredientRequirements()
         {
-            double whiteBreadQuantity = 0;
-            double blackBreadQuantity = 0;
+            double whiteBreadQuantity = 0, blackBreadQuantity = 0;
             List<IngredientQuantity> ingredientQuantities = new List<IngredientQuantity>();
 
             DailyMenu? tomorrowsDailyMenu = GetTomorrowsDailyMenu();
 
             if (tomorrowsDailyMenu == null)
-                return Result.Fail(FailureCode.NotFound).WithError("Tomorrow's menu not found");
+                return Result.Fail(FailureCode.NotFound).WithError("Ne postoji meni za sutrašnji dan.");
 
             foreach (var mealOffer in tomorrowsDailyMenu.Menu)
             {
@@ -45,14 +46,59 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
                 IncreaseBreadQuantity(ref whiteBreadQuantity, ref blackBreadQuantity, mealOffer, meal);
                 AddIngredientQuantities(ref ingredientQuantities, mealOffer, meal);
             }
-            var mergedIngredientQuantities = ingredientQuantities.GroupBy(i => i.IngredientId)
-            .Select(g => new IngredientQuantityDto((int)g.Key, _ingredientRepository.Get(g.Key).Name,
-                                             _ingredientRepository.Get(g.Key).Unit.ShortName, g.Sum(x => x.Quantity))).ToList();
-
-            mergedIngredientQuantities.Add(new IngredientQuantityDto(0, "Hljeb bijeli", "kg", whiteBreadQuantity * 2 * 0.04));
-            mergedIngredientQuantities.Add(new IngredientQuantityDto(0, "Hljeb integralni", "kg", blackBreadQuantity * 2 * 0.04));
+            List<IngredientQuantityDto> mergedIngredientQuantities = SumIngredients(whiteBreadQuantity, blackBreadQuantity, ingredientQuantities);
+            CheckKitchenWarehouseQuantities(ref mergedIngredientQuantities);
             return mergedIngredientQuantities;
         }
+        public void CheckKitchenWarehouseQuantities(ref List<IngredientQuantityDto> ingredientQuantities)
+        {
+            foreach (var ingredientQuantity in ingredientQuantities)
+            {
+                var warehouseIngredient = _kitchenWarehouseRepository.GetByIngredientId(ingredientQuantity.IngredientId);
+
+                if (warehouseIngredient != null && warehouseIngredient.Quantity > 0)
+                {
+                    double newQuantity = ingredientQuantity.Quantity - warehouseIngredient.Quantity;
+                    ingredientQuantity.Quantity = Math.Max(newQuantity, 0);
+                }
+            }
+            ingredientQuantities.RemoveAll(iq => iq.Quantity == 0);
+        }
+
+        private List<IngredientQuantityDto> SumIngredients(double whiteBreadQuantity, double blackBreadQuantity, List<IngredientQuantity> ingredientQuantities)
+        {
+            var mergedIngredientQuantities = ingredientQuantities.GroupBy(i => i.IngredientId)
+                .Select(g =>
+                {
+                    var ingredient = _ingredientRepository.Get(g.Key);
+
+                    if (!ingredient.IsActive)
+                    {
+                        var bestMatch = _ingredientRepository.GetSimilar(ingredient);
+                        if (bestMatch != null)
+                        {
+                            ingredient = bestMatch;
+                        }
+                        //ako ne postoji slican sta uraditi
+                    }
+
+                    return new IngredientQuantityDto((int)ingredient.Id, ingredient.Name,
+                        ingredient.Unit.ShortName, g.Sum(x => x.Quantity));
+                })
+                .GroupBy(dto => dto.IngredientId) // Group by the resulting IngredientId to avoid duplicates
+                .Select(g => new IngredientQuantityDto(
+                    g.Key,
+                    g.First().IngredientName,
+                    g.First().UnitShortName,
+                    g.Sum(dto => dto.Quantity) // Sum the quantities for the same ingredient
+                ))
+                .ToList();
+
+            mergedIngredientQuantities.Add(new IngredientQuantityDto(55, "Hljeb bijeli", "kg", whiteBreadQuantity * 2 * 0.04));
+            mergedIngredientQuantities.Add(new IngredientQuantityDto(56, "Hljeb integralni", "kg", blackBreadQuantity * 2 * 0.04));
+            return mergedIngredientQuantities;
+        }
+
         private void AddIngredientQuantities(ref List<IngredientQuantity> ingredientQuantities, MealOffer mealOffer, Meal meal)
         {
             foreach (var ingredientQuantity in meal.Ingredients)

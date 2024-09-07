@@ -52,7 +52,7 @@
       <td>{{ i.name }}</td>
       <td>
         <ng-container *ngIf="i.ingredient !== undefined; else noMatch">
-          {{ i.ingredient?.name }} ({{ i.ingredient?.unit?.shortName }})
+          {{ i.ingredient.name }} ({{ i.ingredient.unit.shortName }})
         </ng-container>
         <ng-template #noMatch>
           Nije pronađeno

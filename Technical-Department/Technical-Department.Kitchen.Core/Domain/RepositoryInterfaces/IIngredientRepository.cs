@@ -9,5 +9,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
         bool DoesAllIngredientsExist(List<long> ingredientIds);
         void UpdateIngredientsStatus(List<long> ingredientIds);
         Ingredient Get(long ingredientId);
+        Ingredient? GetSimilar(Ingredient ingredient);
     }
 }

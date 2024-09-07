@@ -8,5 +8,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
         void AddNewWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients);
         KitchenWarehouseIngredient GetByWarehouseLabel(string warehouseLabel);
         void UpdateIngredients(List<KitchenWarehouseIngredient> ingredients);
+        KitchenWarehouseIngredient? GetByIngredientId(long ingredientId);
     }
 }
