@@ -66,5 +66,18 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             _dbSet.UpdateRange(ingredientsToActivate);
             DbContext.SaveChanges();
         }
+        public Ingredient? GetSimilar(Ingredient ingredient)
+        {
+            return _dbSet
+                        .Where(i => i.Type == ingredient.Type && i.IsActive)
+                        .Include(i => i.Unit)
+                        .OrderBy(i =>
+                            Math.Abs(i.Calories - ingredient.Calories) +
+                            Math.Abs(i.Proteins - ingredient.Proteins) +
+                            Math.Abs(i.Carbohydrates - ingredient.Carbohydrates) +
+                            Math.Abs(i.Fats - ingredient.Fats) +
+                            Math.Abs(i.Sugar - ingredient.Sugar))
+                         .FirstOrDefault();
+        }
     }
 }

@@ -43,5 +43,9 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 
             DbContext.SaveChanges();
         }
+        public KitchenWarehouseIngredient? GetByIngredientId(long ingredientId)
+        {
+            return _dbSet.Include(i => i.Ingredient).FirstOrDefault(i => i.IngredientId ==  ingredientId);
+        }
     }
 }
