@@ -11,6 +11,7 @@ using System.Reflection;
 using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Infrastructure.Database.Repositories;
 using Technical_Department.Kitchen.Core.UseCases;
+using Technical_Department.Kitchen.Core.Domain.DomainServices;
 
 namespace Technical_Department.Kitchen.Infrastructure;
 
@@ -32,6 +33,8 @@ public static class KitchenStartup
         services.AddScoped<IMealService, MealService>();
         services.AddScoped<IWeeklyMenuService, WeeklyMenuService>();
         services.AddScoped<IMeasurementUnitService, MeasurementUnitService>();
+        services.AddScoped<IKitchenWarehouseService, KitchenWarehouseService>();
+        services.AddScoped<IIngredientRequirementService, IngredientRequirementService>();
         services.AddScoped<ICustomMenuService, CustomMenuService>();
 
     }
@@ -43,6 +46,7 @@ public static class KitchenStartup
         services.AddScoped(typeof(IDailyMenuRepository), typeof(DailyMenuRepository));
         services.AddScoped(typeof(IWeeklyMenuRepository), typeof(WeeklyMenuRepository));
         services.AddScoped(typeof(IMeasurementUnitRepository), typeof(MeasurementUnitRepository));
+        services.AddScoped(typeof(IKitchenWarehouseRepository), typeof(KitchenWarehouseRepository));
 
         services.AddDbContext<KitchenContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("kitchen"),

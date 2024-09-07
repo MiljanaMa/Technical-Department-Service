@@ -57,7 +57,7 @@ export class MealFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getAllIngredients().subscribe({
+    this.service.getAllIngredientsPaged().subscribe({
       next: (result: any) => {
 
         this.allIngredients = result.results;

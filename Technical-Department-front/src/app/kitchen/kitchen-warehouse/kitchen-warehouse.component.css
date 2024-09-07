@@ -1,0 +1,15 @@
+.ingredient-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .ingredient-table th,
+  .ingredient-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .ingredient-table th {
+    background-color: #f4f4f4;
+  }

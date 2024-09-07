@@ -36,7 +36,7 @@ export class IngredientsComponent implements OnInit{
   }
 
   loadIngredients(): void {
-    this.service.getAllIngredients().subscribe({
+    this.service.getAllIngredientsPaged().subscribe({
       next: (result: any) => {
         this.filteredIngredients = result.results;
         this.ingredients = result.results;

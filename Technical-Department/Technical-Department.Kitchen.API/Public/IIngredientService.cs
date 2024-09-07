@@ -10,6 +10,7 @@ namespace Technical_Department.Kitchen.API.Public
         Result<IngredientDto> Update(IngredientDto ingredient);
         Result Delete(int ingredientId);
         Result<IngredientDto> Get(int id);
+        Result<List<IngredientDto>> GetAll();
         Result<PagedResult<IngredientDto>> GetPagedWithMeasurementUnit(int page, int pageSize);
     }
 }

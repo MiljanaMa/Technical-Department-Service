@@ -14,7 +14,10 @@ namespace Technical_Department.Kitchen.Core.Domain
         public IngredientType Type { get; init; }
         public long UnitId { get; init; }
         public MeasurementUnit Unit { get; private set; }
+        public string WarehouseLabel { get; private set; }
+        public bool IsActive { get; private set; }
 
         public void SetMeasurementUnit(MeasurementUnit unit) => this.Unit = unit;
+        public void ChangeStatus(bool isActive) => this.IsActive = isActive;
     }
 }
