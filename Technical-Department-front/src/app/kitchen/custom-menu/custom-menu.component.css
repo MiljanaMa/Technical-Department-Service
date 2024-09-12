@@ -1,63 +1,87 @@
-.tab-content{
-    margin: 10px;
-    padding: 10px;
+.content {
+  height: max-content;
+  background-color: #f8f9fa; 
+  border-radius: 12px;
+  padding: 20px; 
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin: 20px; 
+}
+
+
+.tab-content-meals {
+  background-color: #ffffff; 
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+  margin: 20px 0; 
 }
 
 .container {
   display: flex;
   justify-content: center;
-  padding: 10px;  
-  margin: 10px;       
-}
-  
-form {
-  background-color: white;   
-  padding: 10px;            
-  border-radius: 8px;      
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);                    
+  align-items: center;
+  padding: 20px; 
+  margin: 0 auto; 
+  max-width: 800px; 
 }
 
+form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+
 .checked {
-  margin: 5px;
-  color: green; 
+  margin-left: 8px; 
+  color: #28a745; 
 }
 
 .not-checked {
-  margin: 5px;
-  color: orange;
+  margin-left: 8px;
+  margin-top: 5px;
+  color: #ffc107;
 }
 
-.button{
+.button {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px;
 }
 
-.next-button.mat-button {
-  padding: 16px;
-  font-size: large;
+
+.primary-button.mat-button,
+.secondary-button.mat-button {
+  padding: 12px 24px; 
+  font-size: 18px; 
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  font-weight: bold; 
+  width: 400px;
 }
 
-.confirm-button.mat-button {
-  background-color: #003B6D;
-  color: white; 
-  border-radius: 10px;
-  margin: 16px;
-  margin-left: 32px;
-  padding: 16px;
-  font-size: large;
-  width: 250px;
+.primary-button.mat-button {
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+  margin: 0 10px;
 }
 
-.cancel-button.mat-button {
-  background-color: orange;
-  color: white; 
-  border-radius: 10px;
-  margin: 16px;
-  margin-left: 32px;
-  padding: 16px;
-  font-size: large;
-  width: 250px;
+.primary-button.mat-button:hover {
+  background-color: #01579B;
+}
+
+.secondary-button.mat-button {
+  border-color: #ffc107; 
+  background-color: #ffc107; 
+  color: #ffffff;
+  margin: 0 10px;
+}
+
+.secondary-button.mat-button:hover {
+  background-color: #e0a800;
 }
 
 .form-fields-container {
@@ -66,16 +90,12 @@ form {
 }
 
 .form-fields-container.one-column {
-  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-fields-container.two-columns {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-
-
-
-
-
 
