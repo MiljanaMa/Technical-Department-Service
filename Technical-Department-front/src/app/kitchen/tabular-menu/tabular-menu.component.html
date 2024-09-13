@@ -1,3 +1,4 @@
+<div class="content">
 <mat-tab-group *ngIf="weeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)">
     <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
       <ng-template mat-tab-label>
@@ -32,10 +33,10 @@
 </mat-tab-group>
 
 <div *ngIf="weeklyMenu" class="button">
-  <button class="confirm-button mat-button" (click)="confirmMenu()">POTVRDI NEDELJNI MENI</button>
+  <button class="primary-button mat-button" (click)="confirmMenu()">POTVRDI NEDELJNI MENI</button>
 </div>
 
 <div *ngIf="!weeklyMenu" class="no-menu-message">
-Nema zeljenog unetog menija u bazi.
+Zeljeni meni ne postoji u bazi.
 </div>
-  
+</div>

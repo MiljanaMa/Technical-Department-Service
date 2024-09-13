@@ -16,6 +16,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   styleUrls: ['./consumer-quantity.component.css']
 })
 export class ConsumerQuantityComponent {
+  selectedFileName: string | null = null;
   selectedMealTabIndex: number = 0;
   selectedIndex: number = 0;
   currentWeeklyMenu?: WeeklyMenu;
@@ -229,6 +230,7 @@ export class ConsumerQuantityComponent {
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files[0];
+      this.selectedFileName = event.target.files[0].name;
     }
   }
   
@@ -252,5 +254,11 @@ export class ConsumerQuantityComponent {
         }
       });
     }
+  }
+
+  resetForm(): void {
+    this.mealFormGroup.reset();
+    this.selectedMealTabIndex = 0;
+    this.selectedIndex = 0;
   }
 }

@@ -15,17 +15,15 @@ import { MatTabGroup } from '@angular/material/tabs';
 })
 export class MenusComponent implements OnInit {
 
-  @ViewChild('menuStatusTabGroup') menuStatusTabGroup!: MatTabGroup;
-  @ViewChildren('dayTabGroups') dayTabGroups!: QueryList<MatTabGroup>;
-
   currentWeeklyMenu: WeeklyMenu | undefined;
   newWeeklyMenu: WeeklyMenu | undefined;
   selectedWeeklyMenu: WeeklyMenu | undefined;
+  selectedDailyMenu: DailyMenu | undefined;
   selectedMenuTabIndex: number | null = 0;
+  selectedDayTabIndex: number | null = 0;
   mealOffers: MealOffer[] = [];
   dataSource: any[] = [];
-
-  selectedDailyMenu: DailyMenu | undefined;
+  
   daysOfWeek = Object.keys(DayOfWeek)
     .filter(key => !isNaN(Number(DayOfWeek[key as keyof typeof DayOfWeek])))
     .map(key => ({
@@ -115,8 +113,8 @@ export class MenusComponent implements OnInit {
   }
 
   onSelectedMenuStatusTabChange(event: any): void {
-    const selectedWeeklyMenuStatus = this.weeklyMenuStatuses[event.index].value;
-    if(selectedWeeklyMenuStatus == WeeklyMenuStatus.CURRENT){
+    this.selectedMenuTabIndex = this.weeklyMenuStatuses[event.index].value;
+    if(this.selectedMenuTabIndex == WeeklyMenuStatus.CURRENT){
       this.selectedWeeklyMenu = this.currentWeeklyMenu;
     }else{
       this.selectedWeeklyMenu = this.newWeeklyMenu;
@@ -131,11 +129,11 @@ export class MenusComponent implements OnInit {
   } 
 
   onSelectedDayTabChange(event: any): void {
-    const selectedDayOfWeek = this.daysOfWeek[event.index].value;
-    console.log("Selected day of week tab: " + selectedDayOfWeek);
+    this.selectedDayTabIndex = this.daysOfWeek[event.index].value;
+    console.log("Selected day of week tab: " + this.selectedDayTabIndex);
     if (this.selectedWeeklyMenu && this.selectedWeeklyMenu.menu) {
       for (const dailyMenu of this.selectedWeeklyMenu.menu) {
-        if (dailyMenu.dayOfWeek === selectedDayOfWeek) {
+        if (dailyMenu.dayOfWeek === this.selectedDayTabIndex) {
           this.selectedDailyMenu = dailyMenu;
           this.updateDataSource();
           break;
@@ -220,78 +218,54 @@ export class MenusComponent implements OnInit {
   changeNewMenu(): void {
     this.router.navigate(['/tabular-menu/new']);
   }
-  formatDateIntoSrb(date: Date): string {
-    return date.toLocaleDateString('sr-RS', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  }
-
-  async exportToPDF(type: number) {
-    if (!this.menuStatusTabGroup || !this.dayTabGroups) {
-      console.error('Tab groups are not defined');
+ 
+  async exportToPDF(): Promise<void> {
+    if (!this.selectedWeeklyMenu) {
+      console.error('No weekly menu selected for export.');
       return;
     }
   
     const pdf = new jsPDF({
-      format: 'a4', // or 'letter', or custom size
-      unit: 'mm',   // unit of measurement
+      format: 'a4',
+      unit: 'mm',
     });
-    pdf.setFontSize(10);
-    let position = 0;
-    const menuStatusTabs = this.menuStatusTabGroup._tabs.toArray();
-
-    //get monday
-    const today = new Date();
-    const day = today.getDay();
-    const diff = (day === 0 ? -6 : 1) - day;
-    const monday = type === 0 ? new Date(today.setDate(today.getDate() + diff)) : new Date(today.setDate(today.getDate() + diff + 7));
-    var mondayCounter = 0;
-    var start = type;
-    var end = type + 1;
   
-    for (let i = start; i < end; i++) {
-      this.menuStatusTabGroup.selectedIndex = i;
-      await this.sleep(500); // Wait for the content to render
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const padding = 10;
+    let position = padding;
   
-      const dayTabGroup = this.dayTabGroups.find((_, index) => index === i);
-      if (dayTabGroup) {
-        const dayTabs = dayTabGroup._tabs.toArray();
+    const addImageToPDF = (canvas: HTMLCanvasElement, posY: number) => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = pageWidth - padding * 2;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
   
-        for (let j = 0; j < dayTabs.length; j++) {
-          dayTabGroup.selectedIndex = j;
-          await this.sleep(500); // Wait for the content to render
+      if (posY + imgHeight > pageHeight) {
+        pdf.addPage();
+        posY = padding;
+      }
+  
+      pdf.addImage(imgData, 'PNG', padding, posY, imgWidth, imgHeight);
+      return posY + imgHeight + padding;
+    };
+  
+    for (let dayIndex = 0; dayIndex < this.daysOfWeek.length; dayIndex++) {
+      this.selectedDayTabIndex = dayIndex;
+      await this.sleep(400);
+      position += 10;
+      pdf.text(this.daysOfWeek[this.selectedDayTabIndex].name + " - " + this.getDayDate(this.selectedDayTabIndex || 0), 10,  position);
+      position += 10;
 
-          const tabContent = dayTabGroup._elementRef.nativeElement.closest('.tab-content');
-          const canvas = await html2canvas(tabContent as HTMLElement);
-          const imgData = canvas.toDataURL('image/png');
-          const imgWidth = 210; // A4 width in mm
-          const pageHeight = 295; // A4 height in mm
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-          if (position + imgHeight > pageHeight) {
-            pdf.addPage(); // Add a new page
-            position = 0; // Reset position to the top of the new page
-          }
-          monday.setDate(monday.getDate() + mondayCounter);
-          mondayCounter = 1;
-          if (this.formatDate(monday)) {
-            pdf.text(`Datum: ${this.formatDateIntoSrb(monday)}`, 0, position + 10);
-            position += 20;
-          }
-          
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          position += imgHeight + 10;
-        }
+      const content = document.getElementById('tableToExport');
+      if (content) {
+        const tableCanvas = await html2canvas(content);
+        position = addImageToPDF(tableCanvas, position);
       }
     }
-  
+
     pdf.save('jelovnik.pdf');
-    this.getCurrentMenu();
   }
   
-
   sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
