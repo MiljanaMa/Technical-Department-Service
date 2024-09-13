@@ -2,3 +2,13 @@
     background: #003B6D;
     color: white;
   }
+
+.active-link {
+  background-color: #002C51; 
+  color: #ffffff;
+  border-bottom: 3px solid #ffffff; 
+}
+
+.active-link mat-icon {
+  color: #ffffff; 
+}

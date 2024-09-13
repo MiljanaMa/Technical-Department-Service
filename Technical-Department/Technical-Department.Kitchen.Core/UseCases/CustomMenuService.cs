@@ -17,16 +17,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
 {
     public class CustomMenuService : BaseService<WeeklyMenuDto, WeeklyMenu>, ICustomMenuService
     {
-        private readonly IWeeklyMenuRepository _weeklyMenuRepository;
-        private readonly ICrudRepository<DailyMenu> _dailyMenuRepository;
         private readonly IMealRepository _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
-        public CustomMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository
-            , IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base (mapper )
+        public CustomMenuService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base (mapper )
         {
-            _weeklyMenuRepository = weeklyMenuRepository;
-            _dailyMenuRepository = dailyMenuRepository;
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;
             _mapper = mapper;
@@ -70,15 +65,14 @@ namespace Technical_Department.Kitchen.Core.UseCases
 
             var weeklyMenu = new WeeklyMenu();
             weeklyMenu.SetNextWeekDates();
-            var customMenu = _weeklyMenuRepository.Create(weeklyMenu);
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                var dailyMenu = GenerateCustomDailyMenu(day, totalCalories, customMenu);
-                customMenu.Menu.Add(dailyMenu);
+                var dailyMenu = GenerateCustomDailyMenu(day, totalCalories, weeklyMenu);
+                weeklyMenu.Menu.Add(dailyMenu);
             }
 
-            return ReturnMenuWithMealInformation(customMenu);
+            return ReturnMenuWithMealInformation(weeklyMenu);
         }
 
         private DailyMenu GenerateCustomDailyMenu(DayOfWeek dayOfWeek, int totalCalories, WeeklyMenu weeklyMenu)

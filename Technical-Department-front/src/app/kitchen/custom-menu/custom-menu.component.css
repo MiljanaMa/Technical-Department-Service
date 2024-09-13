@@ -1,26 +1,25 @@
 .content {
   height: max-content;
-  background-color: #f8f9fa; 
-  border-radius: 12px;
-  padding: 20px; 
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  margin: 20px; 
+  background-color: #F5F5F5; 
+  border-radius: 16px;
+  padding: 15px; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  margin: 15px; 
 }
-
 
 .tab-content-meals {
   background-color: #ffffff; 
-  padding: 20px;
+  padding: 15px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
-  margin: 20px 0; 
+  margin: 15px; 
 }
 
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; 
+  padding: 15px; 
   margin: 0 auto; 
   max-width: 800px; 
 }
@@ -41,7 +40,7 @@ form {
 .not-checked {
   margin-left: 8px;
   margin-top: 5px;
-  color: #ffc107;
+  color: #830005;
 }
 
 .button {
@@ -70,18 +69,18 @@ form {
 }
 
 .primary-button.mat-button:hover {
-  background-color: #01579B;
+  background-color: #002C51;
 }
 
 .secondary-button.mat-button {
-  border-color: #ffc107; 
-  background-color: #ffc107; 
+  border-color: #830005; 
+  background-color:#830005; 
   color: #ffffff;
   margin: 0 10px;
 }
 
 .secondary-button.mat-button:hover {
-  background-color: #e0a800;
+  background-color: #570003;
 }
 
 .form-fields-container {
