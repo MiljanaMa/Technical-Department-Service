@@ -253,4 +253,10 @@ export class ConsumerQuantityComponent {
       });
     }
   }
+
+  resetForm(): void {
+    this.mealFormGroup.reset();
+    this.selectedMealTabIndex = 0;
+    this.selectedIndex = 0;
+  }
 }

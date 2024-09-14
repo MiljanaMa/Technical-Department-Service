@@ -1,6 +1,6 @@
-<br>
-<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)"  [selectedIndex]="selectedDayTabIndex">
-  <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
+<div class="content">
+<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)"  [selectedIndex]="selectedDayTabIndex" class="center">
+  <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index" >
     <ng-template mat-tab-label>
       <div>
         <div> {{ day.name }} ({{ getDayDate(dayIndex) }}) </div>
@@ -8,45 +8,46 @@
         <mat-icon class="not-checked" *ngIf="!isDayValid(day.value)">highlight_off</mat-icon>  
       </div>
     </ng-template>
+    <mat-tab-group  (selectedTabChange)="onSelectedMealTabChange($event, dayIndex)" [selectedIndex]="selectedMealTabIndex" class="tab-content-meals">
+      <mat-tab *ngFor="let mealType of mealTypes; let mealTypeIndex = index">
+        <ng-template mat-tab-label>
+          <div>
+            <div>{{ mealType.name }}</div> 
+            <mat-icon class="checked" *ngIf="isMealValid(day.value, mealType.value)">check_circle_outline</mat-icon> 
+            <mat-icon class="not-checked" *ngIf="!isMealValid(day.value, mealType.value)">highlight_off</mat-icon>    
+          </div>   
+        </ng-template>
 
-    <div class="tab-content">
-      <mat-tab-group  (selectedTabChange)="onSelectedMealTabChange($event, dayIndex)" [selectedIndex]="selectedMealTabIndex">
-        <mat-tab *ngFor="let mealType of mealTypes; let mealTypeIndex = index">
-          <ng-template mat-tab-label>
-            <div>
-              <div>{{ mealType.name }}</div> 
-              <mat-icon class="checked" *ngIf="isMealValid(day.value, mealType.value)">check_circle_outline</mat-icon> 
-              <mat-icon class="not-checked" *ngIf="!isMealValid(day.value, mealType.value)">highlight_off</mat-icon>    
-            </div>   
-          </ng-template>
-
-          <div class="container">
-            <form [formGroup]="mealFormGroup">
-              <div [ngClass]="getColumnsClass(mealType.value, consumerTypes)">
-                <div *ngFor="let consumerType of consumerTypes">
-                  <mat-form-field *ngIf="shouldRenderInput(mealType.value, consumerType.value)">
-                    <mat-label>{{ consumerType.name }}:</mat-label>
-                    <input type="text" matInput [formControlName]="getFormControlName(day.value, mealType.value, consumerType.value)" [matAutocomplete]="auto">
-                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">
-                      <mat-option *ngFor="let option of (filteredOptions[getFormControlName(day.value, mealType.value, consumerType.value)] | async) ?? []" [value]="option">
-                        {{ option.name }}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
+        <div class="container">
+          <form [formGroup]="mealFormGroup">
+            <div [ngClass]="getColumnsClass(mealType.value, consumerTypes)">
+              <div *ngFor="let consumerType of consumerTypes">
+                <mat-form-field *ngIf="shouldRenderInput(mealType.value, consumerType.value)">
+                  <mat-label>{{ consumerType.name }}:</mat-label>
+                  <input type="text" matInput [formControlName]="getFormControlName(day.value, mealType.value, consumerType.value)" [matAutocomplete]="auto">
+                  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">
+                    <mat-option *ngFor="let option of (filteredOptions[getFormControlName(day.value, mealType.value, consumerType.value)] | async) ?? []" [value]="option">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
               </div>
-              <div class="button">
-                <button class="next-button mat-button" (click)="showNextTab()">DALJE</button>
-              </div>
-            </form>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
+            </div>
+            <div class="button">
+              <button class="primary-button mat-button" (click)="showNextTab()">DALJE</button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </mat-tab>
 </mat-tab-group>
 
 <div class="button">
-  <button class="confirm-button mat-button" (click)="showTabularView()">PREDJI NA TABELARNI PRIKAZ MENIJA</button>
-  <button class="cancel-button mat-button" (click)="resetDraftMenu()">IZBRISI SVE (POCNI PONOVO) </button>
+  <button class="primary-button mat-button" (click)="showTabularView()">PREDJI NA TABELARNI PRIKAZ MENIJA</button>
+  <button class="secondary-button mat-button" (click)="resetDraftMenu()">IZBRISI SVE (POCNI PONOVO) </button>
 </div>
+
+</div>
+
+
