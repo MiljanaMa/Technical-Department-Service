@@ -1,18 +1,29 @@
-<h1 class="styled-heading">Jela</h1>
-<div class="search-container center">
-  <mat-form-field class="margin">
-    <mat-label>Pretraži jela</mat-label>
-    <input matInput [formControl]="searchControl" placeholder="Unesite ime jela" change>
-  </mat-form-field>
-  <button class="confirm-button mat-button" (click)="addMeal()">Dodaj novo jelo</button>
-</div>
+<div class="content">
 
-<br>
+  <div class="header">
+    <div class="header-top">
+      <button class="primary-button mat-button" (click)="addMeal()">
+        <mat-icon>add</mat-icon> Novo jelo
+      </button>
+    </div>
+  </div>
+   
+<div class="center">
+  <mat-card class="search-content">
+      <mat-card-header> <mat-card-title>Pretraga jela </mat-card-title></mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Unesite ime jela</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Unesite ime jela" change>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</div>
 
 <div class="meals-container">
   <div class="meal-card" *ngFor="let meal of filteredMeals">
-    <h2 class="meal-name">{{ meal.name }}</h2>
-    <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
+    <div class="name">{{ meal.name }}</div>
+    <div class="calories">{{ meal.calories }} kCal</div>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let iq of meal.ingredients">
         <span class="ingredient-name">{{ iq.ingredientName }}</span>
@@ -20,13 +31,14 @@
         <span class="ingredient-unit">{{ iq.unitShortName }}</span>
       </div>
     </div>
-    <div class="center">
-      <button class="button mat-button" mat-icon-button (click)="updateMeal(meal)">
+    <div class="buttons">
+      <button class="small-primary-button mat-button" (click)="updateMeal(meal)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button  class="button mat-button" mat-icon-button (click)="deleteMeal(meal)">
+      <button  class="small-secondary-button mat-button" (click)="deleteMeal(meal)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
   </div>
+</div>
 </div>

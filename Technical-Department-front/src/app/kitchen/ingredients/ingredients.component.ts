@@ -56,8 +56,8 @@ export class IngredientsComponent implements OnInit{
   }
   addIngredient(): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
-      width: '450px',
-      height: '800px',
+      width: '600px',
+      height: '600px',
       data: null
     });
 

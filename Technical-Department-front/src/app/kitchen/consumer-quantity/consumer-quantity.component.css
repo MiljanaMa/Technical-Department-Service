@@ -1,4 +1,7 @@
 .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: max-content;
   background-color: #F5F5F5; 
   border-radius: 16px;
@@ -145,6 +148,8 @@ form {
 }
 
 .upload-section {
+  min-width: 500px;
+  width: 500px;
   padding: 20px;
   display: flex;
   justify-content: center;
@@ -159,4 +164,11 @@ mat-card-header {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
+}
+
+mat-card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    color: #616161;
 }

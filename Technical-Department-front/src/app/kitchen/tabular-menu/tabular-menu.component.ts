@@ -138,7 +138,7 @@ export class TabularMenuComponent implements OnInit {
     const mealOffer = this.mealOffers.find(offer => offer.type === mealType && offer.consumerType === consumerType && offer.dailyMenuId === this.selectedDailyMenu?.id);
     if (mealOffer) {
       const dialogRef = this.dialog.open(EditMealDialogComponent, {
-        width: '250px',
+        width: '500px',
         data: { mealOffer }
       });
   
