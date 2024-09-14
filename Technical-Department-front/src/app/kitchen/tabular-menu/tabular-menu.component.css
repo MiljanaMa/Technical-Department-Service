@@ -109,3 +109,7 @@ th.mat-header-cell {
 .small-primary-button.mat-button:hover {
   background-color: #002C51;
 }
+
+mat-icon{
+  color: 003B6D;
+}

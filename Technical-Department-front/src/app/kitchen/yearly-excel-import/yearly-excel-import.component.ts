@@ -87,14 +87,15 @@ export class YearlyExcelImportComponent implements OnInit{
   }
   openAddIngredientDialog(warehouseIngredient: WarehouseIngredient): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
-      width: '450px',
-      height: '800px',
+      width: '600px',
+      height: '600px',
       data: null
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         warehouseIngredient.ingredient = result;
+        
       }
     });
   }
