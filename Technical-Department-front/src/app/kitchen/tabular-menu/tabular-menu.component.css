@@ -95,3 +95,17 @@ th.mat-header-cell {
   background-color: #f1f1f1; 
   font-weight: bold; 
 }
+
+.small-primary-button{
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  width: 60px;
+  margin: 5px;
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+}
+
+.small-primary-button.mat-button:hover {
+  background-color: #002C51;
+}

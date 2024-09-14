@@ -1,6 +1,6 @@
 <div class="content">
-<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)"  [selectedIndex]="selectedDayTabIndex">
-  <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
+<mat-tab-group (selectedTabChange)="onSelectedDayTabChange($event)"  [selectedIndex]="selectedDayTabIndex" class="center">
+  <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index" >
     <ng-template mat-tab-label>
       <div>
         <div> {{ day.name }} ({{ getDayDate(dayIndex) }}) </div>

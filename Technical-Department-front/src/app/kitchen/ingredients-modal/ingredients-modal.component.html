@@ -1,12 +1,20 @@
-<div class="search-container center">
-  <mat-form-field class="margin" >
-    <mat-label>Pretraži namirnice</mat-label>
-    <input matInput [formControl]="searchControl" placeholder="Unesite ime namirnice" change>
-  </mat-form-field>
-</div>
-<div class="ingredients-container center">
-  <div class="ingredient-card" *ngFor="let ingredient of filteredIngredients" (click)="onIngredientSelect(ingredient)"
-  [class.selected]="ingredient === selectedIngredient">
-    <span class="name">{{ ingredient.name }}</span>
+<div class="content">
+
+  <mat-toolbar color="primary" class="header">
+      <span class="header-title">Izaberi namirnicu</span>
+  </mat-toolbar>
+
+  <div class="form-content">
+    <mat-form-field class="center">
+      <mat-label>Pretraži namirnice</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Unesite ime namirnice" change>
+    </mat-form-field>
+
+    <div class="ingredients-container">
+      <div class="ingredient-card" *ngFor="let ingredient of filteredIngredients" (click)="onIngredientSelect(ingredient)"
+      [class.selected]="ingredient === selectedIngredient">
+        <span class="name">{{ ingredient.name }}</span>
+      </div>
+    </div>
   </div>
 </div>

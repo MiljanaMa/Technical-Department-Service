@@ -7,6 +7,12 @@
   margin: 15px; 
 }
 
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .tab-content-meals {
   background-color: #ffffff; 
   padding: 15px;

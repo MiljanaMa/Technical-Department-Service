@@ -136,8 +136,8 @@ export class YearlyExcelImportComponent implements OnInit{
   }
   openSearchIngredientDialog(warehouseIngredient: WarehouseIngredient): void {
     const dialogRef = this.dialog.open(IngredientsModalComponent, {
-      width: '450px',
-      height: '800px',
+      width: '500px',
+      height: '500px',
       data: null
     });
 

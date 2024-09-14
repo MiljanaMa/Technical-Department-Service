@@ -1,16 +1,23 @@
+<div class="content">
 
-<div class="center">
+  <div class="center">
+    <mat-card class="search-content">
+        <mat-card-header> <mat-card-title>Potreban dnevni kalorijski unos</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Unesite kalorije</mat-label>
+          <input matInput [(ngModel)]="calorieInput" type="number" min="0">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-  <mat-form-field class="margin">
-    <mat-label>Dnevni kalorijski unos:</mat-label>
-    <input matInput [(ngModel)]="calorieInput" type="number" min="0">
-  </mat-form-field>
+  <div class="button">
+    <button class="primary-button mat-button"  (click)="createCustomMenu()">Generisi meni</button>
+    <button  *ngIf="weeklyMenu" class="primary-button mat-button"  (click)="exportToPDF()">Export to PDF</button>
+  </div>
 
-    <button class="confirm-button mat-button hide-on-export"  (click)="createCustomMenu()">Kreiraj meni</button>
-    <button class="confirm-button mat-button hide-on-export"  (click)="exportToPDF()">Export to PDF</button>
-</div>
-
-<div class="table">
+<div class="table" *ngIf="weeklyMenu">
 <table id="tableToExport" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="mealType">
       <th mat-header-cell *matHeaderCellDef></th>
@@ -19,7 +26,7 @@
   
     <ng-container *ngFor="let day of daysOfWeek" [matColumnDef]="day.value.toString()">
       <th mat-header-cell *matHeaderCellDef><b class="center">{{ day.name }}</b></th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(element.mealType)">
         <div class="center">{{ element[day.value.toString()] }}</div>
       </td>
     </ng-container>
@@ -33,8 +40,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">DORUCAK</h1>
 <div class="meals-container" id="breakfasts">
   <div class="meal-card" *ngFor="let meal of breakfasts">
-    <h2 class="meal-name">{{ meal.mealName }}</h2>
-    <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.mealName }}</h2>
+    <h6 class="calories">{{ meal.calories }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -50,8 +57,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">RUCAK</h1>
 <div class="meals-container" id="lunches">
   <div class="meal-card" *ngFor="let meal of lunches">
-    <h2 class="meal-name">{{ meal.mealName }}</h2>
-    <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.mealName }}</h2>
+    <h6 class="calories">{{ meal.calories }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -67,8 +74,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">VECERA</h1>
 <div class="meals-container" id="dinners">
   <div class="meal-card" *ngFor="let meal of dinners">
-    <h2 class="meal-name">{{ meal.mealName }}</h2>
-    <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.mealName }}</h2>
+    <h6 class="calories">{{ meal.calories }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -84,8 +91,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">SALATA</h1>
 <div class="meals-container" id="salads">
   <div class="meal-card" *ngFor="let meal of salads">
-    <h2 class="meal-name">{{ meal.mealName }}</h2>
-    <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.mealName }}</h2>
+    <h6 class="calories">{{ meal.calories }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -101,8 +108,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">UZINA</h1>
 <div class="meals-container" id="snacks">
   <div class="meal-card" *ngFor="let meal of snacks">
-    <h2 class="meal-name">{{ meal.mealName }}</h2>
-    <h6 class="meal-calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.mealName }}</h2>
+    <h6 class="calories">{{ meal.calories }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -111,5 +118,6 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 </div>

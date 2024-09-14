@@ -34,7 +34,6 @@
     </mat-tab>
 
     <mat-tab label="OTPREMNICA IZ MAGACINA">
-        <br>
         <mat-card class="upload-section">
             <mat-card-header>
             <mat-card-title>Prilozite otpremnicu</mat-card-title>
@@ -45,7 +44,7 @@
                 <label for="file-upload" class="file-upload-label">
                     <mat-icon>attach_file</mat-icon>
                     <span class="upload-text">Choose file</span>
-                    <div *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</div>
+                    <div *ngIf="selectedFile?.name" class="file-name">{{ selectedFile?.name }}</div>
                 </label>              
             </div>
             </mat-card-content>

@@ -1,97 +1,186 @@
-.ingredient-details {
-    line-height: 1.5; 
-  }
-  
-  .ingredient-item {
-    margin-bottom: 2px;
-  }
-  
-  .label {
-    display: inline-block; 
-    width: 150px; 
-    font-weight: normal;
-  }
-  
-  .value {
-    display: inline; 
-  }
-  .name {
-    text-align: center; 
-    font-weight: bold;
-    display: inline;
-    margin-bottom: 8px;
-  }
-  .styled-heading {
-    text-align: center; 
-    font-size: 2rem; 
-    color: #333; 
-    font-family: 'Arial', sans-serif; 
-    font-weight: 500; 
-    margin: 10px 0; 
-    padding: 10px; 
-    border-bottom: 2px solid #007bff; 
-    background-color: #f8f9fa; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    text-transform: uppercase; 
-  }
-  
-  h3 {
-    text-align: center; 
-    font-size: 1.2rem;
-  }
-  .ingredients-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .ingredient-card {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #fff;
-  }
-  
-  .ingredient-card h3 {
-    margin-bottom: 5px;
-    color: #7149b1;
-    font-weight: bold;
-  }
-  
-  .ingredient-card p {
-    margin: 0;
-    color: #3d3b3b;
-  }
-  .search-container {
-    margin-bottom: 10px;
-  }
-  
-  .center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.content {
+  height: max-content;
+  background-color: #F5F5F5; 
+  border-radius: 16px;
+  padding: 15px; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  margin: 15px; 
 }
 
-.confirm-button.mat-button {
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.header {
+  position: relative;
+  text-align: center;
+}
+
+.header-top {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px; 
+}
+
+.links-container {
+  display: flex;
+  gap: 10px;
+}
+
+.links-container a {
+  position: relative;
+  display: inline-block;
+  color: #003B6D;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.links-container a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
   background-color: #003B6D;
-  color: white; 
-  border-radius: 10px;
-  margin-left: 32px;
-  padding: 16px;
-  font-size: large;
+  transition: width 0.3s;
 }
 
-.margin {
-  margin-top: 20px;
+.links-container a:hover::after {
+  width: 100%;
 }
 
-.button.mat-button {
-  background-color: #003B6D;
-  color: white; 
-  border-radius: 10px;
+.primary-button.mat-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px; 
+  font-size: 18px; 
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  font-weight: bold; 
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+}
+
+.primary-button.mat-button:hover {
+  background-color: #002C51;
+}
+
+.search-content {
+  background-color: #ffffff; 
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+  margin: 10px; 
+  min-width: 400px;
+  width: 500px;
+  max-width: 500px;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+mat-card-title {
+  font-size: 20px;
+  font-weight: bold;
   margin: 10px;
+  color: #616161;
+}
+
+mat-form-field{
+  margin-top: 10px;
+  width: 100%;
+}
+
+.ingredients-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ingredient-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+}
+
+.ingredient-card .name {
+  font-size: 1.5em;
+  color: #003B6D;
+  margin-bottom: 10px;
+}
+
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.ingredient-item .label {
+  font-weight: bold;
+  color: #666;
+}
+
+.ingredient-item .value {
+  color: #333;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.small-primary-button,
+.small-secondary-button{
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  width: 120px;
+  margin: 10px;
+}
+
+.small-primary-button.mat-button {
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+}
+
+.small-secondary-button.mat-button {
+  border-color: #830005; 
+  background-color:#830005; 
+  color: #ffffff;
+  margin-right: 10px;
+}
+
+.small-primary-button.mat-button:hover {
+  background-color: #002C51;
+}
+
+.small-secondary-button.mat-button:hover {
+  background-color: #570003;
+}
+
+.mat-icon {
+  font-size: 16px;
+  margin-top: 8px;
 }
