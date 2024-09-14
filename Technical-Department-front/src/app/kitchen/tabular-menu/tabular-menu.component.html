@@ -15,11 +15,11 @@
     </ng-container>
   
     <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
-      <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
+      <th mat-header-cell *matHeaderCellDef ><b class="center"> {{ mealType.name }} </b></th>
       <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
         <div class="center">{{ element[mealType.value.toString()] }}</div>
         <div class="center" *ngIf="shouldRenderInput(mealType.value, element.consumerType)">
-            <button class="small-primary-button mat-button" (click)="openModal(mealType.value, element.consumerType)"> 
+            <button mat-button (click)="openModal(mealType.value, element.consumerType)"> 
                 <mat-icon>edit</mat-icon>
             </button>
         </div>
