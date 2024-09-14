@@ -1,49 +1,61 @@
-<h1 class="styled-heading">Namirnice</h1>
+<div class="content">
 
-<div class="search-container center">
-  <mat-form-field class="margin" >
-    <mat-label>Pretraži namirnice</mat-label>
-    <input matInput [formControl]="searchControl" placeholder="Unesite ime namirnice" change>
-  </mat-form-field>
-  <button class="confirm-button mat-button" (click)="addIngredient()">Dodaj novu namirnicu</button>
-</div>
+  <div class="header">
+    <div class="header-top">
+      <div class="links-container">
+        <a href="https://onefit.rs/tablica-kalorija/" target="_blank">Tablica kalorija</a>
+        <a href="https://www.scribd.com/doc/102068329/Tablice-sastava-namirnica" target="_blank">Tablice sastava namirnica</a>
+      </div>
+      <button class="primary-button mat-button" (click)="addIngredient()"> 
+        <mat-icon>add</mat-icon> Nova namirnica
+      </button>
+    </div>
+  </div>
+
 <div class="center">
-  <a href="https://onefit.rs/tablica-kalorija/" target="_blank">Tablica kalorija</a>
-</div>
-<div class="center">
-  <a href="https://www.scribd.com/doc/102068329/Tablice-sastava-namirnica" target="_blank">Tablice sastava namirnica</a>
+  <mat-card class="search-content">
+      <mat-card-header> <mat-card-title>Pretraga namirnica </mat-card-title></mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Unesite ime namirnice</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Unesite ime namirnice">
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
 </div>
 
-<div class="ingredients-container center">
-  <div class="ingredient-card" *ngFor="let ingredient of filteredIngredients">
-    <span class="name">{{ ingredient.name }}</span>
-    <div class="ingredient-item">
-      <span class="label">Kalorije:</span>
-      <span class="value">{{ ingredient.calories }} cal</span>
-    </div>
-    <div class="ingredient-item">
-      <span class="label">Ugljeni hidrati:</span>
-      <span class="value">{{ ingredient.carbohydrates }} g</span>
-    </div>
-    <div class="ingredient-item">
-      <span class="label">Proteini:</span>
-      <span class="value">{{ ingredient.proteins }} g</span>
-    </div>
-    <div class="ingredient-item">
-      <span class="label">Masti:</span>
-      <span class="value">{{ ingredient.fats }} g</span>
-    </div>
-    <div class="ingredient-item">
-      <span class="label">Šećeri:</span>
-      <span class="value">{{ ingredient.sugar }} g</span>
-    </div>
-    <div class="center">
-      <button class="button mat-button" at-icon-button (click)="updateIngredient(ingredient)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button class="button mat-button" mat-icon-button (click)="deleteIngredient(ingredient)">
-        <mat-icon>delete</mat-icon>
-      </button>
+
+  <div class="ingredients-container">
+    <div class="ingredient-card" *ngFor="let ingredient of filteredIngredients">
+      <span class="name">{{ ingredient.name }}</span>
+      <div class="ingredient-item">
+        <span class="label">Kalorije:</span>
+        <span class="value">{{ ingredient.calories }} cal</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="label">Ugljeni hidrati:</span>
+        <span class="value">{{ ingredient.carbohydrates }} g</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="label">Proteini:</span>
+        <span class="value">{{ ingredient.proteins }} g</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="label">Masti:</span>
+        <span class="value">{{ ingredient.fats }} g</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="label">Šećeri:</span>
+        <span class="value">{{ ingredient.sugar }} g</span>
+      </div>
+      <div class="center">
+        <button class="small-primary-button mat-button" (click)="updateIngredient(ingredient)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button class="small-secondary-button mat-button" (click)="deleteIngredient(ingredient)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>

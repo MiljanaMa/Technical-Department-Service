@@ -1,8 +1,7 @@
-<mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [selectedIndex]="selectedIndex">
-    <!-- First Tab: Consumer Quantity Details -->
-    <mat-tab label="Trebovanje za sutra">
+<mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [selectedIndex]="selectedIndex" class="content">
+    <mat-tab label="TREBOVANJE ZA SUTRA">
         <br>
-        <mat-tab-group (selectedTabChange)="onSelectedMealTabChange($event)" [selectedIndex]="selectedMealTabIndex">
+        <mat-tab-group (selectedTabChange)="onSelectedMealTabChange($event)" [selectedIndex]="selectedMealTabIndex" class="tab-content-meals">
             <mat-tab *ngFor="let mealType of mealTypes; let mealTypeIndex = index">
                 <ng-template mat-tab-label>
                     <div>
@@ -13,9 +12,6 @@
                 </ng-template>
                 <div class="container">
                     <form [formGroup]="mealFormGroup">
-                        <mat-card class="title-card">
-                            <mat-card-title>Unesite brojno stanje:</mat-card-title>
-                        </mat-card>
                         <div [ngClass]="getColumnsClass(mealType.value, consumerTypes)">
                             <div *ngFor="let consumerType of consumerTypes">
                                 <mat-form-field *ngIf="shouldRenderSnackInput(mealType.value, consumerType.value)">
@@ -25,31 +21,38 @@
                             </div>
                         </div>
                         <div class="button">
-                            <button class="next-button mat-button" (click)="showNextTab()">DALJE</button>
+                            <button class="primary-button mat-button" (click)="showNextTab()">DALJE</button>
                         </div>
                     </form>
                 </div>
             </mat-tab>
         </mat-tab-group>
-        <div class="container button">
-            <button class="confirm-button mat-button" (click)="createConsumerQuantityList()">POTVRDI BROJNO STANJE</button>
+        <div class="button">
+            <button class="primary-button mat-button" (click)="createConsumerQuantityList()">POTVRDI BROJNO STANJE</button>
+            <button class="secondary-button mat-button" (click)="resetForm()">IZBRISI SVE (POCNI PONOVO) </button>
         </div>
     </mat-tab>
-    
-    <!-- Second Tab: Additional Information -->
-    <mat-tab label="Otpremnica iz magacina">
-        <mat-card>
+
+    <mat-tab label="OTPREMNICA IZ MAGACINA">
+        <mat-card class="upload-section">
             <mat-card-header>
-              <mat-card-title>
-                <mat-icon>upload</mat-icon> Ubacite otpremnicu
-              </mat-card-title>
+            <mat-card-title>Prilozite otpremnicu</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <input type="file" (change)="onFileChange($event)" />
-              <button mat-raised-button color="primary" (click)="uploadFile()">
-                <mat-icon>cloud_upload</mat-icon>Otpremi
-              </button>
+            <div class="file-upload-wrapper">
+                <input type="file" id="file-upload" (change)="onFileChange($event)" />
+                <label for="file-upload" class="file-upload-label">
+                    <mat-icon>attach_file</mat-icon>
+                    <span class="upload-text">Choose file</span>
+                    <div *ngIf="selectedFile?.name" class="file-name">{{ selectedFile?.name }}</div>
+                </label>              
+            </div>
             </mat-card-content>
-          </mat-card>
+        </mat-card>
+        <div class="button">
+        <button class="primary-button mat-button" (click)="uploadFile()">Otpremi</button>
+        </div>
     </mat-tab>
+
+        
 </mat-tab-group>

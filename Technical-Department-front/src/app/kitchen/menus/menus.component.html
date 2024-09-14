@@ -1,21 +1,18 @@
-<div class="center">
-  <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF(0)">Preuzmi Trenutni Jelovnik</button>
-  <button *ngIf="selectedWeeklyMenu" class="confirm-button mat-button" (click)="exportToPDF(1)">Preuzmi Sledeći Jelovnik</button>
-</div>
-<mat-tab-group #menuStatusTabGroup (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
+<div class="content">
+<mat-tab-group (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
   <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
     <ng-template mat-tab-label>
       <div>{{ menuStatus.name }}</div>
     </ng-template>
 
     <div>
-      <mat-tab-group #dayTabGroups *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)">
+      <mat-tab-group *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)" [selectedIndex]="selectedDayTabIndex">
         <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
           <ng-template mat-tab-label>
             <div>{{ day.name }} <br> ({{ getDayDate(dayIndex) }})</div>
           </ng-template>
 
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <table id="tableToExport" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <ng-container matColumnDef="consumerType">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element"><b>{{ element.consumerType }}</b></td>
@@ -27,21 +24,29 @@
                 <div class="center">{{ element[mealType.value.toString()] }}</div>
               </td>
             </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </mat-tab>
-      </mat-tab-group>
-
-      <div *ngIf="!selectedWeeklyMenu" class="no-menu-message">Zeljeni meni ne postoji u bazi.</div>
-      <div *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
-        <button [routerLink]="'/custom-menu'" class="confirm-button mat-button">Novi meni</button>
-        <button class="confirm-button mat-button" (click)="showTabularDefaultMenu()">Meni po sablonu</button>
-      </div>
-      <div  class="center">
-        <button *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 1" class="confirm-button mat-button" (click)="changeNewMenu()">Izmeni meni</button>
-      </div>
+      </mat-tab-group>  
     </div>
   </mat-tab>
 </mat-tab-group>
+
+<div *ngIf="!selectedWeeklyMenu" class="no-menu-message">
+  Zeljeni meni ne postoji u bazi.
+  </div>
+
+<div class="center">
+  <div *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
+    <button [routerLink]="'/custom-menu'" class="primary-button mat-button">Novi meni</button>
+    <button class="primary-button mat-button" (click)="showTabularDefaultMenu()">Meni po sablonu</button>
+  </div>
+  <div  class="center">
+    <button *ngIf="selectedWeeklyMenu" class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik</button>
+    <button *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 1" class="secondary-button mat-button" (click)="changeNewMenu()">Izmeni Jelovnik</button>
+  </div>
+ 
+</div>
+
+</div>

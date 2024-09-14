@@ -1,63 +1,92 @@
-.tab-content{
-    margin: 10px;
-    padding: 10px;
+.content {
+  height: max-content;
+  background-color: #F5F5F5; 
+  border-radius: 16px;
+  padding: 15px; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  margin: 15px; 
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  padding: 10px;  
-  margin: 10px;       
-}
-  
-form {
-  background-color: white;   
-  padding: 10px;            
-  border-radius: 8px;      
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);                    
-}
-
-.checked {
-  margin: 5px;
-  color: green; 
-}
-
-.not-checked {
-  margin: 5px;
-  color: orange;
-}
-
-.button{
+.center{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.next-button.mat-button {
-  padding: 16px;
-  font-size: large;
+.tab-content-meals {
+  background-color: #ffffff; 
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+  margin: 15px; 
 }
 
-.confirm-button.mat-button {
-  background-color: #003B6D;
-  color: white; 
-  border-radius: 10px;
-  margin: 16px;
-  margin-left: 32px;
-  padding: 16px;
-  font-size: large;
-  width: 250px;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px; 
+  margin: 0 auto; 
+  max-width: 800px; 
 }
 
-.cancel-button.mat-button {
-  background-color: orange;
-  color: white; 
-  border-radius: 10px;
-  margin: 16px;
-  margin-left: 32px;
-  padding: 16px;
-  font-size: large;
-  width: 250px;
+form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+
+.checked {
+  margin-left: 8px; 
+  color: #28a745; 
+}
+
+.not-checked {
+  margin-left: 8px;
+  margin-top: 5px;
+  color: #830005;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+
+.primary-button.mat-button,
+.secondary-button.mat-button {
+  padding: 12px 24px; 
+  font-size: 18px; 
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  font-weight: bold; 
+  width: 400px;
+}
+
+.primary-button.mat-button {
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+  margin: 0 10px;
+}
+
+.primary-button.mat-button:hover {
+  background-color: #002C51;
+}
+
+.secondary-button.mat-button {
+  border-color: #830005; 
+  background-color:#830005; 
+  color: #ffffff;
+  margin: 0 10px;
+}
+
+.secondary-button.mat-button:hover {
+  background-color: #570003;
 }
 
 .form-fields-container {
@@ -66,16 +95,12 @@ form {
 }
 
 .form-fields-container.one-column {
-  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-fields-container.two-columns {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-
-
-
-
-
 

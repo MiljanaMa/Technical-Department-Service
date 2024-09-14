@@ -66,7 +66,7 @@ export class IngredientModalComponent implements OnInit {
       if (!this.data) {
         this.service.createIngredient(newIngredient).subscribe({
           next: (result: any) => {
-            this.dialogRef.close(this.ingredientForm.value);
+            this.dialogRef.close(result);
           },
           error: () => {
             //add some toast

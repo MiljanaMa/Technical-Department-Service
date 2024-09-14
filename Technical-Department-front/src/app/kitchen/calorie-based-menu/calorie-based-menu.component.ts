@@ -21,7 +21,7 @@ export class CalorieBasedMenuComponent implements OnInit {
   dinners: MealOffer[] = [];
   salads: MealOffer[] = [];
   snacks: MealOffer[] = [];
-  calorieInput: number = 0;
+  calorieInput: number | null = null;
 
   daysOfWeek = Object.keys(DayOfWeek)
     .filter(key => !isNaN(Number(DayOfWeek[key as keyof typeof DayOfWeek])))
@@ -105,6 +105,24 @@ export class CalorieBasedMenuComponent implements OnInit {
     });
   
     this.dataSource.push(totalCaloriesRow);
+  }
+
+  getMealTypeClass(mealType: string): string {
+    console.log('Meal type:', mealType); 
+    switch (mealType) {
+      case "DORUCAK":
+      case "RUCAK":
+      case "VECERA":
+        return 'main-meal';
+      case "JUTARNJA UZINA":      
+      case "POPODNEVNA UZINA":
+        return 'snack';
+      case "SALATA UZ RUCAK":
+      case "SALATA UZ VECERU":
+        return 'salad';
+      default:
+        return '';
+    }
   }
 
   collectMealOffers(dailyMenus: DailyMenu[] | undefined): void {
