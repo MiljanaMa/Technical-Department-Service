@@ -15,10 +15,10 @@ namespace Technical_Department.Kitchen.Core.Domain
         public string WarehouseLabel { get; init; }
         public double Quantity { get; private set; }
         public double MeasurementUnitScale { get; init; }
-        public void Create(Ingredient ingredient)
+        public void Update(Ingredient ingredient)
         {
             this.Ingredient = ingredient;
-            this.Quantity = Quantity;
+            this.Quantity = 0;
         }
         public void UpdateQuantity(double deliveryNoteQuantity, double requirementQuantity)
         {
