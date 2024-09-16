@@ -7,8 +7,8 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
         PagedResult<Ingredient> GetPagedWithMeasurementUnit(int page, int pageSize);
         List<Ingredient> GetAll();
         bool DoesAllIngredientsExist(List<long> ingredientIds);
-        void UpdateIngredientsStatus(List<long> ingredientIds);
+        void SyncIngredientsStatuses(List<long> ingredientIds);
         Ingredient Get(long ingredientId);
-        Ingredient? GetSimilar(Ingredient ingredient);
+        Ingredient? GetSimilar(long ingredientId);
     }
 }
