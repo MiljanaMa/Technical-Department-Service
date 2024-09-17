@@ -12,22 +12,24 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
 {
     private readonly IKitchenWarehouseRepository _kitchenWarehouseRepository;
     private readonly IIngredientRepository _ingredientRepository;
+    private readonly IIngredientRequirementService _ingredientRequirementService;
     public KitchenWarehouseService(IKitchenWarehouseRepository kitchenWarehouseRepository, IIngredientRepository ingredientRepository,
+        IIngredientRequirementService ingredientRequirementService,
         IMapper mapper) : base(kitchenWarehouseRepository, mapper)
     {
         _kitchenWarehouseRepository = kitchenWarehouseRepository;
         _ingredientRepository = ingredientRepository;
+        _ingredientRequirementService = ingredientRequirementService;
     }
     public Result<List<KitchenWarehouseIngredientDto>> StartNewBusinessYear(List<KitchenWarehouseIngredientDto> ingredients)
     {
         try
         {
-            var newIngredients = CreateWarehouseIngredients(MapToDomain(ingredients));
-            _kitchenWarehouseRepository.AddNewWarehouseIngredients(newIngredients);
+            var newIngredients = UpdateWarehouseIngredients(MapToDomain(ingredients));
+            var result = _kitchenWarehouseRepository.AddNewWarehouseIngredients(newIngredients);
             var ingredientIds = ingredients.Select(i => i.IngredientId).ToList();
-            _ingredientRepository.UpdateIngredientsStatus(ingredientIds);
+            _ingredientRepository.SyncIngredientsStatuses(ingredientIds);
 
-            var result = _kitchenWarehouseRepository.GetAll();
             return MapToDto(result);
         }
         catch (Exception ex)
@@ -36,16 +38,14 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
         }
     }
 
-    private List<KitchenWarehouseIngredient> CreateWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
+    private List<KitchenWarehouseIngredient> UpdateWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
     {
-        var newIngredients = new List<KitchenWarehouseIngredient>();
         foreach (var ingredient in ingredients)
         {
             var dbIngredient = _ingredientRepository.Get(ingredient.IngredientId);
-            ingredient.Create(dbIngredient);
-            newIngredients.Add(ingredient);
+            ingredient.Update(dbIngredient);
         }
-        return newIngredients;
+        return ingredients;
     }
 
     public Result<List<KitchenWarehouseIngredientDto>> GetAll()
@@ -61,10 +61,11 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
     }
-    public Result UpdateKitchenWarehouse(List<IngredientQuantityDto> deliveryNoteIngredients, List<IngredientQuantityDto> requirementIngredients)
+    public Result UpdateKitchenWarehouse(List<IngredientQuantityDto> deliveryNoteIngredients)
     {
         try
         {
+            List<IngredientQuantityDto>  requirementIngredients = _ingredientRequirementService.GetIngredientRequirements().Value;
             var updatedIngredients = new List<KitchenWarehouseIngredient>();
             foreach (var deliveryNoteIngredient in deliveryNoteIngredients)
             {

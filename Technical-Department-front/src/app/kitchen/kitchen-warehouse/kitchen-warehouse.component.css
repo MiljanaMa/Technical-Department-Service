@@ -86,3 +86,37 @@
   color: #830005;
   font-weight: bold;
 }
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+mat-card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px;
+  color: #616161;
+}
+
+mat-form-field{
+  margin-top: 10px;
+  width: 100%;
+}
+.search-content {
+  background-color: #ffffff; 
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+  margin: 10px; 
+  min-width: 400px;
+  width: 500px;
+  max-width: 500px;
+}
