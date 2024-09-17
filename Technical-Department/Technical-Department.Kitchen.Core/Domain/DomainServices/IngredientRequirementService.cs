@@ -123,9 +123,9 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
             tomorrowsDayOfWeek = tomorrowsDayOfWeek == 0 ? 6 : (tomorrowsDayOfWeek - 1);
 
             if (tomorrowsDayOfWeek == 0)
-                weeklyMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.NEW);
+                weeklyMenu = _weeklyMenuRepository.GetByStatus(WeeklyMenuStatus.NEW);
             else
-                weeklyMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.CURRENT);
+                weeklyMenu = _weeklyMenuRepository.GetByStatus(WeeklyMenuStatus.CURRENT);
             if (weeklyMenu == null)
                 return null;
             var tomorrowsDailyMenu = weeklyMenu.Menu.FirstOrDefault(menu => (int)menu.DayOfWeek == tomorrowsDayOfWeek);
