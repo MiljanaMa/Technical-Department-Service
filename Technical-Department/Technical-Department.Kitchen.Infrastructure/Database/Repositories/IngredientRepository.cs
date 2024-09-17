@@ -41,7 +41,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
                 .ToList();
             return ingredientIds.All(id => existingIngredients.Contains(id));
         }
-        public void UpdateIngredientsStatus(List<long> ingredientIds)
+        public void SyncIngredientsStatuses(List<long> ingredientIds)
         {
             var allIngredients = _dbSet.ToList();
 
@@ -66,9 +66,10 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             _dbSet.UpdateRange(ingredientsToActivate);
             DbContext.SaveChanges();
         }
-        public Ingredient? GetSimilar(Ingredient ingredient)
+        public Ingredient? GetSimilar(long ingredientId)
         {
-            return _dbSet
+            var ingredient = _dbSet.FirstOrDefault(i => i.Id == ingredientId);
+            return  _dbSet
                         .Where(i => i.Type == ingredient.Type && i.IsActive)
                         .Include(i => i.Unit)
                         .OrderBy(i =>
@@ -78,6 +79,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
                             Math.Abs(i.Fats - ingredient.Fats) +
                             Math.Abs(i.Sugar - ingredient.Sugar))
                          .FirstOrDefault();
+            
         }
     }
 }

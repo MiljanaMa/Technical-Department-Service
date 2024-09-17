@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KitchenWarehouseIngredient } from '../model/kitchen-warehouse-ingredient';
 import { KitchenService } from '../kitchen.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-kitchen-warehouse',
@@ -9,6 +10,7 @@ import { KitchenService } from '../kitchen.service';
 })
 export class KitchenWarehouseComponent implements OnInit {
 public ingredients: KitchenWarehouseIngredient[] = [];
+searchControl = new FormControl();
 
 constructor(private service: KitchenService){}
 ngOnInit(): void {

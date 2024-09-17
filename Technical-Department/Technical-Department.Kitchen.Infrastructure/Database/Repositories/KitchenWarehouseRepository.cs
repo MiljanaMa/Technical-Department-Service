@@ -27,12 +27,13 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         {
             return _dbSet.Include(i => i.Ingredient).FirstOrDefault(i => i.WarehouseLabel.Equals(warehouseLabel));
         }
-        public void AddNewWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
+        public List<KitchenWarehouseIngredient> AddNewWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
         {
             var allIngredients = _dbSet.ToList();
             _dbSet.RemoveRange(allIngredients);
             _dbSet.AddRange(ingredients);
             DbContext.SaveChanges();
+            return _dbSet.Include(i => i.Ingredient).ThenInclude(ing => ing.Unit).ToList();
         }
         public void UpdateIngredients(List<KitchenWarehouseIngredient> ingredients)
         {
@@ -45,7 +46,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         }
         public KitchenWarehouseIngredient? GetByIngredientId(long ingredientId)
         {
-            return _dbSet.Include(i => i.Ingredient).FirstOrDefault(i => i.IngredientId ==  ingredientId);
+            return _dbSet.Include(i => i.Ingredient).ThenInclude(i => i.Unit).FirstOrDefault(i => i.IngredientId ==  ingredientId);
         }
     }
 }
