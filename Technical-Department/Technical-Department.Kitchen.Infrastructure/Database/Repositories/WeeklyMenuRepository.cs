@@ -24,14 +24,22 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             _dbSet = dbContext.Set<WeeklyMenu>();
         }
 
-        public WeeklyMenu GetMenuByStatus(WeeklyMenuStatus status)
+        public WeeklyMenu GetById(long id)
+        {
+            var entity = _dbSet.Where(m => m.Id == id)
+                               .Include(m => m.Menu)
+                               .FirstOrDefault();
+            return entity;
+        }
+
+        public WeeklyMenu GetByStatus(WeeklyMenuStatus status)
         {
             var entity = _dbSet.Where(m => m.Status == status)
                                .Include(m => m.Menu)
                                .FirstOrDefault();
             return entity;
         }
-        public WeeklyMenu GetMenuByDate(DateOnly date)
+        public WeeklyMenu GetByDate(DateOnly date)
         {
             var entity = _dbSet.Where(m => m.From <= date && m.To > date)
                                .Include(m => m.Menu)

@@ -33,9 +33,9 @@ namespace Technical_Department.API.Controllers
         }
 
         [HttpPost("default")]
-        public ActionResult<WeeklyMenuDto> CreateDraftFromDefaultMenu([FromBody] WeeklyMenuDto weeklyMenu)
+        public ActionResult<WeeklyMenuDto> CreateDraftFromDefault([FromQuery] long defaultMenuId)
         {
-            var result = _weeklyMenuService.CreateDraftFromDefaultMenu(weeklyMenu);
+            var result = _weeklyMenuService.CreateDraftFromDefault(defaultMenuId);
             return CreateResponse(result);
         }
 
@@ -47,9 +47,9 @@ namespace Technical_Department.API.Controllers
         }
 
         [HttpPost("add-meal-offer")]
-        public ActionResult<Boolean> AddMealOffer([FromBody] MealOfferDto mealOffer)
+        public ActionResult<Boolean> AddOrReplaceMealOffer([FromBody] MealOfferDto mealOffer)
         {
-            var result = _weeklyMenuService.AddMealOffer(mealOffer);
+            var result = _weeklyMenuService.AddOrReplaceMealOffer(mealOffer);
             return CreateResponse(result);
         }
         [HttpPut("get-ingredients-requirements")]

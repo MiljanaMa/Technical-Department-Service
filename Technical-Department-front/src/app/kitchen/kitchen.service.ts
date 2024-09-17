@@ -29,8 +29,9 @@ export class KitchenService {
     return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu`, weeklyMenu);
   }
 
-  createDraftFromDefaultMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
-    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/default`, weeklyMenu);
+  createDraftFromDefaultMenu(defaultMenuId: number): Observable<WeeklyMenu> {
+    const params = new HttpParams().set('defaultMenuId', defaultMenuId.toString());
+    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/default`, null, {params});
   }
   
   createCustomMenu(calories: number): Observable<WeeklyMenu> {
