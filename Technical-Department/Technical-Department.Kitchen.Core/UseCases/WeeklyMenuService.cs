@@ -37,7 +37,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             try
             {
                 var weeklyMenu = MapToDomain(weeklyMenuDto);
-                var result = CreateWeeklyMenu(weeklyMenu);
+                var result = CreateOrFetchWeeklyMenu(WeeklyMenuStatus.DRAFT);
                 return ReturnMenuWithMealNames(result);
             }
             catch (ArgumentException e)
@@ -46,13 +46,25 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
         }
 
-        public Result<WeeklyMenuDto> CreateDraftFromDefaultMenu(WeeklyMenuDto weeklyMenuDto)
+        public Result<WeeklyMenuDto> CreateDraftFromDefault(long defaultMenuId)
         {
             try
             {
-                var newDraftMenu = MapToDomain(weeklyMenuDto);
-                var result = CreateDraftFromDefaultMenuLogic(newDraftMenu);
-                return ReturnMenuWithMealNames(result);
+                var defaultMenu = _weeklyMenuRepository.GetById(defaultMenuId);
+
+                if (defaultMenu == null)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Default menu not found.");
+                }
+
+                var draftMenu = CreateOrFetchWeeklyMenu(WeeklyMenuStatus.DRAFT);
+                draftMenu.InitializeFromDefault(defaultMenu);
+
+                foreach(var dailyMenu in draftMenu.Menu)
+                {
+                    _dailyMenuRepository.Update(dailyMenu);
+                }
+                return ReturnMenuWithMealNames(draftMenu);
             }
             catch (ArgumentException e)
             {
@@ -60,60 +72,20 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
         }
 
-        private WeeklyMenu CreateWeeklyMenu(WeeklyMenu weeklyMenu)
+        private WeeklyMenu CreateOrFetchWeeklyMenu(WeeklyMenuStatus status)
         {
-            var existingMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DRAFT);
+            var existingMenu = _weeklyMenuRepository.GetByStatus(status);
 
             if (existingMenu != null)
-            {             
+            {
                 return existingMenu;
             }
-
-            var createdMenu = _weeklyMenuRepository.Create(weeklyMenu);
-            createdMenu.SetNextWeekDates();
-
-            for (int i = 0; i < 7; i++)
-            {
-                var dayOfWeek = (DayOfWeek)i;
-                var dailyMenu = new DailyMenu(dayOfWeek, createdMenu.Id, createdMenu);           
-                createdMenu.Menu.Add(dailyMenu);
-            }
-
-            _weeklyMenuRepository.Update(createdMenu);
-            return createdMenu;
+            var newMenu = new WeeklyMenu(status);
+            newMenu = _weeklyMenuRepository.Create(newMenu);
+            return newMenu;
         }
 
-        private WeeklyMenu CreateDraftFromDefaultMenuLogic(WeeklyMenu newDraftMenu)
-        {
-            var defaultMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.DEFAULT);
-
-            if (defaultMenu == null)
-            {
-                return null;
-            }
-
-            var createdMenu = CreateWeeklyMenu(newDraftMenu);
-
-            foreach (var dailyMenu in createdMenu.Menu)
-            {
-                dailyMenu.ClearMenu();
-                var defaultDailyMenu = defaultMenu.Menu.FirstOrDefault(dm => dm.DayOfWeek == dailyMenu.DayOfWeek);
-                if (defaultDailyMenu != null)
-                {
-                    foreach (var mealOffer in defaultDailyMenu.Menu)
-                    {
-                        var newOffer = new MealOffer(mealOffer, dailyMenu.Id);
-                        dailyMenu.AddMealOffer(newOffer);
-                        _dailyMenuRepository.Update(dailyMenu);
-                    }
-                }
-            }
-
-            _weeklyMenuRepository.Update(createdMenu); 
-            return createdMenu;
-        }
-
-        public Result<Boolean> AddMealOffer(MealOfferDto mealOfferDto)
+        public Result<Boolean> AddOrReplaceMealOffer(MealOfferDto mealOfferDto)
         {
             var dailyMenu = _dailyMenuRepository.Get(mealOfferDto.DailyMenuId);
 
@@ -121,7 +93,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             var consumerTypeDomain = (Domain.Enums.ConsumerType)mealOfferDto.ConsumerType;
 
             MealOffer mealOffer = new MealOffer(typeDomain, consumerTypeDomain, mealOfferDto.MealId, mealOfferDto.ConsumerQuantity, mealOfferDto.DailyMenuId);
-            dailyMenu.AddMealOffer(mealOffer);
+            dailyMenu.AddOrReplaceMealOffer(mealOffer);
             return _dailyMenuRepository.Update(dailyMenu) != null ? true : false;
         }
 
@@ -134,7 +106,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
                     return Result.Fail(FailureCode.InvalidArgument).WithError($"Invalid status value: {status}");
                 }
 
-                var result = _weeklyMenuRepository.GetMenuByStatus(parsedStatus);
+                var result = _weeklyMenuRepository.GetByStatus(parsedStatus);
                 return ReturnMenuWithMealNames(result);
             }
             catch (KeyNotFoundException e)
@@ -147,8 +119,10 @@ namespace Technical_Department.Kitchen.Core.UseCases
         {
             try
             {
-                weeklyMenuDto.Status = API.Dtos.Enums.WeeklyMenuStatus.NEW;
-                var result = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
+                WeeklyMenu weeklyMenu = MapToDomain(weeklyMenuDto);
+                weeklyMenu.SetNextWeekDates();
+                weeklyMenu.SetStatus(WeeklyMenuStatus.NEW);
+                var result = _weeklyMenuRepository.Update(weeklyMenu);
                 return ReturnMenuWithMealNames(result);
             }
             catch (KeyNotFoundException e)
@@ -178,13 +152,13 @@ namespace Technical_Department.Kitchen.Core.UseCases
         {
             var today = DateOnly.FromDateTime(DateTime.Now);
 
-            var currentWeeklyMenu = _weeklyMenuRepository.GetMenuByStatus(WeeklyMenuStatus.CURRENT);
+            var currentWeeklyMenu = _weeklyMenuRepository.GetByStatus(WeeklyMenuStatus.CURRENT);
             if (currentWeeklyMenu != null)
             {
                 if(currentWeeklyMenu.To < today)
                 {
                     _weeklyMenuRepository.Delete(currentWeeklyMenu.Id);
-                    var newCurrentWeeklyMenu = _weeklyMenuRepository.GetMenuByDate(today);
+                    var newCurrentWeeklyMenu = _weeklyMenuRepository.GetByDate(today);
                     if(newCurrentWeeklyMenu != null)
                     {
                         newCurrentWeeklyMenu.Status = WeeklyMenuStatus.CURRENT;

@@ -7,7 +7,7 @@ using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 
 namespace Technical_Department.Kitchen.Core.Domain.DomainServices
 {
-    public  class IngredientRequirementService : IIngredientRequirementService
+    public class IngredientRequirementService : IIngredientRequirementService
     {
         private readonly ICrudRepository<Meal> _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
@@ -21,7 +21,7 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
             _ingredientRepository = ingredientRepository;
             _weeklyMenuRepository = weeklyMenuRepository;
             _kitchenWarehouseRepository = kitchenWarehouseRepository;
-            
+
         }
         public Result<List<IngredientQuantityDto>> GetIngredientRequirements()
         {
@@ -117,7 +117,7 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
             tomorrowDayOfWeek = tomorrowDayOfWeek == 0 ? 6 : tomorrowDayOfWeek - 1;
 
             WeeklyMenuStatus menuStatus = tomorrowDayOfWeek == 6 ? WeeklyMenuStatus.NEW : WeeklyMenuStatus.CURRENT;
-            WeeklyMenu weeklyMenu = _weeklyMenuRepository.GetMenuByStatus(menuStatus);
+            WeeklyMenu weeklyMenu = _weeklyMenuRepository.GetByStatus(menuStatus);
 
             if (weeklyMenu == null)
                 return null;

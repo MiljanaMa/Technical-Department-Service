@@ -180,7 +180,7 @@ export class MenusComponent implements OnInit {
       menu: menus,
       status: WeeklyMenuStatus.DRAFT
     };
-    this.service.createDraftFromDefaultMenu(this.newWeeklyMenu).subscribe({
+    this.service.createDraftFromDefaultMenu(-1).subscribe({
       next: (result: WeeklyMenu) => {
         console.log("Weekly menu:", result);
         this.router.navigate(['/tabular-menu/draft']);

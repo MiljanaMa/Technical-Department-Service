@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 using System;
+using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
 
 namespace Technical_Department.Kitchen.Core.Domain
 {
@@ -15,7 +16,16 @@ namespace Technical_Department.Kitchen.Core.Domain
 
         public WeeklyMenu()
         {
-            Menu = new Collection<DailyMenu>(); ;
+            SetNextWeekDates();
+            Menu = new Collection<DailyMenu>();
+        }
+
+        public WeeklyMenu(WeeklyMenuStatus status)
+        {
+            Status = status;
+            SetNextWeekDates();
+            Menu = new Collection<DailyMenu>(); 
+            InitializeDailyMenus();
         }
 
         public void SetNextWeekDates()
@@ -30,6 +40,29 @@ namespace Technical_Department.Kitchen.Core.Domain
 
             From = today.AddDays(daysUntilNextMonday);
             To = From.AddDays(7);
+        }
+
+        public void SetStatus(WeeklyMenuStatus status)
+        {
+            Status = status;
+        }
+
+        public void InitializeDailyMenus()
+        {
+            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                var dailyMenu = new DailyMenu(day, this.Id, this);
+                Menu.Add(dailyMenu);
+            }
+        }
+
+
+        public void InitializeFromDefault(WeeklyMenu defaultMenu)
+        {
+            foreach (var dailyMenu in Menu)
+            {
+                dailyMenu.InitializeFromDefault(defaultMenu.Menu.FirstOrDefault(dm => dm.DayOfWeek == dailyMenu.DayOfWeek));
+            }
         }
     }
 }
