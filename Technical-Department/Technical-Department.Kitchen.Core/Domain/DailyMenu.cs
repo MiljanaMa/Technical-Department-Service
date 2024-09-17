@@ -25,7 +25,7 @@ namespace Technical_Department.Kitchen.Core.Domain
             WeeklyMenu = weeklyMenu;
         }
 
-        public void AddMealOffer(MealOffer offer)
+        public void AddOrReplaceMealOffer(MealOffer offer)
         {
                   
             var foundOffer = Menu.FirstOrDefault(o => o.Type == offer.Type && o.ConsumerType == offer.ConsumerType);
@@ -40,6 +40,19 @@ namespace Technical_Department.Kitchen.Core.Domain
         public void ClearMenu()
         {
             Menu.Clear();
+        }
+
+        public void InitializeFromDefault(DailyMenu defaultDailyMenu)
+        {
+            ClearMenu();
+            if (defaultDailyMenu != null)
+            {
+                foreach (var mealOffer in defaultDailyMenu.Menu)
+                {
+                    var newOffer = new MealOffer(mealOffer, this.Id);
+                    AddOrReplaceMealOffer(newOffer);
+                }
+            }
         }
     }
 

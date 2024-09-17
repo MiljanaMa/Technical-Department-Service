@@ -64,7 +64,6 @@ namespace Technical_Department.Kitchen.Core.UseCases
         {
 
             var weeklyMenu = new WeeklyMenu();
-            weeklyMenu.SetNextWeekDates();
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -105,7 +104,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
 
             foreach (var mealOffer in selectedMeals)
             {
-                dailyMenu.AddMealOffer(mealOffer);
+                dailyMenu.AddOrReplaceMealOffer(mealOffer);
             }
 
             return dailyMenu;
