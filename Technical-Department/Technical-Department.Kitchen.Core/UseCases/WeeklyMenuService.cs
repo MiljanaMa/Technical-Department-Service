@@ -19,15 +19,16 @@ namespace Technical_Department.Kitchen.Core.UseCases
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
         private readonly ICrudRepository<DailyMenu> _dailyMenuRepository;
         private readonly IMealRepository _mealRepository;
-        private readonly IIngredientRepository _ingredientRepository;
+        private readonly IIngredientRequirementService _ingredientRequirementService;
         private readonly IMapper _mapper;
         public WeeklyMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository
-            , IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base(weeklyMenuRepository, mapper)
+            , IMealRepository mealRepository, IIngredientRepository ingredientRepository, IIngredientRequirementService ingredientRequirementService,
+            IMapper mapper) : base(weeklyMenuRepository, mapper)
         {
             _weeklyMenuRepository = weeklyMenuRepository;
             _dailyMenuRepository = dailyMenuRepository;
             _mealRepository = mealRepository;
-            _ingredientRepository = ingredientRepository;
+            _ingredientRequirementService = ingredientRequirementService;
             _mapper = mapper;
         }
 
@@ -133,12 +134,13 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
-        public Result<WeeklyMenuDto> UpdateWeeklyMenu(WeeklyMenuDto weeklyMenuDto)
+        public Result<List<IngredientQuantityDto>> GetIngredientRequirements(WeeklyMenuDto weeklyMenuDto)
         {
             try
             {
                 var weeklyMenu = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
-                return MapToDto(weeklyMenu);
+                var ingredientRequirements = _ingredientRequirementService.GetIngredientRequirements();
+                return ingredientRequirements;
             }
             catch (KeyNotFoundException e)
             {

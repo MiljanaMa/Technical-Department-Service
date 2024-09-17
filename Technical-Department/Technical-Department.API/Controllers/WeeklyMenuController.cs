@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
+using Technical_Department.Kitchen.Core.Domain;
 
 namespace Technical_Department.API.Controllers
 {
@@ -8,14 +9,11 @@ namespace Technical_Department.API.Controllers
     public class WeeklyMenuController : BaseApiController
     {
         private readonly IWeeklyMenuService _weeklyMenuService;
-        private readonly IIngredientRequirementService _ingredientRequirementService;
         private readonly ICustomMenuService _cusomMenuService;
 
-        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, IIngredientRequirementService ingredientRequirementService,
-            ICustomMenuService customMenuService)
+        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, ICustomMenuService customMenuService)
         {
             _weeklyMenuService = weeklyMenuService;
-            _ingredientRequirementService = ingredientRequirementService;
             _cusomMenuService = customMenuService;
 
         }
@@ -55,10 +53,9 @@ namespace Technical_Department.API.Controllers
             return CreateResponse(result);
         }
         [HttpPut("get-ingredients-requirements")]
-        public ActionResult<List<IngredientQuantityDto>> GetIngredientsRequirements([FromBody] WeeklyMenuDto weeklyMenu)
+        public ActionResult<List<IngredientQuantityDto>> GetIngredientRequirements([FromBody] WeeklyMenuDto weeklyMenuDto)
         {
-            _weeklyMenuService.UpdateWeeklyMenu(weeklyMenu);
-            var result = _ingredientRequirementService.GetIngredientRequirements();
+            var result = _weeklyMenuService.GetIngredientRequirements(weeklyMenuDto);
             return CreateResponse(result);
         }
 
