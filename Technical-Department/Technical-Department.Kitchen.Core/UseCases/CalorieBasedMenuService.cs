@@ -15,13 +15,13 @@ using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
-    public class CustomMenuService : BaseService<WeeklyMenuDto, WeeklyMenu>, ICustomMenuService
+    public class CalorieBasedMenuService : BaseService<WeeklyMenuDto, WeeklyMenu>, ICalorieBasedMenuService
     {
         private readonly IMealRepository _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
         private List<long> _recentMealIds = new List<long>();
-        public CustomMenuService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base (mapper )
+        public CalorieBasedMenuService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base (mapper )
         {
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;
@@ -48,10 +48,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
             return MapToDto(weeklyMenu);
         }
 
-        public Result<WeeklyMenuDto> CreateCustomWeeklyMenu(int totalCalories)
+        public Result<WeeklyMenuDto> CreateCalorieBasedWeeklyMenu(int totalCalories)
         {
 
             var weeklyMenu = new WeeklyMenu();
+            weeklyMenu.SetDefaultWeekDates();
             _recentMealIds.Clear();
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))

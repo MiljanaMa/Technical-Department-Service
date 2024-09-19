@@ -1,53 +1,87 @@
 <div class="content">
-<mat-tab-group (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
-  <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
-    <ng-template mat-tab-label>
-      <div>{{ menuStatus.name }}</div>
-    </ng-template>
+  <mat-tab-group (selectedTabChange)="onSelectedMenuStatusTabChange($event)" [selectedIndex]="selectedMenuTabIndex">
+    <mat-tab *ngFor="let menuStatus of weeklyMenuStatuses; let mealTypeIndex = index">
+      <ng-template mat-tab-label>
+        <div>{{ menuStatus.name }}</div>
+      </ng-template>
 
+      <div>
+        <mat-tab-group *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)" [selectedIndex]="selectedDayTabIndex">
+          <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
+            <ng-template mat-tab-label>
+              <div>{{ day.name }} <br> ({{ getDayDate(dayIndex) }})</div>
+            </ng-template>
+
+            <table id="tableToExport" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+              <ng-container matColumnDef="consumerType">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"><b>{{ element.consumerType }}</b></td>
+              </ng-container>
+
+              <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
+                <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
+                <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
+                  <div class="center">{{ element[mealType.value.toString()] }}</div>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-tab>
+        </mat-tab-group>  
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex !== 2" class="no-menu-message">
+    Željeni meni ne postoji u bazi.
+  </div>
+
+  <div *ngIf="defaultMenus.length === 0 && selectedMenuTabIndex === 2" class="no-menu-message">
+    Šablonski meni ne postoji u bazi.
+  </div>
+
+
+  <div class="center" *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex === 1" >
     <div>
-      <mat-tab-group *ngIf="selectedWeeklyMenu" (selectedTabChange)="onSelectedDayTabChange($event)" [selectedIndex]="selectedDayTabIndex">
-        <mat-tab *ngFor="let day of daysOfWeek; let dayIndex = index">
-          <ng-template mat-tab-label>
-            <div>{{ day.name }} <br> ({{ getDayDate(dayIndex) }})</div>
-          </ng-template>
-
-          <table id="tableToExport" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            <ng-container matColumnDef="consumerType">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element"><b>{{ element.consumerType }}</b></td>
-            </ng-container>
-
-            <ng-container *ngFor="let mealType of mealTypes" [matColumnDef]="mealType.value.toString()">
-              <th mat-header-cell *matHeaderCellDef><b class="center"> {{ mealType.name }} </b></th>
-              <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(mealType.value)">
-                <div class="center">{{ element[mealType.value.toString()] }}</div>
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-        </mat-tab>
-      </mat-tab-group>  
+      <button class="primary-button mat-button" (click)="openMenuForm('DRAFT')">Novi meni</button>
     </div>
-  </mat-tab>
-</mat-tab-group>
-
-<div *ngIf="!selectedWeeklyMenu" class="no-menu-message">
-  Zeljeni meni ne postoji u bazi.
+    <div class="default-menus-container">
+      <div *ngFor="let menu of defaultMenus">
+        <button class="primary-button mat-button" (click)="showDraftFromDefaultMenu(menu.id!)">Iskoristi šablonski meni "{{menu.name}}"</button>
+      </div>
+    </div>
   </div>
 
-<div class="center">
-  <div *ngIf="!selectedWeeklyMenu && selectedMenuTabIndex === 1" class="center">
-    <button [routerLink]="'/custom-menu'" class="primary-button mat-button">Novi meni</button>
-    <button class="primary-button mat-button" (click)="showTabularDefaultMenu()">Meni po sablonu</button>
-  </div>
-  <div  class="center">
-    <button *ngIf="selectedWeeklyMenu" class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik</button>
-    <button *ngIf="selectedWeeklyMenu" class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik sa količinama</button>
-    <button *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 1" class="secondary-button mat-button" (click)="changeNewMenu()">Izmeni Jelovnik</button>
-  </div>
- 
-</div>
 
+  <div  class="center" *ngIf="selectedWeeklyMenu" >
+    <button class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik</button>
+    <button class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik sa količinama</button>
+    <button class="secondary-button mat-button" (click)="changeMenu(selectedWeeklyMenu.id!)">Izmeni Jelovnik</button>
+  </div>
+
+
+  <div *ngIf="selectedMenuTabIndex === 2">
+
+
+        
+
+      <div class="center default-menus-container margin">
+        <button class="primary-button mat-button" (click)="openMenuForm('DRAFT_DEFAULT')">Novi šablonski meni </button>
+        <div class="menus-card" *ngFor="let menu of defaultMenus">
+          <div class="name">{{ menu.name }}</div>
+          <div class="buttons">
+            <button class="small-primary-button mat-button" (click)="changeMenu(menu.id!)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button  class="small-secondary-button mat-button" (click)="deleteMenu(menu.id!)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>  
+        </div>
+      </div>
+    </div>
+
+
+  
 </div>
