@@ -7,7 +7,7 @@ import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels }
 import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model';
 import { WeeklyMenu, WeeklyMenuStatus } from '../model/weekly-menu.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./custom-menu.component.css']
 })
 export class CustomMenuComponent implements OnInit {
-
+  routeParamMenuStatus: string = "";
   selectedDayTabIndex : number = 0;
   selectedMealTabIndex : number = 0;
 
@@ -49,7 +49,7 @@ export class CustomMenuComponent implements OnInit {
 
   filteredOptions: { [key: string]: Observable<Meal[]> } = {};
 
-  constructor(private service: KitchenService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private service: KitchenService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router ) {
     this.initializeEmptyFormGroup();
   }
 
@@ -95,27 +95,23 @@ export class CustomMenuComponent implements OnInit {
 
 
   createInitialWeeklyMenu(): void {
-    const menus: DailyMenu[] = [];
-    this.weeklyMenu = {
-      from: this.formatDate(this.getNextMonday()),
-      to: this.formatDate(this.getNextMondayPlusWeek()),
-      menu: menus,
-      status: WeeklyMenuStatus.DRAFT
-    };
+    this.route.paramMap.subscribe(params => {
+      this.routeParamMenuStatus = params.get('status') || 'DRAFT'; 
 
-    this.service.createOrFetchWeeklyMenu(this.weeklyMenu).subscribe({
-      next: (result: WeeklyMenu) => {
-        this.weeklyMenu = result;
-        console.log("Weekly menu:", result);
-        this.selectedDailyMenuId = this.weeklyMenu.menu![0].id;
-        this.getMeals();
-      },
-      error: (error) => {
-        console.error('Error saving weekly menu:', error);
-        if (error.error && error.error.errors) {
-          console.log('Validation errors:', error.error.errors);
-        }
-      }
+        this.service.createOrFetchWeeklyMenu(this.routeParamMenuStatus).subscribe({
+          next: (result: WeeklyMenu) => {
+            this.weeklyMenu = result;
+            console.log("Weekly menu:", result);
+            this.selectedDailyMenuId = this.weeklyMenu.menu![0].id;
+            this.getMeals();
+          },
+          error: (error) => {
+            console.error('Error saving weekly menu:', error);
+            if (error.error && error.error.errors) {
+              console.log('Validation errors:', error.error.errors);
+            }
+          }
+        });
     });
   }
 
@@ -290,7 +286,7 @@ export class CustomMenuComponent implements OnInit {
       });
       return;
     }else{
-      this.router.navigate(['/tabular-menu/draft']);
+      this.router.navigate([`/tabular-menu`, this.weeklyMenu?.id!]);
     }
   }
 

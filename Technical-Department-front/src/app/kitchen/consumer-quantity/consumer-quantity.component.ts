@@ -47,7 +47,7 @@ export class ConsumerQuantityComponent {
     let status = 'CURRENT'
     if (new Date().getDay() === 0)
       status = 'NEW'
-    this.service.getMenu(status).subscribe({
+    this.service.getMenuByStatus(status).subscribe({
       next: (result: WeeklyMenu) => {
         this.currentWeeklyMenu = result;
       }

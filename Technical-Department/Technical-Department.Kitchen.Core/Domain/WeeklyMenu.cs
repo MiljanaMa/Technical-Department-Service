@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 using System;
 using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Technical_Department.Kitchen.Core.Domain
 {
     public class WeeklyMenu: Entity
     {
+        public string Name { get; set; }
         public DateOnly From { get; set; }
         public DateOnly To { get; set; }
         public ICollection<DailyMenu> Menu { get; init; }
@@ -16,16 +18,26 @@ namespace Technical_Department.Kitchen.Core.Domain
 
         public WeeklyMenu()
         {
-            SetNextWeekDates();
+            Name = string.Empty;
             Menu = new Collection<DailyMenu>();
         }
 
         public WeeklyMenu(WeeklyMenuStatus status)
         {
+            Name= string.Empty;
             Status = status;
-            SetNextWeekDates();
+            if (Status == WeeklyMenuStatus.DRAFT)
+                SetNextWeekDates();
+            else
+                SetDefaultWeekDates();
             Menu = new Collection<DailyMenu>(); 
             InitializeDailyMenus();
+        }
+
+        public void SetDefaultWeekDates()
+        {
+            From = new DateOnly(1980, 1, 1);
+            To = new DateOnly(1980, 1, 1);
         }
 
         public void SetNextWeekDates()

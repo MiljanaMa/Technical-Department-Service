@@ -195,6 +195,10 @@ namespace Technical_Department.Kitchen.Infrastructure.Migrations
                     b.Property<DateOnly>("From")
                         .HasColumnType("date");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 

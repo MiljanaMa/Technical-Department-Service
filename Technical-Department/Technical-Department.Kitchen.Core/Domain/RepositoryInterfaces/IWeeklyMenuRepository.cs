@@ -14,5 +14,6 @@ namespace Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces
         WeeklyMenu GetById(long id);
         WeeklyMenu GetByStatus(WeeklyMenuStatus status);
         WeeklyMenu GetByDate(DateOnly date);
+        List<WeeklyMenu> GetDefaultMenus();
     }
 }

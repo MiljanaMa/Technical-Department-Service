@@ -109,3 +109,89 @@ th.mat-header-cell {
   background-color: #f1f1f1; 
   font-weight: bold; 
 }
+
+.default-menus-container {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px;
+}
+
+.margin{
+  margin-top: 20px;
+}
+
+.menus-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+  position: relative;
+  margin: 10px;
+}
+
+.menus-card .name {
+  font-size: 1.5em;
+  color: #003B6D;
+  margin-bottom: 10px;
+}
+
+.small-primary-button,
+.small-secondary-button{
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  width: 170px;
+  margin: 10px;
+}
+
+.small-primary-button.mat-button {
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+}
+
+.small-secondary-button.mat-button {
+  border-color: #830005; 
+  background-color:#830005; 
+  color: #ffffff;
+  margin-right: 10px;
+}
+
+.small-primary-button.mat-button:hover {
+  background-color: #002C51;
+}
+
+.small-secondary-button.mat-button:hover {
+  background-color: #570003;
+}
+
+.buttons {
+  margin-top: auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; 
+}
+
+.primary-button.mat-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px; 
+  font-size: 18px; 
+  border-radius: 8px; 
+  text-transform: uppercase; 
+  font-weight: bold; 
+  background-color: #003B6D; 
+  border-color: #003B6D;
+  color: #ffffff;
+}
+
+.primary-button.mat-button:hover {
+  background-color: #002C51;
+}

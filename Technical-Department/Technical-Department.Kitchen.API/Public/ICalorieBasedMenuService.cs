@@ -8,9 +8,9 @@ using Technical_Department.Kitchen.API.Dtos;
 
 namespace Technical_Department.Kitchen.API.Public
 {
-    public interface ICustomMenuService
+    public interface ICalorieBasedMenuService
     {
-        Result<WeeklyMenuDto> CreateCustomWeeklyMenu(int calories);
+        Result<WeeklyMenuDto> CreateCalorieBasedWeeklyMenu(int calories);
  
     }
 }
