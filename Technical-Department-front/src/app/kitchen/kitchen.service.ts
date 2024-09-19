@@ -43,8 +43,13 @@ export class KitchenService {
   confirmWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu>{
     return this.http.put<WeeklyMenu>(environment.apiHost + `weekly-menu/confirm`, weeklyMenu)
   }
-  getIngredientsRequirements(weeklyMenu: WeeklyMenu): Observable<IngredientQuantity[]>{
-    return this.http.put<IngredientQuantity[]>(environment.apiHost + `weekly-menu/get-ingredients-requirements`, weeklyMenu)
+  getRequsition(weeklyMenu: WeeklyMenu): Observable<IngredientQuantity[]>{
+    return this.http.put<IngredientQuantity[]>(environment.apiHost + `weekly-menu/get-requsition`, weeklyMenu)
+  }
+  getIngredientRequirements(dailyMenuId: number): Observable<MealOffer[]>{
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("dailyMenuId", dailyMenuId);
+    return this.http.get<MealOffer[]>(environment.apiHost + `weekly-menu/get-ingredients-requirements`,  {params: queryParams})
   }
 
   getMenuByStatus(menuStatus: string): Observable<WeeklyMenu> {

@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Core.UseCases;
 using BuildingBlocks.Infrastructure.Database;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,17 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
         {
             return _dbSet.Include(i => i.Unit).ToList();
         }
+        public List<Ingredient> GetAllByIds(List<long> ingredientIds)
+        {
+            return  _dbSet.Include(i => i.Unit).Where(ingredient => ingredientIds.Contains(ingredient.Id)).ToList();
+        }
         public Ingredient Get(long ingredientId)
         {
             return _dbSet.Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);
+        }
+        public Ingredient GetWithNoTracking(long ingredientId)
+        {
+            return _dbSet.AsNoTracking().Include(i => i.Unit).FirstOrDefault(i => i.Id == ingredientId);
         }
         public bool DoesAllIngredientsExist(List<long> ingredientIds)
         {

@@ -6,7 +6,8 @@ import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-new-menu',
@@ -20,7 +21,7 @@ export class MenusComponent implements OnInit {
   selectedWeeklyMenu: WeeklyMenu | undefined;
   selectedDailyMenu: DailyMenu | undefined;
   selectedMenuTabIndex: number | null = 0;
-  selectedDayTabIndex: number | null = 0;
+  selectedDayTabIndex: number = 0;
   mealOffers: MealOffer[] = [];
   dataSource: any[] = [];
   defaultMenus: WeeklyMenu[] = [];
@@ -55,7 +56,7 @@ export class MenusComponent implements OnInit {
 
   displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
-  constructor(private router: Router, private service: KitchenService){}
+  constructor(private router: Router, private service: KitchenService, private snackBar: MatSnackBar){}
 
   ngOnInit(): void {
     this.getCurrentMenu();
@@ -307,5 +308,86 @@ export class MenusComponent implements OnInit {
   sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+  getIngredientRequirementsPDF() {
+    const today = new Date();
+    var dayOfWeek = today.getDay();
+    dayOfWeek = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+    if(this.selectedDayTabIndex <= dayOfWeek + 1){
+      this.service.getIngredientRequirements(this.selectedDailyMenu?.id || 0).subscribe({
+        next:(result: MealOffer[]) => {
+          this.generateMealOfferPDF(result);
+        },
+        error: (error: any) => {
+  
+        }
+      });
+    }
+    else{
+      this.snackBar.open('Moguće je preuzeti, samo za dane u kojima je izvršen unos pacijenata.', 'OK', {
+        duration: 3000,
+        verticalPosition: 'top'
+      });
+    }
+  }
+  generateMealOfferPDF(mealOffers: MealOffer[]): void {
+    mealOffers.sort((a, b) => {
+        if (a.type !== b.type) {
+            return a.type - b.type;
+        }
+        return a.mealId - b.mealId;
+    });
+    const doc = new jsPDF();
+    doc.setFont('arial');
 
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(26);
+    doc.text('Jelovnik sa kolicinama', 50, 10);
+
+    let yPosition = 20;
+
+    const groupedByType = mealOffers.reduce((acc, mealOffer) => {
+        const typeKey = MealTypeLabels[mealOffer.type];
+        if (!acc[typeKey]) {
+            acc[typeKey] = [];
+        }
+        acc[typeKey].push(mealOffer);
+        return acc;
+    }, {} as Record<string, MealOffer[]>);
+
+    for (const type in groupedByType) {
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text(`${type}`, 14, yPosition);
+        yPosition += 10;
+
+        groupedByType[type].forEach(mealOffer => {
+          doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Jelo: ${mealOffer.mealName}`, 14, yPosition);
+            yPosition += 3;
+
+            if (mealOffer.ingredients && mealOffer.ingredients.length > 0) {
+                autoTable(doc, {
+                  startY: yPosition,
+                  head: [['Namirnica', 'Kolicina', 'Jedinica mere']],
+                  body: mealOffer.ingredients.map(ingredient => [
+                      ingredient.ingredientName || '',
+                      (ingredient.quantity ?? 0).toFixed(2),
+                      ingredient.unitShortName || ''
+                  ]),
+              });
+    
+                yPosition = (doc as any).lastAutoTable.finalY + 10;
+            }else {
+              doc.text('No ingredients available.', 10, yPosition);
+              yPosition += 10;
+          }
+          yPosition += 5;
+      });
+  
+      yPosition += 5;
+  }
+  
+  doc.save('jelovnik-sa-kolicinama.pdf');
+}
 }

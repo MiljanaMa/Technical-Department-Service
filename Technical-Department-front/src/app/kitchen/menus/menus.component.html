@@ -53,19 +53,14 @@
     </div>
   </div>
 
-
   <div  class="center" *ngIf="selectedWeeklyMenu" >
     <button class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik</button>
-    <button class="primary-button mat-button" (click)="exportToPDF()">Preuzmi Jelovnik sa količinama</button>
+    <button *ngIf="selectedWeeklyMenu && selectedMenuTabIndex === 0" class="primary-button mat-button" (click)="getIngredientRequirementsPDF()">Preuzmi Jelovnik sa količinama</button>
     <button class="secondary-button mat-button" (click)="changeMenu(selectedWeeklyMenu.id!)">Izmeni Jelovnik</button>
   </div>
 
 
   <div *ngIf="selectedMenuTabIndex === 2">
-
-
-        
-
       <div class="center default-menus-container margin">
         <button class="primary-button mat-button" (click)="openMenuForm('DRAFT_DEFAULT')">Novi šablonski meni </button>
         <div class="menus-card" *ngFor="let menu of defaultMenus">

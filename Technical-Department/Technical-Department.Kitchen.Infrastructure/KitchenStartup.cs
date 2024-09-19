@@ -33,7 +33,7 @@ public static class KitchenStartup
         services.AddScoped<IMealService, MealService>();
         services.AddScoped<IWeeklyMenuService, WeeklyMenuService>();
         services.AddScoped<IMeasurementUnitService, MeasurementUnitService>();
-        services.AddScoped<IKitchenWarehouseService, KitchenWarehouseService>();
+        services.AddScoped<IWarehouseService, WarehouseService>();
         services.AddScoped<IIngredientRequirementService, IngredientRequirementService>();
         services.AddScoped<ICalorieBasedMenuService, CalorieBasedMenuService>();
 
@@ -46,7 +46,7 @@ public static class KitchenStartup
         services.AddScoped(typeof(IDailyMenuRepository), typeof(DailyMenuRepository));
         services.AddScoped(typeof(IWeeklyMenuRepository), typeof(WeeklyMenuRepository));
         services.AddScoped(typeof(IMeasurementUnitRepository), typeof(MeasurementUnitRepository));
-        services.AddScoped(typeof(IKitchenWarehouseRepository), typeof(KitchenWarehouseRepository));
+        services.AddScoped(typeof(IWarehouseRepository), typeof(WarehouseRepository));
 
         services.AddDbContext<KitchenContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("kitchen"),
