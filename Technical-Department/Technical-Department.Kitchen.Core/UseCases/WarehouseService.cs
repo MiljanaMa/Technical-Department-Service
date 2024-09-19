@@ -65,7 +65,7 @@ public class WarehouseService : CrudService<WarehouseIngredientDto, WarehouseIng
     {
         try
         {
-            List<IngredientQuantityDto>  requirementIngredients = _ingredientRequirementService.GetIngredientRequirements().Value;
+            List<IngredientQuantityDto>  requirementIngredients = _ingredientRequirementService.GetRequsition().Value;
             var updatedIngredients = new List<WarehouseIngredient>();
             foreach (var deliveryNoteIngredient in deliveryNoteIngredients)
             {
