@@ -56,7 +56,7 @@ export class CalorieBasedMenuComponent implements OnInit {
       this.showTabularView();
       return;
     }
-    this.service.createCustomMenu(this.calorieInput).subscribe({
+    this.service.createCalorieBasedMenu(this.calorieInput).subscribe({
       next: (result: WeeklyMenu) => {
         this.weeklyMenu = result;
         this.processMenu(this.weeklyMenu.menu);

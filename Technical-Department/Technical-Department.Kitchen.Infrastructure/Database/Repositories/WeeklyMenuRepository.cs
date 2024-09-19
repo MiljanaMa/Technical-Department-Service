@@ -47,5 +47,13 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             return entity;
         }
 
+        public List<WeeklyMenu> GetDefaultMenus()
+        {
+            var entity = _dbSet.Where(m => m.Status == WeeklyMenuStatus.DEFAULT)
+                               .Include(m => m.Menu)
+                               .ToList();
+            return entity;
+        }
+
     }
 }

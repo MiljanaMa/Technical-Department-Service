@@ -32,12 +32,15 @@ namespace Technical_Department.Kitchen.Core.UseCases
             _mapper = mapper;
         }
 
-        public Result<WeeklyMenuDto> CreateOrFetch(WeeklyMenuDto weeklyMenuDto)
+        public Result<WeeklyMenuDto> CreateOrFetch(string status)
         {
             try
             {
-                var weeklyMenu = MapToDomain(weeklyMenuDto);
-                var result = CreateOrFetchWeeklyMenu(WeeklyMenuStatus.DRAFT);
+                if (!Enum.TryParse(status, true, out WeeklyMenuStatus parsedStatus))
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError($"Invalid status value: {status}");
+                }
+                var result = CreateOrFetchWeeklyMenu(parsedStatus);
                 return ReturnMenuWithMealNames(result);
             }
             catch (ArgumentException e)
@@ -81,6 +84,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 return existingMenu;
             }
             var newMenu = new WeeklyMenu(status);
+
             newMenu = _weeklyMenuRepository.Create(newMenu);
             return newMenu;
         }
@@ -115,13 +119,46 @@ namespace Technical_Department.Kitchen.Core.UseCases
             }
         }
 
+        public Result<WeeklyMenuDto> GetMenuById(long id)
+        {
+            try
+            {
+                var result = _weeklyMenuRepository.GetById(id);
+                return ReturnMenuWithMealNames(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<WeeklyMenuDto>> GetDefaultMenus()
+        {
+            try
+            {
+                return  MapToDto(_weeklyMenuRepository.GetDefaultMenus());
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
         public Result<WeeklyMenuDto> ConfirmWeeklyMenu(WeeklyMenuDto weeklyMenuDto)
         {
             try
             {
-                WeeklyMenu weeklyMenu = MapToDomain(weeklyMenuDto);
-                weeklyMenu.SetNextWeekDates();
-                weeklyMenu.SetStatus(WeeklyMenuStatus.NEW);
+                WeeklyMenu weeklyMenu = MapToDomain(weeklyMenuDto);           
+                if (weeklyMenuDto.Status == API.Dtos.Enums.WeeklyMenuStatus.DRAFT)
+                {
+                    weeklyMenu.SetStatus(WeeklyMenuStatus.NEW);
+                    weeklyMenu.SetNextWeekDates(); 
+                }
+                else if (weeklyMenuDto.Status == API.Dtos.Enums.WeeklyMenuStatus.DRAFT_DEFAULT)
+                {
+                    weeklyMenu.SetStatus(WeeklyMenuStatus.DEFAULT);
+                    weeklyMenu.SetDefaultWeekDates();
+                }
                 var result = _weeklyMenuRepository.Update(weeklyMenu);
                 return ReturnMenuWithMealNames(result);
             }
