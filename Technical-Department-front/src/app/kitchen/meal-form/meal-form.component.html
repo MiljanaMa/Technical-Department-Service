@@ -6,7 +6,7 @@
   </mat-toolbar>
 
   <mat-dialog-content class="form-content">
-  <form [formGroup]="mealForm" (ngSubmit)="onSubmit()" class="meal-form">
+  <form [formGroup]="mealForm" class="meal-form">
     <mat-form-field class="full-width">
       <mat-label>Ime</mat-label>
       <input matInput formControlName="name" placeholder="Unesite ime jela">
@@ -72,8 +72,8 @@
       <button class="primary-button mat-button" (click)="addNewIngredient()">Dodaj namirnicu</button>
     </div>
     <div class="buttons">
-      <button class="primary-button mat-button" type="submit">Sačuvaj jelo</button>
-      <button class="secondary-button mat-button">Otkazi</button>
+      <button class="primary-button mat-button" (click)="saveIngredient()">Sačuvaj jelo</button>
+      <button class="secondary-button mat-button" (click)="onCancel()">Otkaži</button>
     </div>
   </form>
   </mat-dialog-content>

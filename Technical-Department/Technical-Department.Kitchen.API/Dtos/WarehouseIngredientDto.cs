@@ -2,7 +2,7 @@
 
 namespace Technical_Department.Kitchen.API.Dtos;
 
-public class KitchenWarehouseIngredientDto
+public class WarehouseIngredientDto
 {
     public long IngredientId { get; set; }
     public IngredientDto Ingredient { get; set; }

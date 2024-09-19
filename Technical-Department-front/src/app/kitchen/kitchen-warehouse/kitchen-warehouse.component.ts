@@ -21,9 +21,6 @@ ngOnInit(): void {
     next:(result: KitchenWarehouseIngredient[]) => {
       this.ingredients = result;
       this.filteredIngredients = result;
-    },
-    error: (error) => {
-      // Handle error
     }
   });
 }

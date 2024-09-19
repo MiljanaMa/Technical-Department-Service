@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './yearly-excel-import.component.html',
   styleUrls: ['./yearly-excel-import.component.css']
 })
-export class YearlyExcelImportComponent implements OnInit{
+export class YearlyExcelImportComponent implements OnInit {
   selectedFoodFile: File | null = null;
   selectedMeatFile: File | null = null;
   foodSheetName: string = '';
@@ -24,17 +24,12 @@ export class YearlyExcelImportComponent implements OnInit{
   warehouseIngredients: WarehouseIngredient[] = []
   kitchenIngredients: Ingredient[] = []
 
-  constructor(private service: KitchenService, private dialog: MatDialog, private snackBar: MatSnackBar,
-    private router: Router) {}
+  constructor(private service: KitchenService, private dialog: MatDialog, private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
     this.service.getAllIngredients().subscribe({
-      next:(result: Ingredient[]) => {
+      next: (result: Ingredient[]) => {
         this.kitchenIngredients = result;
-
-      },
-      error: (error) => {
-        // Handle error
       }
     });
   }
@@ -51,7 +46,7 @@ export class YearlyExcelImportComponent implements OnInit{
   }
 
   uploadFile() {
-    if (this.selectedFoodFile && this.selectedMeatFile &&  this.foodSheetName &&  this.meatSheetName) {
+    if (this.selectedFoodFile && this.selectedMeatFile && this.foodSheetName && this.meatSheetName) {
       const formData = new FormData();
       formData.append('foodFile', this.selectedFoodFile);
       formData.append('foodSheet', this.foodSheetName);
@@ -59,14 +54,22 @@ export class YearlyExcelImportComponent implements OnInit{
       formData.append('meatSheet', this.meatSheetName);
 
       this.service.proceedExcel(formData).subscribe({
-        next:(result: WarehouseIngredient[]) => {
+        next: (result: WarehouseIngredient[]) => {
           this.warehouseIngredients = result;
           this.findMatchingIngredients();
 
         },
         error: (error) => {
-          // Handle error
+          this.snackBar.open(error.error.message, 'OK', {
+            duration: 3000,
+            verticalPosition: 'top'
+          });
         }
+      });
+    } else {
+      this.snackBar.open('Otpremite dokumenta i unesite sheet imena!', 'OK', {
+        duration: 3000,
+        verticalPosition: 'top'
       });
     }
   }
@@ -83,7 +86,7 @@ export class YearlyExcelImportComponent implements OnInit{
     });
   }
   confirmRow(ingredient: WarehouseIngredient) {
-    ingredient.isConfirmed = !ingredient.isConfirmed; // Mark the ingredient as confirmed
+    ingredient.isConfirmed = !ingredient.isConfirmed;
   }
   openAddIngredientDialog(warehouseIngredient: WarehouseIngredient): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
@@ -95,33 +98,33 @@ export class YearlyExcelImportComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         warehouseIngredient.ingredient = result;
-        
       }
     });
   }
   startNewBusinessYear(): void {
-    if(!this.warehouseIngredients.every(i => i.isConfirmed)){
+    if (!this.warehouseIngredients.every(i => i.isConfirmed)) {
       this.snackBar.open('Potvrdite sve redove, pa pokušajte ponovo', 'OK', {
-        duration: 3000, 
-        verticalPosition: 'top',
-        panelClass: ['mat-warn'] 
+        duration: 3000,
+        verticalPosition: 'top'
       });
-    }else{
+    } else {
       var kitchenIngredients: KitchenWarehouseIngredient[] = [];
       this.warehouseIngredients.forEach(element => {
         kitchenIngredients.push(this.transformToKitchenWarehouseIngredient(element));
       });
       this.service.startNewBusinessYear(kitchenIngredients).subscribe({
-        next:(result: KitchenWarehouseIngredient[]) => {
+        next: (result: KitchenWarehouseIngredient[]) => {
           this.snackBar.open('Uspjesno ste započeli novu poslovnu godinu', 'OK', {
-            duration: 3000, 
-            verticalPosition: 'top',
-            panelClass: ['mat-warn'] 
+            duration: 3000,
+            verticalPosition: 'top'
           });
           this.router.navigate([`kitchen-warehouse`]);
         },
         error: (error) => {
-          // Handle error
+          this.snackBar.open('Greška, nije moguće pokrenuti novu poslovnu godinu.', 'OK', {
+            duration: 3000,
+            verticalPosition: 'top'
+          });
         }
       });
     }
@@ -148,5 +151,5 @@ export class YearlyExcelImportComponent implements OnInit{
       }
     });
   }
-  
+
 }

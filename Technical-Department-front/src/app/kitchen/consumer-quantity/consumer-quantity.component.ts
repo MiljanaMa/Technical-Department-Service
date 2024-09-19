@@ -45,15 +45,11 @@ export class ConsumerQuantityComponent {
 
   ngOnInit() {
     let status = 'CURRENT'
-    if(new Date().getDay() === 0)
+    if (new Date().getDay() === 0)
       status = 'NEW'
     this.service.getMenu(status).subscribe({
       next: (result: WeeklyMenu) => {
         this.currentWeeklyMenu = result;
-      },
-      error: (error: any) => {
-        console.log(error)
-        // Handle error
       }
     });
   }
@@ -62,13 +58,13 @@ export class ConsumerQuantityComponent {
     const positiveIntegerPattern = '^[0-9]+$';
     this.mealTypes.forEach(mealType => {
       this.consumerTypes.forEach(consumerType => {
-        if (this.shouldRenderSnackInput(mealType.value, consumerType.value)){
-        const controlName = this.getFormControlName(mealType.value, consumerType.value);
-        this.mealFormGroup.addControl(controlName, new FormControl('', [
-          Validators.required,
-          Validators.pattern(positiveIntegerPattern)
-        ]));
-      }
+        if (this.shouldRenderSnackInput(mealType.value, consumerType.value)) {
+          const controlName = this.getFormControlName(mealType.value, consumerType.value);
+          this.mealFormGroup.addControl(controlName, new FormControl('', [
+            Validators.required,
+            Validators.pattern(positiveIntegerPattern)
+          ]));
+        }
       });
     });
 
@@ -138,7 +134,10 @@ export class ConsumerQuantityComponent {
     const tomorrowsDailyMenu = this.currentWeeklyMenu?.menu?.find(menu => menu.dayOfWeek === tomorrowsDayOfWeek);
 
     if (tomorrowsDailyMenu === null) {
-      console.error("Tomorrow's menu not found");
+      this.snackBar.open('Meni za sutrašnji dan ne postoji!', 'OK', {
+        duration: 3000,
+        verticalPosition: 'top'
+      });
       return consumerQuantities;
     }
 
@@ -185,8 +184,10 @@ export class ConsumerQuantityComponent {
           this.downloadExcel(result)
         },
         error: (error: any) => {
-          console.log(error)
-          // Handle error
+          this.snackBar.open('Nije moguće preuzeti trebovanje', 'OK', {
+            duration: 3000,
+            verticalPosition: 'top'
+          });
         }
       });
     }
@@ -211,7 +212,7 @@ export class ConsumerQuantityComponent {
     const snackEligibleConsumerTypes = [ConsumerType.DIABETIC, ConsumerType.PREGNANT, ConsumerType.CHILDREN_2_4, ConsumerType.CHILDREN_4_14];
     const snackMealTypes = [MealType.MORNING_SNACK, MealType.DINNER_SNACK];
     const otherMealTypes = [MealType.BREAKFAST, MealType.DINNER, MealType.DINNER_SALAD, MealType.LUNCH, MealType.LUNCH_SALAD]
-    return  otherMealTypes.includes(mealType) || (snackMealTypes.includes(mealType) && snackEligibleConsumerTypes.includes(consumerType));
+    return otherMealTypes.includes(mealType) || (snackMealTypes.includes(mealType) && snackEligibleConsumerTypes.includes(consumerType));
   }
 
   getColumnsClass(mealType: MealType, consumerTypes: any[]): string {
@@ -231,24 +232,30 @@ export class ConsumerQuantityComponent {
       this.selectedFile = event.target.files[0];
     }
   }
-  
+
   uploadFile() {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       this.service.proceedDeliveryNote(formData).subscribe({
-        next:(result: IngredientQuantity[]) => {
-            this.service.updateKitchenWarehouse(result).subscribe({
-              next:() => {
-                this.router.navigate([`kitchen-warehouse`]);
-              },
-              error: (error) => {
-                // Handle error
-              }
-            });
+        next: (result: IngredientQuantity[]) => {
+          this.service.updateKitchenWarehouse(result).subscribe({
+            next: () => {
+              this.router.navigate([`kitchen-warehouse`]);
+            },
+            error: (error) => {
+              this.snackBar.open("Greška prilikom obrade otpremnice", 'OK', {
+                duration: 3000,
+                verticalPosition: 'top'
+              });
+            }
+          });
         },
         error: (error) => {
-          // Handle error
+          this.snackBar.open(error.error.message, 'OK', {
+            duration: 3000,
+            verticalPosition: 'top'
+          });
         }
       });
     }
