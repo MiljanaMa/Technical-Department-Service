@@ -1,19 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import { DishType, Meal } from '../model/meal.model';
-import { Observable } from 'rxjs';
-import { FormControl } from '@angular/forms';
 import { KitchenService } from '../kitchen.service';
-import { startWith, map } from 'rxjs/operators';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
-  selector: 'app-edit-meal-dialog',
-  templateUrl: './edit-meal-dialog.component.html',
-  styleUrls: ['./edit-meal-dialog.component.css']
+  selector: 'app-edit-calorie-based-menu-modal',
+  templateUrl: './edit-calorie-based-menu-modal.component.html',
+  styleUrls: ['./edit-calorie-based-menu-modal.component.css']
 })
-export class EditMealDialogComponent implements OnInit {
-
+export class EditCalorieBasedMenuModalComponent {
   filteredOptions: Observable<Meal[]> | undefined;
   formControl: FormControl = new FormControl();
   currentMeals: Meal[] = [];
@@ -21,8 +19,8 @@ export class EditMealDialogComponent implements OnInit {
 
   constructor(
     private service: KitchenService,
-    public dialogRef: MatDialogRef<EditMealDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { mealOffer: MealOffer }
+    public dialogRef: MatDialogRef<EditCalorieBasedMenuModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { mealOffer: MealOffer, dayName: string }
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +39,6 @@ export class EditMealDialogComponent implements OnInit {
     this.service.getMeals().subscribe({
       next: (result: Meal[]) => {
         const allMeals = result;
-        console.log(allMeals[0].ingredients);
         switch (this.data.mealOffer.type) {
           case MealType.BREAKFAST:
             this.currentMeals = allMeals.filter(m => m.types.includes(DishType.BREAKFAST));
@@ -116,21 +113,8 @@ export class EditMealDialogComponent implements OnInit {
           consumerQuantity: 0,
           dailyMenuId: this.data.mealOffer.dailyMenuId
         };
-        this.service.addMealOffer(newMealOffer).subscribe({
-          next: () => {
-            console.log("Added/changed meal offer");   
-            this.dialogRef.close(newMealOffer);       
-          },
-          error: (error) => {
-            console.error('Error adding meal offer: ', error);
-            if (error.error && error.error.errors) {
-              console.log('Validation errors:', error.error.errors);
-            }
-          }
-        });
+         this.dialogRef.close(newMealOffer);         
       }
     }
-  }
-
-  
+}
 }

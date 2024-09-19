@@ -15,7 +15,7 @@
   <div class="button">
     <button class="primary-button mat-button"  (click)="createCustomMenu()">Generisi jelovnik</button>
     <button  *ngIf="weeklyMenu" class="primary-button mat-button"  (click)="exportToPDF()">Preuzmi jelovnik</button>
-    <button  *ngIf="weeklyMenu" class="secondary-button mat-button">Izmeni jelovnik</button>
+    <button  *ngIf="weeklyMenu" class="secondary-button mat-button" (click)="changeMenu()">{{ buttonsVisible ? 'Potvrdi izmene' : 'Izmeni jelovnik' }}</button>
   </div>
 
 <div class="table" *ngIf="weeklyMenu">
@@ -29,6 +29,11 @@
       <th mat-header-cell *matHeaderCellDef><b class="center">{{ day.name }}</b></th>
       <td mat-cell *matCellDef="let element" [ngClass]="getMealTypeClass(element.mealType)">
         <div class="center">{{ element[day.value.toString()] }}</div>
+        <div class="center" *ngIf="shouldRenderEditButton(element.mealType) && buttonsVisible">
+          <button class="icon mat-button" (click)="openModal(element.mealType, day.value)"> 
+              <mat-icon>edit</mat-icon>
+          </button>
+      </div>
       </td>
     </ng-container>
   
@@ -41,8 +46,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">DORUCAK</h1>
 <div class="meals-container" id="breakfasts">
   <div class="meal-card" *ngFor="let meal of breakfasts">
-    <h2 class="name">{{ meal.mealName }}</h2>
-    <h6 class="calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.name }}</h2>
+    <h6 class="calories">{{  meal.calories | number: '1.0-2' }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -58,8 +63,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">RUCAK</h1>
 <div class="meals-container" id="lunches">
   <div class="meal-card" *ngFor="let meal of lunches">
-    <h2 class="name">{{ meal.mealName }}</h2>
-    <h6 class="calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.name }}</h2>
+    <h6 class="calories">{{ meal.calories | number: '1.0-2' }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -75,8 +80,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">VECERA</h1>
 <div class="meals-container" id="dinners">
   <div class="meal-card" *ngFor="let meal of dinners">
-    <h2 class="name">{{ meal.mealName }}</h2>
-    <h6 class="calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.name }}</h2>
+    <h6 class="calories">{{  meal.calories | number: '1.0-2' }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -92,8 +97,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">SALATA</h1>
 <div class="meals-container" id="salads">
   <div class="meal-card" *ngFor="let meal of salads">
-    <h2 class="name">{{ meal.mealName }}</h2>
-    <h6 class="calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.name}}</h2>
+    <h6 class="calories">{{  meal.calories | number: '1.0-2' }} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
@@ -109,8 +114,8 @@
 <h1 class="meal-section-title" *ngIf="mealsVisible">UZINA</h1>
 <div class="meals-container" id="snacks">
   <div class="meal-card" *ngFor="let meal of snacks">
-    <h2 class="name">{{ meal.mealName }}</h2>
-    <h6 class="calories">{{ meal.calories }} kCal</h6>
+    <h2 class="name">{{ meal.name }}</h2>
+    <h6 class="calories">{{  meal.calories | number: '1.0-2'}} kCal</h6>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let ingredient of meal.ingredients">
         <span class="ingredient-name">{{ ingredient.ingredientName }}</span>
