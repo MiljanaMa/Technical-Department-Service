@@ -99,22 +99,36 @@ mat-form-field{
   margin-top: 10px; 
 }
 
-.primary-button.mat-button {
+.primary-button.mat-button,
+.secondary-button.mat-button {
   padding: 12px 24px; 
   font-size: 18px; 
   border-radius: 8px; 
   text-transform: uppercase; 
   font-weight: bold; 
   width: 400px;
+}
+
+.primary-button.mat-button {
   background-color: #003B6D; 
   border-color: #003B6D;
   color: #ffffff;
   margin: 0 10px;
-  transition: background-color 0.3s ease;
 }
 
 .primary-button.mat-button:hover {
   background-color: #002C51;
+}
+
+.secondary-button.mat-button {
+  border-color: #830005; 
+  background-color:#830005; 
+  color: #ffffff;
+  margin: 0 10px;
+}
+
+.secondary-button.mat-button:hover {
+  background-color: #570003;
 }
 
 .mat-elevation-z8 {

@@ -70,7 +70,8 @@ export class IngredientsComponent implements OnInit{
   }
   updateIngredient(ingredient: Ingredient): void {
     const dialogRef = this.dialog.open(IngredientModalComponent, {
-      width: '450px',
+      width: '600px',
+      height: '600px',
       data: ingredient
     });
 
