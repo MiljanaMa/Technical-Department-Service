@@ -40,9 +40,6 @@ export class IngredientsComponent implements OnInit{
       next: (result: any) => {
         this.filteredIngredients = result.results;
         this.ingredients = result.results;
-      },
-      error: () => {
-        //add some toast
       }
     })
   }
@@ -64,7 +61,6 @@ export class IngredientsComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadIngredients();
-        console.log('The dialog was closed', result);
       }
     });
   }
@@ -78,14 +74,13 @@ export class IngredientsComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadIngredients();
-        console.log('The dialog was closed', result);
       }
     });
   }
   deleteIngredient(ingredient: Ingredient): void {
     this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '600px',  // Set the width
-      height: '150px',  // Set the height
+      width: '600px',
+      height: '150px',
       disableClose: false
     });
     this.dialogRef.componentInstance.confirmMessage = "Da li ste sigurni da želite da obrišete " + ingredient.name + "?"

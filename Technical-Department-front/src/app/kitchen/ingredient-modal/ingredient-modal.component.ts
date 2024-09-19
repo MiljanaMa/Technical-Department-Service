@@ -4,6 +4,7 @@ import { MeasurementUnit } from '../model/measurementUnit.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Ingredient, IngredientType } from '../model/ingredient.model';
 import { KitchenService } from '../kitchen.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-ingredient-modal',
@@ -24,20 +25,18 @@ export class IngredientModalComponent implements OnInit {
   };
   public IngredientTypes: [string, IngredientType][] = Object.entries(this.IngredientTypeMapping);
 
-  constructor(private service: KitchenService,
-    public dialogRef: MatDialogRef<IngredientModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Ingredient,
-    private fb: FormBuilder
-  ) {
+  constructor(private service: KitchenService, public dialogRef: MatDialogRef<IngredientModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Ingredient, private fb: FormBuilder, private snackBar: MatSnackBar)
+  {
     this.ingredientForm = this.fb.group({
       id: [this.data?.id || 0],
-      name: [this.data?.name || '', Validators.required],
+      name: [this.data?.name || 0, Validators.required],
       calories: [this.data?.calories || 0, [Validators.required, Validators.min(0)]],
       proteins: [this.data?.proteins || 0, [Validators.required, Validators.min(0)]],
       carbohydrates: [this.data?.carbohydrates || 0, [Validators.required, Validators.min(0)]],
       fats: [this.data?.fats || 0, [Validators.required, Validators.min(0)]],
       sugar: [this.data?.sugar || 0, [Validators.required, Validators.min(0)]],
-      type: [this.data?.type || '', Validators.required],
+      type: [this.data?.type || 0, Validators.required],
       unit: [this.data?.unit || '', Validators.required]
     });
   }
@@ -50,9 +49,6 @@ export class IngredientModalComponent implements OnInit {
           const selectedUnit = this.measurementUnits.find(unit => unit.id === this.data.unitId);
           this.ingredientForm.patchValue({ unit: selectedUnit });
         }
-      },
-      error: () => {
-        //add some toast
       }
     })
   }
@@ -63,26 +59,46 @@ export class IngredientModalComponent implements OnInit {
       newIngredient.warehouseLabel = "";
       newIngredient.isActive = true;
 
-      if (!this.data) {
+      if (this.data.id === 0) {
         this.service.createIngredient(newIngredient).subscribe({
-          next: (result: any) => {
+          next: (result: Ingredient) => {
+            this.snackBar.open("Namirnica je uspešno uneta", 'OK', {
+              duration: 3000, 
+              verticalPosition: 'top'
+            });
             this.dialogRef.close(result);
           },
-          error: () => {
-            //add some toast
+          error: (error) => {
+            this.errorMessage();
           }
         })
       } else {
         this.service.updateIngredient(newIngredient).subscribe({
           next: (result: Ingredient) => {
+            this.snackBar.open("Namirnica je uspešno ažurirana.", 'OK', {
+              duration: 3000, 
+              verticalPosition: 'top'
+            });
             this.dialogRef.close(result);
           },
-          error: () => {
-            //add some toast
+          error: (error) => {
+            this.errorMessage();
           }
         })
       }
+    }else{
+      this.snackBar.open("Proverite da li su sva polja validno popunjena.", 'OK', {
+        duration: 3000,
+        verticalPosition: 'top'
+      });
     }
+  }
+
+  private errorMessage() {
+    this.snackBar.open("Greška prilikom unosa, pokušajte ponovo.", 'OK', {
+      duration: 3000,
+      verticalPosition: 'top'
+    });
   }
 
   onCancel(): void {

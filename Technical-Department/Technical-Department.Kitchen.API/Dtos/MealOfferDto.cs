@@ -10,6 +10,7 @@ public class MealOfferDto
     public string MealName { get; set; }
     public double? Calories { get; set; }
     public int ConsumerQuantity { get; set; }
-    public long DailyMenuId { get; set; }
+    public long DailyMenuId { get; set;  } 
+    public ICollection<IngredientQuantityDto>? Ingredients { get; set; }
 
 }

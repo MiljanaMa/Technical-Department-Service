@@ -171,12 +171,24 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
-        public Result<List<IngredientQuantityDto>> GetIngredientRequirements(WeeklyMenuDto weeklyMenuDto)
+        public Result<List<IngredientQuantityDto>> GetRequsition(WeeklyMenuDto weeklyMenuDto)
         {
             try
             {
                 var weeklyMenu = _weeklyMenuRepository.Update(MapToDomain(weeklyMenuDto));
-                var ingredientRequirements = _ingredientRequirementService.GetIngredientRequirements();
+                var ingredientRequirements = _ingredientRequirementService.GetRequsition();
+                return ingredientRequirements;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+        public Result<List<MealOfferDto>> GetIngredientRequirements(long dailyMenuId)
+        {
+            try
+            {
+                var ingredientRequirements = _ingredientRequirementService.GetIngredientRequirements(dailyMenuId);
                 return ingredientRequirements;
             }
             catch (KeyNotFoundException e)

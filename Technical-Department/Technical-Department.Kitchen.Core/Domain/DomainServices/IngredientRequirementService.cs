@@ -12,10 +12,10 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
         private readonly ICrudRepository<Meal> _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
-        private readonly IKitchenWarehouseRepository _kitchenWarehouseRepository;
+        private readonly IWarehouseRepository _kitchenWarehouseRepository;
 
         public IngredientRequirementService(IMealRepository mealRepository, IIngredientRepository ingredientRepository,
-            IWeeklyMenuRepository weeklyMenuRepository, IKitchenWarehouseRepository kitchenWarehouseRepository)
+            IWeeklyMenuRepository weeklyMenuRepository, IWarehouseRepository kitchenWarehouseRepository)
         {
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;
@@ -23,7 +23,66 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
             _kitchenWarehouseRepository = kitchenWarehouseRepository;
 
         }
-        public Result<List<IngredientQuantityDto>> GetIngredientRequirements()
+        Result<List<MealOfferDto>> IIngredientRequirementService.GetIngredientRequirements(long dailyMenuId)
+        {
+            List<MealOfferDto> ingredientRequirements = new List<MealOfferDto>();
+            WeeklyMenu weeklyMenu = _weeklyMenuRepository.GetByStatus(WeeklyMenuStatus.CURRENT);
+            DailyMenu dailyMenu = weeklyMenu.Menu.Where(dm => dm.Id == dailyMenuId).FirstOrDefault();
+            if (dailyMenu == null)
+                return Result.Fail(FailureCode.NotFound).WithError("Traženi dnevni meni ne postoji.");
+            try
+            {
+                foreach (var mealOffer in dailyMenu.Menu)
+                {
+                    var existingMealOffer = ingredientRequirements.FirstOrDefault(mo => (int)mo.Type == (int)mealOffer.Type && mo.MealId == mealOffer.MealId);
+
+                    if (existingMealOffer != null)
+                        ChangeQuantites(ref existingMealOffer, mealOffer);
+                    else
+                        ingredientRequirements.Add(MakeNewMealOffer(mealOffer));
+                }
+                return ingredientRequirements;
+            }
+            catch(Exception ex)
+            {
+                return Result.Fail(FailureCode.Conflict).WithError("Greska prilikom kreiranja liste namirnica");
+            }
+        }
+
+        private MealOfferDto MakeNewMealOffer(MealOffer mealOffer)
+        {
+            var meal = _mealRepository.Get(mealOffer.MealId);
+            var ingredientIds = meal.Ingredients.Select(ingredient => ingredient.IngredientId).Distinct().ToList();
+            var ingredients = _ingredientRepository.GetAllByIds(ingredientIds);
+            return new MealOfferDto
+            {
+                MealId = mealOffer.MealId,
+                Type = (API.Dtos.Enums.MealType)mealOffer.Type,
+                MealName = meal.Name,
+                Ingredients = meal.Ingredients.Select(ingredient =>
+                {
+                    var ingredientDetails = ingredients.FirstOrDefault(i => i.Id == ingredient.IngredientId);
+                    return new IngredientQuantityDto
+                    {
+                        IngredientId = (int)ingredient.IngredientId,
+                        Quantity = ingredient.Quantity * mealOffer.ConsumerQuantity,
+                        IngredientName = ingredientDetails?.Name,
+                        UnitShortName = ingredientDetails?.Unit.ShortName,
+                    };
+                }).ToArray()
+            };
+        }
+
+        private void ChangeQuantites(ref MealOfferDto existingMealOffer, MealOffer mealOffer)
+        {
+            var meal = _mealRepository.Get(mealOffer.MealId);
+            foreach(var iq in existingMealOffer.Ingredients)
+            {
+                iq.Quantity += meal.Ingredients.FirstOrDefault(i => i.IngredientId == iq.IngredientId).Quantity * mealOffer.ConsumerQuantity;
+            }
+        }
+
+        public Result<List<IngredientQuantityDto>> GetRequsition()
         {
             List<IngredientQuantityDto> ingredientRequirements = new List<IngredientQuantityDto>
             {
