@@ -1,0 +1,27 @@
+<div class="content">
+
+    <mat-toolbar color="primary" class="header">
+        <span class="header-title">Izmeni jelo</span>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="form-content">
+        
+        <h3 class="center title" mat-dialog-title>Dan: {{data.dayName}} </h3>
+        <h3 class="center title" mat-dialog-title>Tip jela: {{getMealTypeName(data.mealOffer.type)}}</h3>
+        <mat-form-field class="center">
+            <input type="text" matInput [matAutocomplete]="auto" [formControl] = "formControl">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayName">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{ option.name }}
+                </mat-option>
+            </mat-autocomplete>
+        
+            </mat-form-field>
+
+            <mat-dialog-actions class="button">
+                <button class="primary-button mat-button" (click)="onSave()">Potvrdi</button>
+                <button class="secondary-button mat-button"  (click)="onCancel()">Otkazi</button>
+            </mat-dialog-actions>
+    </div>
+</div>
+
