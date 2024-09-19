@@ -54,10 +54,10 @@
       <tr>
         <th>Namirnica-magacin</th>
         <th>Namirnica-kuhinja</th>
-        <th>Pretrazi/Dodaj</th>
+        <th>Pretraži/Dodaj</th>
         <th>Skaliranje</th>
-        <th>Jedinica mjere magacin</th>
-        <th>Potvrdi/Otkazi</th>
+        <th>Jedinica mere magacin</th>
+        <th>Potvrdi/Otkaži</th>
       </tr>
     </thead>
     <tbody>
@@ -73,8 +73,8 @@
         
         </td>
         <td class="table-button">
-          <button class="small-primary-button mat-button" (click)="openSearchIngredientDialog(i)">Pretraži</button>
-          <button class="small-secondary-button mat-button" (click)="openAddIngredientDialog(i)">Dodaj</button>
+          <button class="small-primary-button mat-button" [disabled]="i.isConfirmed" (click)="openSearchIngredientDialog(i)">Pretraži</button>
+          <button class="small-secondary-button mat-button" [disabled]="i.isConfirmed" (click)="openAddIngredientDialog(i)">Dodaj</button>
         </td>
         <td>
           <input type="number" [(ngModel)]="i.scale" [disabled]="i.isConfirmed || i.ingredient?.unit?.shortName === i.warehouseUnitShortName"  />

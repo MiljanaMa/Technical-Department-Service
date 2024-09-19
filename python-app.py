@@ -15,15 +15,12 @@ logger = logging.getLogger(__name__)
 
 @app.route('/proceedExcel', methods=['POST'])
 def proceedExcel():
-    #if 'foodFile' or 'meatFile' not in request.files:
-    #    return jsonify({'error': 'No file part'}), 400
-
     foodFile = request.files['foodFile']
     meatFile = request.files['meatFile']
     food_sheet_name = request.form.get('foodSheet', None)
     meat_sheet_name = request.form.get('meatSheet', None)
     if foodFile.filename == '' or meatFile.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        return jsonify({'message': 'Postoji greška sa poslatim fajlovima'}), 400
 
     allIngredients = []
     if foodFile:
@@ -31,15 +28,21 @@ def proceedExcel():
             df = pd.read_excel(foodFile, sheet_name=food_sheet_name)
             result = get_ingredients(df)
             allIngredients.extend(result)
+        except ValueError as e:
+            return jsonify({'message': "Sheet pod imenom " + food_sheet_name + " nije pronađen."}), 400
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'message': str(e)}), 400
+        
     if meatFile:
         try:
             df = pd.read_excel(meatFile, sheet_name=meat_sheet_name)
             result = get_meats(df)
             allIngredients.extend(result)
+        except ValueError as e:
+            return jsonify({'message': "Sheet pod imenom " + meat_sheet_name + " nije pronađen."}), 400
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'message': str(e)}), 400
+        
     return jsonify(allIngredients)
         
 
@@ -47,12 +50,12 @@ def proceedExcel():
 def proceedDeliveryNote():
     
     if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+        return jsonify({'message': 'Nema priloženog dokumenta.'}), 400
 
     file = request.files['file']
 
     if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        return jsonify({'message': 'Postoji greška sa poslatim fajlovima'}), 400
 
     if file:
         try:
@@ -60,7 +63,7 @@ def proceedDeliveryNote():
             result = get_delivered_ingredients(df)
             return jsonify(result)
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'error': 'Desila se greška prilikom obrade otpremnice'}), 500
 
 
 def find_column_index_in_cell(df, search_terms):
@@ -76,110 +79,94 @@ def find_column_index_in_cell(df, search_terms):
         return None
     
 def get_delivered_ingredients(df):
-    try:
-
-        objects = []
+    objects = []
         
-        for index, row in  df.iloc[1:].iterrows():
+    for index, row in  df.iloc[1:].iterrows():
             
-            if pd.notna(row[0]) and pd.notna(row[1]):
-                object_data = {
-                    'IngredientId': 0,
-                    'IngredientName': row[0],
-                    'UnitShortName': 'deafult',
-                    'quantity': row[1]
-                }
-                objects.append(object_data)
+        if pd.notna(row[0]) and pd.notna(row[1]):
+            object_data = {
+                'IngredientId': 0,
+                'IngredientName': row[0],
+                'UnitShortName': 'deafult',
+                'quantity': row[1]
+            }
+            objects.append(object_data)
 
-        return objects
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    return objects
 
 def get_ingredients(df):
-    try:
+    nameColumn = find_column_index_in_cell(df, ['naziv robe'])
+    if(nameColumn == None):
+        raise Exception("Ne postoji kolona sa imenom naziv robe")
 
-        nameColumn = find_column_index_in_cell(df, ['naziv robe'])
-        if(nameColumn == None):
-            print("Ne postoji kolona sa imenom ugovoreno")
-
-        unitColumn = find_column_index_in_cell(df, ['jed.mjere.'])
-        if(unitColumn == None):
-            print("Ne postoji kolona sa imenom jed.mjere.")
-
-        quantityColumn = find_column_index_in_cell(df, ['ugovoreno', 'ugo.količina'])
-        if(quantityColumn == None):
-            print("Ne postoji kolona sa imenom ugovoreno")
-
-        objects = []
-        first_search_term = True
-        pattern = r'(\d+[.,]?\d*)\s*(g|gr|kg|l|ml)'
+    unitColumn = find_column_index_in_cell(df, ['jed.mjere.'])
+    if(unitColumn == None):
+        raise Exception("Ne postoji kolona sa imenom jed.mjere.")
+    
+    quantityColumn = find_column_index_in_cell(df, ['ugovoreno', 'ugo.količina'])
+    if(quantityColumn == None):
+        raise Exception("Ne postoji kolona sa imenom naziv ugovoreno")
+    
+    objects = []
+    first_search_term = True
+    pattern = r'(\d+[.,]?\d*)\s*(g|gr|kg|l|ml)'
         
-        for index, row in df.iterrows():
-            if 'naziv robe' in row.values:
-                first_search_term = False
-                continue
-            elif first_search_term:
-                continue
+    for index, row in df.iterrows():
+        if 'naziv robe' in row.values:
+            first_search_term = False
+            continue
+        elif first_search_term:
+            continue
             
-            if pd.notna(row[nameColumn]) and pd.notna(row[unitColumn]) and pd.notna(row[quantityColumn]):
-                unit = row[unitColumn]
-                number = 0
-                if not (row[unitColumn] == 'kg' or row[unitColumn] == 'lit'):
-                    match = re.search(pattern, row[nameColumn])
-                    if match:
-                        number, unit = convert_to_standard_unit(float(match.group(1).replace(',', '.')), match.group(2))
+        if pd.notna(row[nameColumn]) and pd.notna(row[unitColumn]) and pd.notna(row[quantityColumn]):
+            unit = row[unitColumn]
+            number = 0
+            if not (row[unitColumn] == 'kg' or row[unitColumn] == 'lit'):
+                match = re.search(pattern, row[nameColumn])
+                if match:
+                    number, unit = convert_to_standard_unit(float(match.group(1).replace(',', '.')), match.group(2))
                     
 
-                object_data = {
-                    'name': row[nameColumn],
-                    'warehouseUnitShortName': row[unitColumn],
-                    'scale': number,
-                    'unitShortName': unit,
-                    'isConfirmed': False
-                }
-                objects.append(object_data)
-
-        return objects
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
+            object_data = {
+                'name': row[nameColumn],
+                'warehouseUnitShortName': row[unitColumn],
+                'scale': number,
+                'unitShortName': unit,
+                'isConfirmed': False
+            }
+            objects.append(object_data)
+    return objects
 
 def get_meats(df):
-    try:
+    nameColumn = find_column_index_in_cell(df, ['VRSTE MESA'])
+    if(nameColumn == None):
+        raise Exception("Ne postoji kolona sa imenom VRSTE MESA")
 
-        nameColumn = find_column_index_in_cell(df, ['VRSTE MESA'])
-        if(nameColumn == None):
-            print("Ne postoji kolona sa imenom mesa.")
+    quantityColumn = find_column_index_in_cell(df, ['ugovoreno', 'ugo.količina', 'ugov. Kolicina'])
+    if(quantityColumn == None):
+        raise Exception("Ne postoji kolona sa imenom ugovoreno")
 
-        quantityColumn = find_column_index_in_cell(df, ['ugovoreno', 'ugo.količina', 'ugov. Kolicina'])
-        if(quantityColumn == None):
-            print("Ne postoji kolona sa imenom ugovoreno")
-
-        objects = []
-        first_search_term = True
+    objects = []
+    first_search_term = True
         
-        for index, row in df.iterrows():
-            if 'VRSTE MESA' in row.values:
-                first_search_term = False
-                continue
-            elif first_search_term:
-                continue
+    for index, row in df.iterrows():
+        if 'VRSTE MESA' in row.values:
+            first_search_term = False
+            continue
+        elif first_search_term:
+            continue
             
-            if pd.notna(row[nameColumn]) and pd.notna(row[quantityColumn]):
-                object_data = {
-                    'name': row[nameColumn],
-                    'warehouseUnitShortName': 'kg',
-                    'scale': 0,
-                    'unitShortName': 'kg',
-                    'isConfirmed': False
-                }
-                objects.append(object_data)
+        if pd.notna(row[nameColumn]) and pd.notna(row[quantityColumn]):
+            object_data = {
+                'name': row[nameColumn],
+                'warehouseUnitShortName': 'kg',
+                'scale': 0,
+                'unitShortName': 'kg',
+                'isConfirmed': False
+            }
+            objects.append(object_data)
 
-        return objects
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    return objects
 
 def convert_to_standard_unit(number, unit):
     if unit == 'kg':

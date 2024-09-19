@@ -20,7 +20,7 @@ public class KitchenContext: DbContext
     public DbSet<Meal> Meals { get; set; }
     public DbSet<DailyMenu> DailyMenus { get; set; }
     public DbSet<WeeklyMenu> WeeklyMenus { get; set; }
-    public DbSet<KitchenWarehouseIngredient> KitchenWarehouseIngredients { get; set; }
+    public DbSet<WarehouseIngredient> KitchenWarehouseIngredients { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,7 +48,7 @@ public class KitchenContext: DbContext
            .WithMany(wm => wm.Menu)
            .HasForeignKey(dm => dm.WeeklyMenuId);
 
-        modelBuilder.Entity<KitchenWarehouseIngredient>()
+        modelBuilder.Entity<WarehouseIngredient>()
             .HasOne(k => k.Ingredient)
             .WithMany()
             .HasForeignKey(k => k.IngredientId);
