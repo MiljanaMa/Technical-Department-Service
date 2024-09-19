@@ -6,7 +6,6 @@ import { DailyMenu, DayOfWeek, DayOfWeekLabels } from '../model/daily-menu.model
 import { ConsumerType, ConsumerTypeLabels, MealOffer, MealType, MealTypeLabels } from '../model/meal-offer.model';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { MatTabGroup } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import autoTable from 'jspdf-autotable';
 
@@ -25,6 +24,7 @@ export class MenusComponent implements OnInit {
   selectedDayTabIndex: number = 0;
   mealOffers: MealOffer[] = [];
   dataSource: any[] = [];
+  defaultMenus: WeeklyMenu[] = [];
   
   daysOfWeek = Object.keys(DayOfWeek)
     .filter(key => !isNaN(Number(DayOfWeek[key as keyof typeof DayOfWeek])))
@@ -52,7 +52,7 @@ export class MenusComponent implements OnInit {
   .map(key => ({
     name: WeeklyMenuStatusLabels[WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus] as keyof typeof WeeklyMenuStatusLabels],
     value: WeeklyMenuStatus[key as keyof typeof WeeklyMenuStatus]
-  })).filter(weeklyMenuStatus => ![WeeklyMenuStatus.DRAFT].includes(weeklyMenuStatus.value));
+  })).filter(weeklyMenuStatus => ![WeeklyMenuStatus.DRAFT, WeeklyMenuStatus.DRAFT_DEFAULT].includes(weeklyMenuStatus.value));
 
   displayedColumns: string[] = ['consumerType', ...this.mealTypes.map(mealType => mealType.value.toString())];
 
@@ -61,10 +61,26 @@ export class MenusComponent implements OnInit {
   ngOnInit(): void {
     this.getCurrentMenu();
     this.getNewMenu();
+    this.getDefaultMenus();
+  }
+
+  getDefaultMenus(): void {
+    this.service.getDefaultMenus().subscribe({
+      next: (result: WeeklyMenu[]) => {
+        console.log("DEFAULT:", result)
+        this.defaultMenus = result;       
+    },
+      error: (error) => {
+        console.error('Error fetching default menus:', error);
+        if (error.error && error.error.errors) {
+          console.log('Validation errors:', error.error.errors);
+        }
+      }
+    });
   }
 
   getCurrentMenu(): void {
-    this.service.getMenu('CURRENT').subscribe({
+    this.service.getMenuByStatus('CURRENT').subscribe({
       next: (result: WeeklyMenu) => {
         this.currentWeeklyMenu = result;
         this.selectedWeeklyMenu = this.currentWeeklyMenu;
@@ -85,7 +101,7 @@ export class MenusComponent implements OnInit {
   }
 
   getNewMenu(): void {
-    this.service.getMenu('NEW').subscribe({
+    this.service.getMenuByStatus('NEW').subscribe({
       next: (result: WeeklyMenu) => {
         this.newWeeklyMenu = result;    
     },
@@ -118,21 +134,20 @@ export class MenusComponent implements OnInit {
     this.selectedMenuTabIndex = this.weeklyMenuStatuses[event.index].value;
     if(this.selectedMenuTabIndex == WeeklyMenuStatus.CURRENT){
       this.selectedWeeklyMenu = this.currentWeeklyMenu;
-    }else{
+    }else if(this.selectedMenuTabIndex == WeeklyMenuStatus.NEW){
       this.selectedWeeklyMenu = this.newWeeklyMenu;
+    }else{
+      this.selectedWeeklyMenu = undefined;
     }
     if (this.selectedWeeklyMenu && this.selectedWeeklyMenu.menu && this.selectedWeeklyMenu.menu.length > 0) {
       this.selectedDailyMenu = this.selectedWeeklyMenu.menu.find(menu => menu.dayOfWeek === DayOfWeek.MONDAY);      
       this.updateDataSource();
     }
-    console.log("SELEKTOVANI MENI:")
-    console.log( this.selectedWeeklyMenu)
     this.selectedMenuTabIndex = event.index;
   } 
 
   onSelectedDayTabChange(event: any): void {
     this.selectedDayTabIndex = this.daysOfWeek[event.index].value;
-    console.log("Selected day of week tab: " + this.selectedDayTabIndex);
     if (this.selectedWeeklyMenu && this.selectedWeeklyMenu.menu) {
       for (const dailyMenu of this.selectedWeeklyMenu.menu) {
         if (dailyMenu.dayOfWeek === this.selectedDayTabIndex) {
@@ -174,7 +189,7 @@ export class MenusComponent implements OnInit {
     return date;
   }
 
-  showTabularDefaultMenu(): void {
+  showDraftFromDefaultMenu(id: number): void {
     const menus: DailyMenu[] = [];
     this.newWeeklyMenu = {
       from: this.formatDate(this.getNextMonday()),
@@ -182,10 +197,10 @@ export class MenusComponent implements OnInit {
       menu: menus,
       status: WeeklyMenuStatus.DRAFT
     };
-    this.service.createDraftFromDefaultMenu(-1).subscribe({
+    this.service.createDraftFromDefaultMenu(id).subscribe({
       next: (result: WeeklyMenu) => {
         console.log("Weekly menu:", result);
-        this.router.navigate(['/tabular-menu/draft']);
+        this.router.navigate([`/tabular-menu`, result.id]);
       },
       error: (error: any) => {
         console.error('Error saving weekly menu:', error);
@@ -217,10 +232,32 @@ export class MenusComponent implements OnInit {
     return nextMondayPlusWeek;
   }
 
-  changeNewMenu(): void {
-    this.router.navigate(['/tabular-menu/new']);
-  }
+  changeMenu(id: number): void {
+   this.router.navigate([`/tabular-menu`, id]);
+  } 
+
+  deleteMenu(id: number): void {
+    const confirmation = window.confirm("Da li ste sigurni da želite da izbrišete šablonski meni?");
+  
+    if (confirmation) {
+      this.service.deleteMenu(id).subscribe({
+        next: (result: any) => {
+          this.getDefaultMenus();
+        },
+        error: (error: any) => {
+          console.error('Error deleting weekly menu:', error);
+          if (error.error && error.error.errors) {
+            console.log('Validation errors:', error.error.errors);
+          }
+        }
+      });
+    }
+  } 
  
+  openMenuForm(status: string): void{
+    this.router.navigate([`/custom-menu`, status]);
+  }
+
   async exportToPDF(): Promise<void> {
     if (!this.selectedWeeklyMenu) {
       console.error('No weekly menu selected for export.');
@@ -308,7 +345,6 @@ export class MenusComponent implements OnInit {
 
     let yPosition = 20;
 
-    // Group mealOffers by type
     const groupedByType = mealOffers.reduce((acc, mealOffer) => {
         const typeKey = MealTypeLabels[mealOffer.type];
         if (!acc[typeKey]) {
@@ -318,22 +354,18 @@ export class MenusComponent implements OnInit {
         return acc;
     }, {} as Record<string, MealOffer[]>);
 
-    // Iterate over each type group
     for (const type in groupedByType) {
         doc.setFont('Helvetica', 'bold');
         doc.setFontSize(16);
         doc.text(`${type}`, 14, yPosition);
         yPosition += 10;
 
-        // Add meal offers for this type
         groupedByType[type].forEach(mealOffer => {
           doc.setFont('Helvetica', 'normal');
             doc.setFontSize(12);
             doc.text(`Jelo: ${mealOffer.mealName}`, 14, yPosition);
-            // Move position down for ingredients
             yPosition += 3;
 
-            // Check if there are ingredients
             if (mealOffer.ingredients && mealOffer.ingredients.length > 0) {
                 autoTable(doc, {
                   startY: yPosition,
@@ -344,23 +376,18 @@ export class MenusComponent implements OnInit {
                       ingredient.unitShortName || ''
                   ]),
               });
-
-                // Update yPosition after the table
+    
                 yPosition = (doc as any).lastAutoTable.finalY + 10;
             }else {
               doc.text('No ingredients available.', 10, yPosition);
               yPosition += 10;
           }
-  
-          // Add some space between different meal offers
           yPosition += 5;
       });
   
-      // Add some space between different types
       yPosition += 5;
   }
   
-  // Save the PDF
   doc.save('jelovnik-sa-kolicinama.pdf');
 }
 }

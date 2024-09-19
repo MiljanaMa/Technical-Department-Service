@@ -11,6 +11,7 @@ namespace Technical_Department.Kitchen.Core.Domain.Enums
        CURRENT,
        DRAFT,
        NEW,
-       DEFAULT
+       DEFAULT,
+       DRAFT_DEFAULT
     }
 }

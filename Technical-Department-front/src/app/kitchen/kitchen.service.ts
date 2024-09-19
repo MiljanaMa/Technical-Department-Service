@@ -25,8 +25,10 @@ export class KitchenService {
     return this.http.post<Boolean>(`${environment.apiHost}weekly-menu/add-meal-offer`, mealOffer);
   }
   
-  createOrFetchWeeklyMenu(weeklyMenu: WeeklyMenu): Observable<WeeklyMenu> {
-    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu`, weeklyMenu);
+  createOrFetchWeeklyMenu(menuStatus: string): Observable<WeeklyMenu> {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("status", menuStatus);
+    return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu`, null, {params: queryParams});
   }
 
   createDraftFromDefaultMenu(defaultMenuId: number): Observable<WeeklyMenu> {
@@ -34,7 +36,7 @@ export class KitchenService {
     return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/default`, null, {params});
   }
   
-  createCustomMenu(calories: number): Observable<WeeklyMenu> {
+  createCalorieBasedMenu(calories: number): Observable<WeeklyMenu> {
     const params = new HttpParams().set('calories', calories.toString());
     return this.http.post<WeeklyMenu>(environment.apiHost + `weekly-menu/custom-menu`, null, { params });
   }
@@ -49,10 +51,23 @@ export class KitchenService {
     queryParams = queryParams.append("dailyMenuId", dailyMenuId);
     return this.http.get<MealOffer[]>(environment.apiHost + `weekly-menu/get-ingredients-requirements`,  {params: queryParams})
   }
-  getMenu(menuStatus: string): Observable<WeeklyMenu> {
+
+  getMenuByStatus(menuStatus: string): Observable<WeeklyMenu> {
     let queryParams = new HttpParams();
     queryParams = queryParams.append("status", menuStatus);
     return this.http.get<WeeklyMenu>(environment.apiHost + `weekly-menu/status`, {params: queryParams})
+  }
+
+  deleteMenu(menuId: number): Observable<void> {
+    return this.http.delete<void>(environment.apiHost + 'weekly-menu/' + menuId);
+  }
+
+  getDefaultMenus(): Observable<WeeklyMenu[]> {
+    return this.http.get<WeeklyMenu[]>(environment.apiHost + `weekly-menu/default`)
+  }
+
+  getMenuById(menuId: number): Observable<WeeklyMenu> {
+    return this.http.get<WeeklyMenu>(environment.apiHost + `weekly-menu/` + menuId)
   }
 
   getMeal(mealId: number): Observable<Meal> {

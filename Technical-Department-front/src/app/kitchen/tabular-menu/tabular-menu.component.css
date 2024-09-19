@@ -17,19 +17,16 @@
 .main-meal {
   background-color: #e3f2fd; 
   border-radius: 8px; 
-  padding: 8px; 
 }
 
 .salad {
   background-color: #e8f5e9; 
   border-radius: 8px; 
-  padding: 8px;
 }
 
 .snack {
   background-color: #fff8e1; 
   border-radius: 8px; 
-  padding: 8px;
 }
 
 .no-menu-message {
@@ -110,6 +107,47 @@ th.mat-header-cell {
   background-color: #002C51;
 }
 
-mat-icon{
-  color: 003B6D;
+.icon.mat-button{
+  background-color: transparent;
+  border-color: transparent;
+  margin: 2px;
+  padding: 2px;
+  color: #003B6D;
+}
+
+.icon.mat-button:hover{
+  background-color: #F5F5F5;
+  border-color: #F5F5F5;
+  border-radius: 5px;
+  margin: 2px;
+  color: #003B6D;
+}
+.search-content {
+  background-color: #ffffff; 
+  padding: 5px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+  margin: 5px; 
+  min-width: 400px;
+  width: 300px;
+  max-width: 500px;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+mat-card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px;
+  color: #616161;
+}
+
+mat-form-field{
+  margin-top: 10px;
+  width: 100%;
 }

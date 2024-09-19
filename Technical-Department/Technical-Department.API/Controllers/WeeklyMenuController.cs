@@ -2,6 +2,7 @@
 using Technical_Department.Kitchen.API.Dtos;
 using Technical_Department.Kitchen.API.Public;
 using Technical_Department.Kitchen.Core.Domain;
+using Technical_Department.Kitchen.Core.UseCases;
 
 namespace Technical_Department.API.Controllers
 {
@@ -9,14 +10,15 @@ namespace Technical_Department.API.Controllers
     public class WeeklyMenuController : BaseApiController
     {
         private readonly IWeeklyMenuService _weeklyMenuService;
-        private readonly ICustomMenuService _cusomMenuService;
+        private readonly ICalorieBasedMenuService _cusomMenuService;
 
-        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, ICustomMenuService customMenuService)
+        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, ICalorieBasedMenuService customMenuService)
         {
             _weeklyMenuService = weeklyMenuService;
             _cusomMenuService = customMenuService;
 
         }
+
         [HttpGet("status")]
         public ActionResult<WeeklyMenuDto> GetMenuByStatus([FromQuery] string status)
         {
@@ -24,11 +26,25 @@ namespace Technical_Department.API.Controllers
             return CreateResponse(result);
         }
 
+        [HttpGet("default")]
+        public ActionResult<List<WeeklyMenuDto>> GetDefaultMenus()
+        {
+            var result = _weeklyMenuService.GetDefaultMenus();
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<WeeklyMenuDto> Get(int id)
+        {
+            var result = _weeklyMenuService.GetMenuById(id);
+            return CreateResponse(result);
+        }
+
         [HttpPost("")]
-        public ActionResult<WeeklyMenuDto> Create([FromBody] WeeklyMenuDto weeklyMenu)
+        public ActionResult<WeeklyMenuDto> Create([FromQuery] string status)
         
         {
-            var result = _weeklyMenuService.CreateOrFetch(weeklyMenu);
+            var result = _weeklyMenuService.CreateOrFetch(status);
             return CreateResponse(result);
         }
 
@@ -73,10 +89,17 @@ namespace Technical_Department.API.Controllers
         }
 
         [HttpPost("custom-menu")]
-        public ActionResult<WeeklyMenuDto> CreateCustomMenu([FromQuery] int calories)
+        public ActionResult<WeeklyMenuDto> CreateCalorieBasedMenu([FromQuery] int calories)
 
         {
-            var result = _cusomMenuService.CreateCustomWeeklyMenu(calories);
+            var result = _cusomMenuService.CreateCalorieBasedWeeklyMenu(calories);
+            return CreateResponse(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var result = _weeklyMenuService.Delete(id);
             return CreateResponse(result);
         }
     }
