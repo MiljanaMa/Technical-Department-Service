@@ -8,25 +8,25 @@ using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 
 namespace Technical_Department.Kitchen.Core.UseCases;
 
-public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto, KitchenWarehouseIngredient>, IKitchenWarehouseService
+public class WarehouseService : CrudService<WarehouseIngredientDto, WarehouseIngredient>, IWarehouseService
 {
-    private readonly IKitchenWarehouseRepository _kitchenWarehouseRepository;
+    private readonly IWarehouseRepository _warehouseRepository;
     private readonly IIngredientRepository _ingredientRepository;
     private readonly IIngredientRequirementService _ingredientRequirementService;
-    public KitchenWarehouseService(IKitchenWarehouseRepository kitchenWarehouseRepository, IIngredientRepository ingredientRepository,
+    public WarehouseService(IWarehouseRepository kitchenWarehouseRepository, IIngredientRepository ingredientRepository,
         IIngredientRequirementService ingredientRequirementService,
         IMapper mapper) : base(kitchenWarehouseRepository, mapper)
     {
-        _kitchenWarehouseRepository = kitchenWarehouseRepository;
+        _warehouseRepository = kitchenWarehouseRepository;
         _ingredientRepository = ingredientRepository;
         _ingredientRequirementService = ingredientRequirementService;
     }
-    public Result<List<KitchenWarehouseIngredientDto>> StartNewBusinessYear(List<KitchenWarehouseIngredientDto> ingredients)
+    public Result<List<WarehouseIngredientDto>> StartNewBusinessYear(List<WarehouseIngredientDto> ingredients)
     {
         try
         {
             var newIngredients = UpdateWarehouseIngredients(MapToDomain(ingredients));
-            var result = _kitchenWarehouseRepository.AddNewWarehouseIngredients(newIngredients);
+            var result = _warehouseRepository.AddNewWarehouseIngredients(newIngredients);
             var ingredientIds = ingredients.Select(i => i.IngredientId).ToList();
             _ingredientRepository.SyncIngredientsStatuses(ingredientIds);
 
@@ -38,7 +38,7 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
         }
     }
 
-    private List<KitchenWarehouseIngredient> UpdateWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
+    private List<WarehouseIngredient> UpdateWarehouseIngredients(List<WarehouseIngredient> ingredients)
     {
         foreach (var ingredient in ingredients)
         {
@@ -48,11 +48,11 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
         return ingredients;
     }
 
-    public Result<List<KitchenWarehouseIngredientDto>> GetAll()
+    public Result<List<WarehouseIngredientDto>> GetAll()
     {
         try
         {
-            var result = _kitchenWarehouseRepository.GetAll();
+            var result = _warehouseRepository.GetAll();
             return MapToDto(result);
 
         }
@@ -61,15 +61,15 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
             return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
         }
     }
-    public Result UpdateKitchenWarehouse(List<IngredientQuantityDto> deliveryNoteIngredients)
+    public Result UpdateWarehouse(List<IngredientQuantityDto> deliveryNoteIngredients)
     {
         try
         {
             List<IngredientQuantityDto>  requirementIngredients = _ingredientRequirementService.GetIngredientRequirements().Value;
-            var updatedIngredients = new List<KitchenWarehouseIngredient>();
+            var updatedIngredients = new List<WarehouseIngredient>();
             foreach (var deliveryNoteIngredient in deliveryNoteIngredients)
             {
-                var kitchenWarehouseIngredient = _kitchenWarehouseRepository.GetByWarehouseLabel(deliveryNoteIngredient.IngredientName);
+                var kitchenWarehouseIngredient = _warehouseRepository.GetByWarehouseLabel(deliveryNoteIngredient.IngredientName);
 
                 if (kitchenWarehouseIngredient != null)
                 {
@@ -86,7 +86,7 @@ public class KitchenWarehouseService : CrudService<KitchenWarehouseIngredientDto
                     return Result.Fail(FailureCode.NotFound).WithError($"Namirnica sa imenom {deliveryNoteIngredient.IngredientName} ne postoji!");
                 }
             }
-            _kitchenWarehouseRepository.UpdateIngredients(updatedIngredients);
+            _warehouseRepository.UpdateIngredients(updatedIngredients);
 
             return Result.Ok();
         }

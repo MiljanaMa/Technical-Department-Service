@@ -25,8 +25,6 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
         try
         {
             MeasurementUnit measurementUnit = _measurementUnitRepository.Get(ingredient.UnitId);
-            if (measurementUnit == null)
-                Result.Fail(FailureCode.NotFound).WithError("Merna jedinica ne postoji");
 
             Ingredient newIngredient = MapToDomain(ingredient);
             newIngredient.SetMeasurementUnit(measurementUnit);
@@ -35,9 +33,13 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
             return MapToDto(result);
 
         }
+        catch (KeyNotFoundException)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError("Merna jedinica ne postoji.");
+        }
         catch(Exception ex)
         {
-            return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+            return Result.Fail(FailureCode.InvalidArgument).WithError("Neispravni podaci, pokušajte ponovo.");
         }
     }
     public Result<IngredientDto> Update(IngredientDto ingredient)
@@ -45,26 +47,27 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
         try
         {
             MeasurementUnit measurementUnit = _measurementUnitRepository.Get(ingredient.UnitId);
-            if (measurementUnit == null)
-                Result.Fail(FailureCode.NotFound).WithError("Merna jedinica ne postoji");
 
             Ingredient updatedIngredient = MapToDomain(ingredient);
             updatedIngredient.SetMeasurementUnit(measurementUnit);
 
             var dbIngredient = _ingredientRepository.Get(ingredient.Id);
-            if (dbIngredient.Calories != updatedIngredient?.Calories)
+            if (dbIngredient.Calories != updatedIngredient.Calories)
             {
                 var newCalories = measurementUnit.Name.Equals("Komad") ? (updatedIngredient.Calories * 0.6) : updatedIngredient.Calories * 10;
                 _mealRepository.UpdateMealCalories(dbIngredient, newCalories);
             }
-                _mealRepository.UpdateMealCalories(dbIngredient, updatedIngredient.Calories);
             var result = _ingredientRepository.Update(updatedIngredient);
             return MapToDto(result);
 
         }
+        catch (KeyNotFoundException)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError("Merna jedinica ne postoji.");
+        }
         catch (Exception ex)
         {
-            return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+            return Result.Fail(FailureCode.InvalidArgument).WithError("Neispravni podaci, pokušajte ponovo.");
         }
     }
     public Result<PagedResult<IngredientDto>> GetPagedWithMeasurementUnit(int page, int pageSize)
@@ -76,7 +79,7 @@ public class IngredientService : CrudService<IngredientDto, Ingredient>, IIngred
     {
         Meal meal = _mealRepository.FindFirstWithIngredient(ingredientId);
         if (meal != null)
-            return Result.Fail(FailureCode.Forbidden).WithError("It is not allowed to delete ingredient, it is connected to meal.");
+            return Result.Fail(FailureCode.Forbidden).WithError("Namirnica je povezana sa jelom i nije je moguće obrisati.");
         _ingredientRepository.Delete(ingredientId);
         return Result.Ok();
     }

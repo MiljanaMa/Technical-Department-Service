@@ -12,10 +12,10 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
         private readonly ICrudRepository<Meal> _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IWeeklyMenuRepository _weeklyMenuRepository;
-        private readonly IKitchenWarehouseRepository _kitchenWarehouseRepository;
+        private readonly IWarehouseRepository _kitchenWarehouseRepository;
 
         public IngredientRequirementService(IMealRepository mealRepository, IIngredientRepository ingredientRepository,
-            IWeeklyMenuRepository weeklyMenuRepository, IKitchenWarehouseRepository kitchenWarehouseRepository)
+            IWeeklyMenuRepository weeklyMenuRepository, IWarehouseRepository kitchenWarehouseRepository)
         {
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;

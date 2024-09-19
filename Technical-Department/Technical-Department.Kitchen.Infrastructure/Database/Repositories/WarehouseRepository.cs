@@ -11,23 +11,23 @@ using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 
 namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 {
-    public class KitchenWarehouseRepository : CrudDatabaseRepository<KitchenWarehouseIngredient, KitchenContext>, IKitchenWarehouseRepository
+    public class WarehouseRepository : CrudDatabaseRepository<WarehouseIngredient, KitchenContext>, IWarehouseRepository
     {
-        private readonly DbSet<KitchenWarehouseIngredient> _dbSet;
+        private readonly DbSet<WarehouseIngredient> _dbSet;
 
-        public KitchenWarehouseRepository(KitchenContext dbContext) : base(dbContext)
+        public WarehouseRepository(KitchenContext dbContext) : base(dbContext)
         {
-            _dbSet = dbContext.Set<KitchenWarehouseIngredient>();
+            _dbSet = dbContext.Set<WarehouseIngredient>();
         }
-        public List<KitchenWarehouseIngredient> GetAll()
+        public List<WarehouseIngredient> GetAll()
         {
             return _dbSet.Include(i => i.Ingredient).ThenInclude(ing => ing.Unit).ToList();
         }
-        public KitchenWarehouseIngredient GetByWarehouseLabel(string warehouseLabel)
+        public WarehouseIngredient GetByWarehouseLabel(string warehouseLabel)
         {
             return _dbSet.Include(i => i.Ingredient).FirstOrDefault(i => i.WarehouseLabel.Equals(warehouseLabel));
         }
-        public List<KitchenWarehouseIngredient> AddNewWarehouseIngredients(List<KitchenWarehouseIngredient> ingredients)
+        public List<WarehouseIngredient> AddNewWarehouseIngredients(List<WarehouseIngredient> ingredients)
         {
             var allIngredients = _dbSet.ToList();
             _dbSet.RemoveRange(allIngredients);
@@ -35,7 +35,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
             DbContext.SaveChanges();
             return _dbSet.Include(i => i.Ingredient).ThenInclude(ing => ing.Unit).ToList();
         }
-        public void UpdateIngredients(List<KitchenWarehouseIngredient> ingredients)
+        public void UpdateIngredients(List<WarehouseIngredient> ingredients)
         {
             foreach (var ingredient in ingredients)
             {
@@ -44,7 +44,7 @@ namespace Technical_Department.Kitchen.Infrastructure.Database.Repositories
 
             DbContext.SaveChanges();
         }
-        public KitchenWarehouseIngredient? GetByIngredientId(long ingredientId)
+        public WarehouseIngredient? GetByIngredientId(long ingredientId)
         {
             return _dbSet.Include(i => i.Ingredient).ThenInclude(i => i.Unit).FirstOrDefault(i => i.IngredientId ==  ingredientId);
         }
