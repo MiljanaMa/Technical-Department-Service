@@ -19,6 +19,6 @@ export const WeeklyMenuStatusLabels = {
     [WeeklyMenuStatus.CURRENT]: "TRENUTNI",
     [WeeklyMenuStatus.DRAFT]: "U IZRADI",
     [WeeklyMenuStatus.NEW]: "NOVI",
-    [WeeklyMenuStatus.DEFAULT]: "DIFOLTNI"
+    [WeeklyMenuStatus.DEFAULT]: "ŠABLONSKI"
 };
 

@@ -13,8 +13,9 @@
   </div>
 
   <div class="button">
-    <button class="primary-button mat-button"  (click)="createCustomMenu()">Generisi meni</button>
+    <button class="primary-button mat-button"  (click)="createCustomMenu()">Generisi jelovnik</button>
     <button  *ngIf="weeklyMenu" class="primary-button mat-button"  (click)="exportToPDF()">Preuzmi jelovnik</button>
+    <button  *ngIf="weeklyMenu" class="secondary-button mat-button">Izmeni jelovnik</button>
   </div>
 
 <div class="table" *ngIf="weeklyMenu">
