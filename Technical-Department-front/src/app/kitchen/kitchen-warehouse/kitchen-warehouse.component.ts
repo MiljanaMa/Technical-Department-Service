@@ -11,13 +11,16 @@ import { Router } from '@angular/router';
 })
 export class KitchenWarehouseComponent implements OnInit {
 public ingredients: KitchenWarehouseIngredient[] = [];
+public filteredIngredients: KitchenWarehouseIngredient[] = [];
 searchControl = new FormControl();
 
 constructor(private service: KitchenService, private router: Router){}
 ngOnInit(): void {
+  this.searchControl.valueChanges.subscribe(value => this.searchIngredients(value));
   this.service.getKitchenWarehouse().subscribe({
     next:(result: KitchenWarehouseIngredient[]) => {
       this.ingredients = result;
+      this.filteredIngredients = result;
     },
     error: (error) => {
       // Handle error
@@ -27,6 +30,11 @@ ngOnInit(): void {
 
 showYearlyExcelImport(): void{
   this.router.navigate([`/yearly-excel-import`]);
+}
+searchIngredients(query: string): void {
+  const lowerCaseQuery = query.toLowerCase();
+  this.filteredIngredients = this.ingredients.filter(wi =>
+    wi.ingredient.name.toLowerCase().includes(lowerCaseQuery));
 }
 
 }
