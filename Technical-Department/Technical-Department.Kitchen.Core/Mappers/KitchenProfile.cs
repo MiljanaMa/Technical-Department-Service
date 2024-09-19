@@ -15,6 +15,6 @@ public class KitchenProfile : Profile
         CreateMap<MealOfferDto, MealOffer>().ReverseMap();
         CreateMap<DailyMenuDto, DailyMenu>().ReverseMap();
         CreateMap<WeeklyMenuDto, WeeklyMenu>().ReverseMap();
-        CreateMap<KitchenWarehouseIngredientDto, KitchenWarehouseIngredient>().ReverseMap();
+        CreateMap<WarehouseIngredientDto, WarehouseIngredient>().ReverseMap();
     }
 }

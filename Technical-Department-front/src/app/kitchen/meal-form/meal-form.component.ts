@@ -26,18 +26,17 @@ export class MealFormComponent implements OnInit {
     'UŽINA': DishType.SNACK
   };
 
-  constructor(private fb: FormBuilder, private service: KitchenService, private route: ActivatedRoute, 
-              private router: Router, private snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private service: KitchenService, private route: ActivatedRoute,
+    private router: Router, private snackBar: MatSnackBar) {
     this.mealForm = this.fb.group({
       name: ['', Validators.required],
       code: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       date: ['', Validators.required],
       isBreadIncluded: [],
       types: this.fb.array([]),
-      ingredients: this.fb.array([])
+      ingredients: this.fb.array([]),
+      updateOn: 'submit'
     });
-    //this.initializeIngredients(5);
-
   }
 
   private addCheckboxes() {
@@ -67,18 +66,15 @@ export class MealFormComponent implements OnInit {
           this.loadMeal(parseInt(id || ''));
         } else {
           this.addCheckboxes();
-          this.initializeIngredients(5);
+          this.initializeIngredients(3);
         }
         this.initializeIngredientFilteredOptions();
-      },
-      error: () => {
-        // Handle error
       }
     });
   }
   validateIngredient(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) return { required: true }; 
-    return this.isString(control.value) ? { invalidMeal: true } : null; 
+    if (!control.value) return { required: true };
+    return this.isString(control.value) ? { invalidMeal: true } : null;
   }
   private isString(variable: any) {
     return typeof variable === "string";
@@ -98,9 +94,6 @@ export class MealFormComponent implements OnInit {
         result.ingredients.forEach((ingredient: any) => {
           this.addExistingIngredient(ingredient);
         });
-      },
-      error: () => {
-        // Handle error
       }
     });
   }
@@ -109,7 +102,8 @@ export class MealFormComponent implements OnInit {
     var existingIngredient = this.allIngredients.filter(ingredient => ingredient.id === iq.ingredientId);
     const ingredientGroup = this.fb.group({
       ingredient: [existingIngredient[0], [this.validateIngredient.bind(this)]],
-      quantity: [iq.quantity, Validators.required]
+      quantity: [iq.quantity, Validators.required],
+      updateOn: 'submit'
     });
 
     this.ingredients.push(ingredientGroup);
@@ -122,8 +116,9 @@ export class MealFormComponent implements OnInit {
 
   addNewIngredient(): void {
     const ingredientGroup = this.fb.group({
-      ingredient: ['', [this.validateIngredient.bind(this)]],
-      quantity: [null, [Validators.required,  Validators.pattern(/^(?!0(\.0+)?$)\d+(\.\d+)?$/)]]
+      ingredient: ['', [Validators.required, this.validateIngredient.bind(this)]],
+      quantity: [null, [Validators.required, Validators.pattern(/^(?!0(\.0+)?$)\d+(\.\d+)?$/)]],
+      updateOn: 'submit'
     });
     this.ingredients.push(ingredientGroup);
     this.setupIngredientAutocomplete(ingredientGroup, this.ingredients.length - 1);
@@ -134,7 +129,7 @@ export class MealFormComponent implements OnInit {
     this.ingredientFilteredOptions.splice(index, 1);
   }
 
-  onSubmit(): void {
+  saveIngredient(): void {
     if (this.mealForm.valid) {
 
       let dateTime = new Date(this.mealForm.value.date);
@@ -164,8 +159,8 @@ export class MealFormComponent implements OnInit {
           next: () => {
             this.router.navigate([`meals`]);
           },
-          error: () => {
-            // Handle error
+          error: (error: any) => {
+            this.errorMessage();
           }
         });
       } else {
@@ -174,16 +169,15 @@ export class MealFormComponent implements OnInit {
             this.router.navigate([`meals`]);
           },
           error: (error: any) => {
-            console.log(error)
-            // Handle error
+            this.errorMessage();
           }
         });
       }
-    }else{
-      this.snackBar.open('Proverite da li su sva polja forme validno popunjene.', 'OK', {
-        duration: 3000, 
-        verticalPosition: 'top',
-        panelClass: ['mat-warn'] 
+    }
+    else {
+      this.snackBar.open('Proverite da li su sva polja forme validno popunjena.', 'OK', {
+        duration: 3000,
+        verticalPosition: 'top'
       });
     }
   }
@@ -220,6 +214,15 @@ export class MealFormComponent implements OnInit {
   private initializeIngredientFilteredOptions(): void {
     this.ingredients.controls.forEach((_, index) => {
       this.setupIngredientAutocomplete(this.ingredients.at(index) as FormGroup, index);
+    });
+  }
+  onCancel(): void {
+    this.router.navigate([`meals`]);
+  }
+  private errorMessage() {
+    this.snackBar.open("Greška prilikom unosa, pokušajte ponovo.", 'OK', {
+      duration: 3000,
+      verticalPosition: 'top'
     });
   }
 }
