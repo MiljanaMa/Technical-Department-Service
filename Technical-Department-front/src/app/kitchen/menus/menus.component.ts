@@ -361,6 +361,6 @@ export class MenusComponent implements OnInit {
   }
   
   // Save the PDF
-  doc.save('meal_offers.pdf');
+  doc.save('jelovnik-sa-kolicinama.pdf');
 }
 }
