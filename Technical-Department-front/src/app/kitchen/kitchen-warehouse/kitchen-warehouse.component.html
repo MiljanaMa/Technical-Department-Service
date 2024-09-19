@@ -20,7 +20,7 @@
     </mat-card>
   </div>
   <div class="center-table">
-    <table class="ingredient-table" *ngIf="this.ingredients.length > 0">
+    <table class="ingredient-table" *ngIf="this.filteredIngredients.length > 0">
       <thead>
         <tr>
           <th>Namirnica-kuhinja</th>
@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let i of ingredients">
+        <tr *ngFor="let i of filteredIngredients">
           <td>{{ i.ingredient.name }}</td>
           <td>{{ i.warehouseLabel }}</td>
           <td>{{ i.quantity }}</td>
