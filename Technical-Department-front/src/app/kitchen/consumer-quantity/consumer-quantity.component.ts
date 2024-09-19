@@ -179,7 +179,7 @@ export class ConsumerQuantityComponent {
       });
     });
     if (this.currentWeeklyMenu != undefined) {
-      this.service.getIngredientsRequirements(this.currentWeeklyMenu).subscribe({
+      this.service.getRequsition(this.currentWeeklyMenu).subscribe({
         next: (result: IngredientQuantity[]) => {
           this.downloadExcel(result)
         },

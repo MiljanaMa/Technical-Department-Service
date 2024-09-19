@@ -7,6 +7,7 @@ namespace Technical_Department.Kitchen.API.Public
 {
     public interface IIngredientRequirementService
     {
-        Result<List<IngredientQuantityDto>> GetIngredientRequirements();
+        Result<List<IngredientQuantityDto>> GetRequsition();
+        Result<List<MealOfferDto>> GetIngredientRequirements(long dailyMenuId);
     }
 }
