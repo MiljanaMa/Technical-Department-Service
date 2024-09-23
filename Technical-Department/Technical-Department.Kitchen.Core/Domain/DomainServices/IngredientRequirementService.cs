@@ -175,7 +175,7 @@ namespace Technical_Department.Kitchen.Core.Domain.DomainServices
             int tomorrowDayOfWeek = (int)DateTime.Today.AddDays(1).DayOfWeek;
             tomorrowDayOfWeek = tomorrowDayOfWeek == 0 ? 6 : tomorrowDayOfWeek - 1;
 
-            WeeklyMenuStatus menuStatus = tomorrowDayOfWeek == 6 ? WeeklyMenuStatus.NEW : WeeklyMenuStatus.CURRENT;
+            WeeklyMenuStatus menuStatus = tomorrowDayOfWeek == 0 ? WeeklyMenuStatus.NEW : WeeklyMenuStatus.CURRENT;
             WeeklyMenu weeklyMenu = _weeklyMenuRepository.GetByStatus(menuStatus);
 
             if (weeklyMenu == null)
