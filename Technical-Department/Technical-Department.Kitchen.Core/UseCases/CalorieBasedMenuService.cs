@@ -15,16 +15,18 @@ using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
-    public class CustomMenuService : BaseService<WeeklyMenuDto, WeeklyMenu>, ICustomMenuService
+    public class CalorieBasedMenuService : BaseService<WeeklyMenuDto, WeeklyMenu>, ICalorieBasedMenuService
     {
         private readonly IMealRepository _mealRepository;
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
-        public CustomMenuService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base (mapper )
+        private List<long> _recentMealIds = new List<long>();
+        public CalorieBasedMenuService(IMealRepository mealRepository, IIngredientRepository ingredientRepository, IMapper mapper) : base (mapper )
         {
             _mealRepository = mealRepository;
             _ingredientRepository = ingredientRepository;
             _mapper = mapper;
+            _recentMealIds = new List<long>();
         }
 
         private WeeklyMenuDto ReturnMenuWithMealInformation(WeeklyMenu weeklyMenu)
@@ -36,23 +38,9 @@ namespace Technical_Department.Kitchen.Core.UseCases
                 {
                     foreach (var mealOffer in dailyMenu.Menu)
                     {
-                        mealOffer.Ingredients = new List<IngredientQuantityDto>();
                         var meal = _mealRepository.Get(mealOffer.MealId);
                         mealOffer.MealName = meal.Name;
-                        mealOffer.Calories = meal.Calories;
-                        
-                        if (meal.Ingredients != null)
-                        {
-                            foreach (var item in meal.Ingredients)
-                            {
-                                var ingredient = _ingredientRepository.Get(item.IngredientId);
-                                var ingredientQuantity = new IngredientQuantityDto();
-                                ingredientQuantity.IngredientName = ingredient.Name;
-                                ingredientQuantity.Quantity = item.Quantity;
-                                ingredientQuantity.UnitShortName = ingredient.Unit.ShortName;
-                                mealOffer.Ingredients.Add(ingredientQuantity);
-                            }
-                        }
+                        mealOffer.Calories = meal.Calories;                  
                     }
                 }
                 return menuDto;
@@ -60,10 +48,12 @@ namespace Technical_Department.Kitchen.Core.UseCases
             return MapToDto(weeklyMenu);
         }
 
-        public Result<WeeklyMenuDto> CreateCustomWeeklyMenu(int totalCalories)
+        public Result<WeeklyMenuDto> CreateCalorieBasedWeeklyMenu(int totalCalories)
         {
 
             var weeklyMenu = new WeeklyMenu();
+            weeklyMenu.SetDefaultWeekDates();
+            _recentMealIds.Clear();
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -127,14 +117,14 @@ namespace Technical_Department.Kitchen.Core.UseCases
 
             double dynamicTolerance = requiredCalories * 0.15;
             var mealsWithinRange = availableMeals
-                .Where(meal => Math.Abs(meal.Calories - requiredCalories) <= dynamicTolerance)
+                .Where(meal => Math.Abs(meal.Calories - requiredCalories) <= dynamicTolerance && !_recentMealIds.Contains(meal.Id))
                 .OrderBy(meal => Math.Abs(meal.Calories - requiredCalories))
                 .ToList();
 
             if (!mealsWithinRange.Any())
             {
                 mealsWithinRange = availableMeals
-                    .Where(meal => meal.Calories <= requiredCalories + dynamicTolerance)
+                    .Where(meal => meal.Calories <= requiredCalories + dynamicTolerance && !_recentMealIds.Contains(meal.Id))
                     .OrderBy(meal => meal.Calories)
                     .ToList();
             }
@@ -143,9 +133,17 @@ namespace Technical_Department.Kitchen.Core.UseCases
             var random = new Random();
             var selectedMeal = mealPool.OrderBy(_ => random.Next()).FirstOrDefault();
 
-            return selectedMeal != null
-                ? new MealOffer(mealType, ConsumerType.MILD_PATIENT, selectedMeal.Id, 1, dailyMenuId)
-                : null;
+            if (selectedMeal != null)
+            {
+                _recentMealIds.Add(selectedMeal.Id);
+                if(_recentMealIds.Count > 16)
+                {
+                    _recentMealIds.RemoveAt(0);
+                }
+                return new MealOffer(mealType, ConsumerType.MILD_PATIENT, selectedMeal.Id, 1, dailyMenuId);
+            }
+
+            return null;
         }
 
         private void AdjustMealsToFitCalories(List<MealOffer> selectedMeals, int targetCalories)
@@ -153,7 +151,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             int currentCalories = CalculateTotalCalories(selectedMeals);
             int attempts = 0;
 
-            while (Math.Abs(currentCalories - targetCalories) > 50 && attempts < 10)
+            while (Math.Abs(currentCalories - targetCalories) > 100 && attempts < 10)
             {
                 for (int i = 0; i < selectedMeals.Count; i++)
                 {
@@ -162,6 +160,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
                     if (adjustedMeal != null)
                     {
                         selectedMeals.RemoveAt(i);
+                        _recentMealIds.Remove(mealOffer.MealId);
                         var newMealOffer = new MealOffer(
                             mealOffer.Type,
                             mealOffer.ConsumerType,
@@ -171,11 +170,12 @@ namespace Technical_Department.Kitchen.Core.UseCases
                         );
 
                         selectedMeals.Insert(i, newMealOffer);
+                        _recentMealIds.Add(adjustedMeal.Id);
 
                         currentCalories = CalculateTotalCalories(selectedMeals);
                     }
 
-                    if (Math.Abs(currentCalories - targetCalories) <= 50)
+                    if (Math.Abs(currentCalories - targetCalories) <= 100)
                         break;
                 }
 
@@ -196,7 +196,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             };
 
             var availableMeals = _mealRepository.GetAll()
-                .Where(meal => meal.Types.Contains(dishType))
+                .Where(meal => meal.Types.Contains(dishType) && !_recentMealIds.Contains(meal.Id))
                 .ToList();
 
             var currentMeal = _mealRepository.Get(mealOffer.MealId);

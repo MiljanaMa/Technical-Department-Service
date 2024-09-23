@@ -20,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
 import { IngredientsModalComponent } from './ingredients-modal/ingredients-modal.component';
 import { KitchenWarehouseComponent } from './kitchen-warehouse/kitchen-warehouse.component';
 import { CalorieBasedMenuComponent } from './calorie-based-menu/calorie-based-menu.component';
+import { EditCalorieBasedMenuModalComponent } from './edit-calorie-based-menu-modal/edit-calorie-based-menu-modal.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CalorieBasedMenuComponent } from './calorie-based-menu/calorie-based-me
     IngredientsModalComponent,
     KitchenWarehouseComponent,
     CalorieBasedMenuComponent,
+    EditCalorieBasedMenuModalComponent,
   ],
   imports: [
     CommonModule,

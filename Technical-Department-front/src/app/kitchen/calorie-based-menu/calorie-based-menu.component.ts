@@ -6,6 +6,9 @@ import { WeeklyMenu } from '../model/weekly-menu.model';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { EditCalorieBasedMenuModalComponent } from '../edit-calorie-based-menu-modal/edit-calorie-based-menu-modal.component';
+import { Meal } from '../model/meal.model';
 
 @Component({
   selector: 'app-calorie-based-menu',
@@ -15,12 +18,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CalorieBasedMenuComponent implements OnInit {
 
   mealsVisible: boolean = false;
+  buttonsVisible: boolean = false;
   weeklyMenu: WeeklyMenu | undefined;
-  breakfasts: MealOffer[] = [];
-  lunches: MealOffer[] = [];
-  dinners: MealOffer[] = [];
-  salads: MealOffer[] = [];
-  snacks: MealOffer[] = [];
+  allMeals: Meal[] = [];
+  breakfasts: Meal[] = [];
+  lunches: Meal[] = [];
+  dinners: Meal[] = [];
+  salads: Meal[] = [];
+  snacks: Meal[] = [];
   calorieInput: number | null = null;
 
   daysOfWeek = Object.keys(DayOfWeek)
@@ -40,7 +45,7 @@ export class CalorieBasedMenuComponent implements OnInit {
   dataSource: any[] = [];
   displayedColumns: string[] = ['mealType', ...this.daysOfWeek.map(day => day.value.toString())];
 
-  constructor(private service: KitchenService, private snackBar: MatSnackBar) { }
+  constructor(private service: KitchenService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit(): void {
    
@@ -51,11 +56,11 @@ export class CalorieBasedMenuComponent implements OnInit {
       this.showTabularView();
       return;
     }
-    this.service.createCustomMenu(this.calorieInput).subscribe({
+    this.service.createCalorieBasedMenu(this.calorieInput).subscribe({
       next: (result: WeeklyMenu) => {
         this.weeklyMenu = result;
-        this.processMenu(result.menu);
-        this.collectMealOffers(result.menu);
+        this.processMenu(this.weeklyMenu.menu);
+        this.collectMeals();
       },
       error: (error) => {
         console.error('Error fetching weekly menu:', error);
@@ -107,8 +112,14 @@ export class CalorieBasedMenuComponent implements OnInit {
     this.dataSource.push(totalCaloriesRow);
   }
 
+  shouldRenderEditButton(mealType: string){
+    if(mealType =='Dnevni unos kalorija'){
+      return false;
+    }
+    return true;
+  }
+
   getMealTypeClass(mealType: string): string {
-    console.log('Meal type:', mealType); 
     switch (mealType) {
       case "DORUCAK":
       case "RUCAK":
@@ -125,79 +136,128 @@ export class CalorieBasedMenuComponent implements OnInit {
     }
   }
 
-  collectMealOffers(dailyMenus: DailyMenu[] | undefined): void {
-    this.mealsVisible = true;
-    if (!dailyMenus) return;
-  
-    const mealCollections: { [key in MealType]: Set<string> } = {
-      [MealType.BREAKFAST]: new Set(),
-      [MealType.MORNING_SNACK]: new Set(),
-      [MealType.LUNCH]: new Set(),
-      [MealType.LUNCH_SALAD]: new Set(),
-      [MealType.DINNER_SNACK]: new Set(),
-      [MealType.DINNER]: new Set(),
-      [MealType.DINNER_SALAD]: new Set(),
-    };
-  
-    const mealOffersByType: { [key in MealType]: MealOffer[] } = {
-      [MealType.BREAKFAST]: [],
-      [MealType.MORNING_SNACK]: [],
-      [MealType.LUNCH]: [],
-      [MealType.LUNCH_SALAD]: [],
-      [MealType.DINNER_SNACK]: [],
-      [MealType.DINNER]: [],
-      [MealType.DINNER_SALAD]: [],
-    };
+  collectMeals(): void {
+    this.service.getMeals().subscribe({
+      next: (result: Meal[]) => {
+        this.allMeals = result;
+        this.refreshMeals();
+        this.mealsVisible = true;
+      },
+      error: () => { }
+    });
+    
+  }
 
-    dailyMenus.flatMap(dailyMenu => dailyMenu.menu).forEach(mealOffer => {
-      const mealType = mealOffer.type;
-
-      if (!mealCollections[mealType].has(mealOffer.mealName)) {
-        mealCollections[mealType].add(mealOffer.mealName);  
-        mealOffersByType[mealType].push(mealOffer); 
+  refreshMeals(): void {
+    if (!this.weeklyMenu) return;
+  
+    const breakfastIds: number[] = [];
+    const lunchIds: number[] = [];
+    const dinnerIds: number[] = [];
+    const saladIds: number[] = [];
+    const snackIds: number[] = [];
+  
+    for (const dailyMenu of this.weeklyMenu.menu!) {
+      for (const mealOffer of dailyMenu.menu) {
+        switch (mealOffer.type) {
+          case MealType.BREAKFAST:
+            breakfastIds.push(mealOffer.mealId);
+            break;
+          case MealType.LUNCH:
+            lunchIds.push(mealOffer.mealId);
+            break; 
+          case MealType.DINNER:
+            dinnerIds.push(mealOffer.mealId);
+            break;
+          case MealType.LUNCH_SALAD:
+          case MealType.DINNER_SALAD:
+            saladIds.push(mealOffer.mealId);
+            break; 
+          case MealType.MORNING_SNACK:
+          case MealType.DINNER_SNACK: 
+            snackIds.push(mealOffer.mealId);
+            break;
+          default:
+            break; 
+        }
       }
+    }
+  
+    this.breakfasts = this.allMeals.filter(meal => breakfastIds.includes(meal.id!));
+    this.lunches = this.allMeals.filter(meal => lunchIds.includes(meal.id!));
+    this.dinners = this.allMeals.filter(meal => dinnerIds.includes(meal.id!));
+    this.salads = this.allMeals.filter(meal => saladIds.includes(meal.id!));
+    this.snacks = this.allMeals.filter(meal => snackIds.includes(meal.id!));
+    
+  }
+
+  getMealTypeByName(name: string): MealType | undefined {
+    const keys = Object.keys(MealType).filter(k => isNaN(Number(k)));
+    for (const key of keys) {
+      if (MealTypeLabels[MealType[key as keyof typeof MealType]] === name) {
+        return MealType[key as keyof typeof MealType];
+      }
+    }
+    return undefined;
+  }
+
+  changeMenu(): void{
+    if(this.buttonsVisible){
+      this.buttonsVisible = false;
+    }else{
+      this.buttonsVisible = true;
+    }
+    
+  }
+
+  openModal(mealTypeName: string, day: DayOfWeek): void {
+    const mealType = this.getMealTypeByName(mealTypeName);
+    const dayName = this.daysOfWeek.find(d => d.value === day)?.name;
+    const dailyMealOffers = this.weeklyMenu?.menu?.find(d => d.dayOfWeek === day);
+    const mealOffer = dailyMealOffers?.menu?.find(m => m.type === mealType);
+  
+    const dialogRef = this.dialog.open(EditCalorieBasedMenuModalComponent, {
+      width: '500px',
+      data: { mealOffer, dayName }
     });
   
+    dialogRef.afterClosed().subscribe((updatedMealOffer: MealOffer) => {
+      if (updatedMealOffer) {
+        console.log('The dialog was closed with result:', updatedMealOffer);       
 
-    this.breakfasts = mealOffersByType[MealType.BREAKFAST];
-    this.lunches = mealOffersByType[MealType.LUNCH];
-    this.dinners = mealOffersByType[MealType.DINNER];
-  
-    const uniqueSalads = new Set<string>();
-    this.salads = [
-      ...mealOffersByType[MealType.LUNCH_SALAD].filter(mealOffer => {
-        if (uniqueSalads.has(mealOffer.mealName)) return false;
-        uniqueSalads.add(mealOffer.mealName);
-        return true;
-      }),
-      ...mealOffersByType[MealType.DINNER_SALAD].filter(mealOffer => {
-        if (uniqueSalads.has(mealOffer.mealName)) return false;
-        uniqueSalads.add(mealOffer.mealName);
-        return true;
-      })
-    ];
-  
-    const uniqueSnacks = new Set<string>();
-    this.snacks = [
-      ...mealOffersByType[MealType.MORNING_SNACK].filter(mealOffer => {
-        if (uniqueSnacks.has(mealOffer.mealName)) return false;
-        uniqueSnacks.add(mealOffer.mealName);
-        return true;
-      }),
-      ...mealOffersByType[MealType.DINNER_SNACK].filter(mealOffer => {
-        if (uniqueSnacks.has(mealOffer.mealName)) return false;
-        uniqueSnacks.add(mealOffer.mealName);
-        return true;
-      })
-    ];
+        const dayMenu = this.weeklyMenu?.menu?.find(d => d.dayOfWeek === day);
+        if (dayMenu) {
+            const meal = dayMenu.menu?.find(m => m.type === mealType);
+            if (meal) {        
+                Object.assign(meal, updatedMealOffer);
+            }
+        }
+
+        const dataSourceRow = this.dataSource.find(row => row.mealType === MealTypeLabels[mealType!]);
+        if (dataSourceRow) {
+          dataSourceRow[day.toString()] = `${updatedMealOffer.mealName} \n (${updatedMealOffer.calories?.toFixed(2)} kcal)`;
+        }
+        this.dataSource = [...this.dataSource];   
+        this.refreshMeals();
+        
+      } else {
+        console.log('The dialog was closed without result');
+      }
+    });
   }
   
   async exportToPDF(): Promise<void> {
+    this.buttonsVisible = false;
     const pdf = new jsPDF({
       format: 'a4',
       unit: 'mm',
     });
-  
+
+    const snackBarRef = this.snackBar.open('Preuzimanje fajla je u toku, sacekajte...', 'Zatvori', {
+      verticalPosition: 'top',
+      panelClass: ['mat-info'],
+    });
+
     const pageWidth = 210;
     const pageHeight = 297;
     const padding = 10;
@@ -233,6 +293,7 @@ export class CalorieBasedMenuComponent implements OnInit {
     }
   
     pdf.save('prilagodjeni-jelovnik.pdf');
+    snackBarRef.dismiss();
   }
   
 }  
