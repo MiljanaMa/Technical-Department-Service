@@ -42,7 +42,7 @@ export class MealFormComponent implements OnInit {
   }
 
   private addCheckboxes() {
-    if (this.data !== null)
+    if (this.data === null)
       this.dishTypes.forEach(() => this.types.push(new FormControl(false)));
     else {
       this.dishTypes.forEach((type, index) => {
