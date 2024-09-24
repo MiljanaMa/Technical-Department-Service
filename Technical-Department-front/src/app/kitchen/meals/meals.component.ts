@@ -45,7 +45,7 @@ export class MealsComponent implements OnInit {
 
   addMeal(): void {
     const dialogRef = this.dialog.open(MealFormComponent, {
-      width: '1020px',
+      width: 'auto',
       height: 'auto',
       data: null  
     });
@@ -57,7 +57,7 @@ export class MealsComponent implements OnInit {
 
   updateMeal(meal: Meal): void {
     const dialogRef = this.dialog.open(MealFormComponent, {
-      width: '1020px',
+      width: 'auto',
       height: 'auto',
       data: meal 
     });
