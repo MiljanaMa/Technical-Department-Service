@@ -83,7 +83,7 @@ export class IngredientsComponent implements OnInit{
       height: '150px',
       disableClose: false
     });
-    this.dialogRef.componentInstance.confirmMessage = "Da li ste sigurni da želite da obrišete " + ingredient.name + "?"
+    this.dialogRef.componentInstance.confirmMessage = 'Da li ste sigurni da želite da obrišete namirnicu "' + ingredient.name + '"?'
 
     this.dialogRef.afterClosed().subscribe(result => {
       if(result) {

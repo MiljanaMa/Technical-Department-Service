@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MealFormComponent } from '../meal-form/meal-form.component';
 
 @Component({
   selector: 'app-meals',
@@ -41,19 +42,37 @@ export class MealsComponent implements OnInit {
     this.filteredMeals = this.meals.filter(meal =>
       meal.name.toLowerCase().includes(lowerCaseQuery));
   }
+
   addMeal(): void {
-    this.router.navigate([`/meal-form/null`]);
+    const dialogRef = this.dialog.open(MealFormComponent, {
+      width: 'auto',
+      height: 'auto',
+      data: null  
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadMeals();  
+    });
   }
+
   updateMeal(meal: Meal): void {
-    this.router.navigate([`/meal-form/${meal.id}`]);
+    const dialogRef = this.dialog.open(MealFormComponent, {
+      width: 'auto',
+      height: 'auto',
+      data: meal 
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadMeals();  
+    });
   }
   deleteMeal(meal: Meal): void {
     this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '600px',  // Set the width
-      height: '250px',  // Set the height
+      width: '600px',
+      height: '200px',  
       disableClose: false
     });
-    this.dialogRef.componentInstance.confirmMessage = "Da li ste sigurni da želite da obrišete " + meal.name + "?"
+    this.dialogRef.componentInstance.confirmMessage = 'Da li ste sigurni da želite da obrišete jelo "' + meal.name + '"?'
 
     this.dialogRef.afterClosed().subscribe(result => {
       if(result) {
