@@ -30,7 +30,7 @@ export class IngredientModalComponent implements OnInit {
   {
     this.ingredientForm = this.fb.group({
       id: [this.data?.id || 0],
-      name: [this.data?.name || 0, Validators.required],
+      name: [this.data?.name || "", Validators.required],
       calories: [this.data?.calories || 0, [Validators.required, Validators.min(0)]],
       proteins: [this.data?.proteins || 0, [Validators.required, Validators.min(0)]],
       carbohydrates: [this.data?.carbohydrates || 0, [Validators.required, Validators.min(0)]],
@@ -59,7 +59,7 @@ export class IngredientModalComponent implements OnInit {
       newIngredient.warehouseLabel = "";
       newIngredient.isActive = true;
 
-      if (this.data.id === 0) {
+      if (this.data === null) {
         this.service.createIngredient(newIngredient).subscribe({
           next: (result: Ingredient) => {
             this.snackBar.open("Namirnica je uspešno uneta", 'OK', {
