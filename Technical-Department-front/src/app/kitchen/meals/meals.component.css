@@ -203,10 +203,10 @@ mat-form-field{
 }
 
 .buttons {
-  margin-top: auto; /* Pushes the buttons to the bottom */
+  margin-top: auto; 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px; /* Adds space between the buttons */
+  gap: 10px;
 }
 

@@ -6,6 +6,8 @@ import { Ingredient } from '../model/ingredient.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, startWith, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-meal-form',
@@ -26,8 +28,8 @@ export class MealFormComponent implements OnInit {
     'UŽINA': DishType.SNACK
   };
 
-  constructor(private fb: FormBuilder, private service: KitchenService, private route: ActivatedRoute,
-    private router: Router, private snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private service: KitchenService, private snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: Meal | null,
+    private dialogRef: MatDialogRef<MealFormComponent> ) {
     this.mealForm = this.fb.group({
       name: ['', Validators.required],
       code: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -40,8 +42,7 @@ export class MealFormComponent implements OnInit {
   }
 
   private addCheckboxes() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id === "null")
+    if (this.data === null)
       this.dishTypes.forEach(() => this.types.push(new FormControl(false)));
     else {
       this.dishTypes.forEach((type, index) => {
@@ -61,9 +62,8 @@ export class MealFormComponent implements OnInit {
 
         this.allIngredients = result.results;
 
-        const id = this.route.snapshot.paramMap.get('id');
-        if (id !== "null") {
-          this.loadMeal(parseInt(id || ''));
+        if (this.data) {
+          this.loadMeal(this.data?.id!);
         } else {
           this.addCheckboxes();
           this.initializeIngredients(3);
@@ -134,7 +134,7 @@ export class MealFormComponent implements OnInit {
 
       let dateTime = new Date(this.mealForm.value.date);
       let standardizedDate = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate());
-      const id = this.route.snapshot.paramMap.get('id');
+      const id = this.data?.id;
       const meal: Meal = {
         id: 0,
         name: this.mealForm.value.name,
@@ -153,11 +153,11 @@ export class MealFormComponent implements OnInit {
         }))
       };
 
-      if (id !== "null") {
-        meal.id = parseInt(id || '0')
+      if (this.data !== null) {
+        meal.id = this.data.id
         this.service.updateMeal(meal).subscribe({
           next: () => {
-            this.router.navigate([`meals`]);
+            this.dialogRef.close(); 
           },
           error: (error: any) => {
             this.errorMessage();
@@ -166,7 +166,7 @@ export class MealFormComponent implements OnInit {
       } else {
         this.service.createMeal(meal).subscribe({
           next: () => {
-            this.router.navigate([`meals`]);
+            this.dialogRef.close(); 
           },
           error: (error: any) => {
             this.errorMessage();
@@ -217,7 +217,7 @@ export class MealFormComponent implements OnInit {
     });
   }
   onCancel(): void {
-    this.router.navigate([`meals`]);
+    this.dialogRef.close(); 
   }
   private errorMessage() {
     this.snackBar.open("Greška prilikom unosa, pokušajte ponovo.", 'OK', {

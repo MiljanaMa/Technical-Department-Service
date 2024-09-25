@@ -23,7 +23,7 @@
 <div class="meals-container">
   <div class="meal-card" *ngFor="let meal of filteredMeals">
     <div class="name">{{ meal.name }}</div>
-    <div class="calories">{{ meal.calories }} kCal</div>
+    <div class="calories">{{ meal.calories | number: '1.0-2'  }} kCal</div>
     <div class="ingredients-list">
       <div class="ingredient-item" *ngFor="let iq of meal.ingredients">
         <span class="ingredient-name">{{ iq.ingredientName }}</span>
