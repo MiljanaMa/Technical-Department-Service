@@ -22,6 +22,7 @@ namespace Technical_Department.Kitchen.API.Public
         Result Delete(int id);
         Result<List<IngredientQuantityDto>> GetRequsition(WeeklyMenuDto weeklyMenuDto);
         Result<List<MealOfferDto>> GetIngredientRequirements(long dailyMenuId);
+        Result<WeeklyMenuDto> CreateCalorieBasedWeeklyMenu(int calories);
 
     }
 }

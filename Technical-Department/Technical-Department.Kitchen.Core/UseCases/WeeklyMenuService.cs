@@ -11,6 +11,7 @@ using Technical_Department.Kitchen.Core.Domain.RepositoryInterfaces;
 using Technical_Department.Kitchen.Core.Domain;
 using Technical_Department.Kitchen.Core.Domain.Enums;
 using DayOfWeek = Technical_Department.Kitchen.Core.Domain.Enums.DayOfWeek;
+using Technical_Department.Kitchen.Core.Domain.DomainServices;
 
 namespace Technical_Department.Kitchen.Core.UseCases
 {
@@ -20,16 +21,16 @@ namespace Technical_Department.Kitchen.Core.UseCases
         private readonly ICrudRepository<DailyMenu> _dailyMenuRepository;
         private readonly IMealRepository _mealRepository;
         private readonly IIngredientRequirementService _ingredientRequirementService;
-        private readonly IMapper _mapper;
+        private readonly ICalorieBasedMenuService _calorieBasedMenuService;
         public WeeklyMenuService(IWeeklyMenuRepository weeklyMenuRepository, IDailyMenuRepository dailyMenuRepository
-            , IMealRepository mealRepository, IIngredientRepository ingredientRepository, IIngredientRequirementService ingredientRequirementService,
-            IMapper mapper) : base(weeklyMenuRepository, mapper)
+            , IMealRepository mealRepository, IIngredientRequirementService ingredientRequirementService,
+            ICalorieBasedMenuService calorieBasedMenuService, IMapper mapper) : base(weeklyMenuRepository, mapper)
         {
             _weeklyMenuRepository = weeklyMenuRepository;
             _dailyMenuRepository = dailyMenuRepository;
             _mealRepository = mealRepository;
             _ingredientRequirementService = ingredientRequirementService;
-            _mapper = mapper;
+            _calorieBasedMenuService = calorieBasedMenuService;
         }
 
         public Result<WeeklyMenuDto> CreateOrFetch(string status)
@@ -73,6 +74,11 @@ namespace Technical_Department.Kitchen.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+        }
+
+        public Result<WeeklyMenuDto> CreateCalorieBasedWeeklyMenu(int totalCalories)
+        {
+            return _calorieBasedMenuService.CreateCalorieBasedWeeklyMenu(totalCalories);
         }
 
         private WeeklyMenu CreateOrFetchWeeklyMenu(WeeklyMenuStatus status)
@@ -256,7 +262,7 @@ namespace Technical_Department.Kitchen.Core.UseCases
             return MapToDto(weeklyMenu);
         }
 
-
+        
 
 
     }

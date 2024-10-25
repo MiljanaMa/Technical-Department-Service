@@ -10,13 +10,10 @@ namespace Technical_Department.API.Controllers
     public class WeeklyMenuController : BaseApiController
     {
         private readonly IWeeklyMenuService _weeklyMenuService;
-        private readonly ICalorieBasedMenuService _cusomMenuService;
 
-        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService, ICalorieBasedMenuService customMenuService)
+        public WeeklyMenuController(IWeeklyMenuService weeklyMenuService)
         {
             _weeklyMenuService = weeklyMenuService;
-            _cusomMenuService = customMenuService;
-
         }
 
         [HttpGet("status")]
@@ -92,7 +89,7 @@ namespace Technical_Department.API.Controllers
         public ActionResult<WeeklyMenuDto> CreateCalorieBasedMenu([FromQuery] int calories)
 
         {
-            var result = _cusomMenuService.CreateCalorieBasedWeeklyMenu(calories);
+            var result = _weeklyMenuService.CreateCalorieBasedWeeklyMenu(calories);
             return CreateResponse(result);
         }
 
