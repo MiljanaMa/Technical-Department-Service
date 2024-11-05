@@ -1,0 +1,78 @@
+@startuml
+actor Dietitian
+participant WeeklyMenuController as Controller
+participant WeeklyMenuService as WMS
+participant IngredientRequirementService as IRS
+participant WeeklyMenuRepository as WMR
+participant MealRepository as MR
+participant KitchenWarehouseRepository as KWR
+participant IngredientRepository as IR
+
+Dietitian -> Controller: GetIngredientRequirements(weeklyMenuDto)
+activate Controller
+Controller -> WMS: GetIngredientRequirements(weeklyMenuDto)
+activate WMS
+WMS -> WMR: Update(weeklyMenu)
+activate WMR
+return updatedWeeklyMenu
+deactivate WMR
+
+WMS-> IRS: GetIngredientRequirements()
+activate IRS
+IRS -> IRS: GetTomorrowDailyMenu()
+activate IRS
+alt tomorrowsDayOfWeek == 0
+    IRS -> WMR: GetMenuByStatus(WeeklyMenuStatus.NEW)
+    activate WMR
+    return WeeklyMenu
+else
+    IRS -> WMR: GetMenuByStatus(WeeklyMenuStatus.CURRENT)
+    activate WMR
+    return WeeklyMenu
+end
+return tomorrowDailyMenu
+
+    loop foreach mealOffer in tomorrowDailyMenu.Menu
+        IRS -> MR: Get(mealOffer.MealId)
+        activate MR
+        return meal
+        deactivate MR
+
+        IRS -> IRS: AddIngredientRequirements(ingredientRequirements, mealOffer, meal)
+        activate IRS
+        deactivate IRS
+        IRS -> IRS: IncreaseBreadQuantity(ingredientRequirements, mealOffer, meal)
+        activate IRS
+        deactivate IRS
+    end
+
+IRS -> IRS: AdjustBasedOnWarehouse(ingredientRequirements)
+activate IRS
+loop foreach ingredientQuantity in ingredientRequirements
+IRS -> KWR: GetByIngredientId(ingredientId)
+activate KWR
+return warehouseIngredient
+deactivate KWR
+
+alt warehouseIngredient != null
+note right of IRS: The ingredient quantity is reduced by the amount available in the warehouse.
+else
+IRS -> IR: GetSimilar(ingredientQuantity.IngredientId)
+activate IR
+return similarIngredient
+deactivate IR
+note right of IRS: Similar ingredient is used as a substitute.
+end
+deactivate IRS
+
+
+IRS --> WMS: ingredientRequirements
+deactivate IRS
+
+WMS --> Controller: ingredientRequirements
+deactivate WMS
+
+Controller --> Dietitian: ingredientRequirements
+deactivate Controller 
+
+@enduml

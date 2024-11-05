@@ -1,10 +1,4 @@
 ﻿using BuildingBlocks.Core.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Technical_Department.Kitchen.Core.Domain
 {
@@ -24,9 +18,11 @@ namespace Technical_Department.Kitchen.Core.Domain
         {
             double newQuantity;
             if (this.MeasurementUnitScale != 0)
-            newQuantity = deliveryNoteQuantity * this.MeasurementUnitScale - requirementQuantity;
+                newQuantity = deliveryNoteQuantity * this.MeasurementUnitScale - requirementQuantity;
             else
                 newQuantity = deliveryNoteQuantity - requirementQuantity;
+
+            newQuantity = Math.Round(newQuantity, 2);
             this.Quantity += Math.Max(newQuantity, 0);
         }
 

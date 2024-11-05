@@ -1,0 +1,43 @@
+@startuml
+actor Dietitian
+participant KitchenWarehouseController as Controller
+participant KitchenWarehouseService as KWS
+participant KitchenWarehouseRepository as KWR
+participant IngredientRepository as IR
+participant KitchenWarehouseIngredient as KWI
+
+Dietitian -> Controller: StartNewBusinessYear(ingredients)
+activate Controller
+Controller -> KWS: StartNewBusinessYear(ingredients)
+activate KWS
+KWS -> KWS: CreateWarehouseIngredients(ingredients)
+activate KWS
+note right of KWS: Create empty list of warehouse ingredients
+
+loop foreach ingredient in ingredients
+KWS -> IR: Get(ingredient.IngredientId)
+activate IR
+return dbIngredient
+deactivate IR
+KWS -> KWI : Update(dbIngredient)
+activate KWI
+deactivate KWI
+note right of KWS: Add updated warehouse ingredient into list
+end
+KWS --> KWS: newIngredients
+deactivate KWS
+KWS -> KWR: AddNewWarehouseIngredients(newIngredients)
+activate KWR
+return allWarehouseIngredients
+deactivate KWR
+KWS -> IR: SyncIngredientsStatuses(ingredientIds)
+activate IR
+deactivate IR
+
+KWS --> Controller: allWarehouseIngredients
+deactivate KWS
+
+Controller --> Dietitian: allWarehouseIngredients
+deactivate Controller
+
+@enduml

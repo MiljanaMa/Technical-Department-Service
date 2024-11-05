@@ -56,7 +56,6 @@ def proceedDeliveryNote():
 
     if file.filename == '':
         return jsonify({'message': 'Postoji greška sa poslatim fajlovima'}), 400
-
     if file:
         try:
             df = pd.read_excel(file)
