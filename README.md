@@ -14,23 +14,23 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 
 ## Key Features
 
-- **Ingredient Management** 
+### Ingredient Management 
 ![ingredients](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/ingredients.jpg)
-- **Meal Management**
+### Meal Management
 ![meals](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/meals.jpg)
-- **Menu Management**:
-  - Create New Menu (Default or For The Next Week)
+### Menu Management
+#### Create New Menus (Default or for the Upcoming Week)
 ![menuFrom](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/menu-form.jpg)
-  - View Existing Menus
+#### View and Review Existing Menus
 ![menus](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/menu.jpg)
-- Create Custom Menus Based on Patient Calories Demand
+#### Generate Custom Menu Based on Patient Calorie Requirements
 ![customMenu](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/custom-menu.jpg)
-- **Requisition Management**: Manage food requisitions and requests.
+### Requisition Management
 ![requisition](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/requisition.jpg)
-- **Warehouse Management**: Oversee the storage and inventory of kitchen ingredients.
-	- Warehouse
+### Warehouse Management
+#### Warehouse Overview
 ![warehouse](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/warehouse.jpg)
--	New Fiscal Year 
+#### New Fiscal Year 
 ![newYear](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/new-fiscal-year.jpg)
 
 
