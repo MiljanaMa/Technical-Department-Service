@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This project was developed for the **Public Health Institution "Sveti Vračevi" Hospital** in Bijeljina as part of our **graduation thesis**. The software is specifically tailored for their hospital kitchen, streamlining processes related to meal planning, ingredient procurement, and inventory management. By optimizing resource management and enabling precise meal planning, the system helps ensure timely meal preparation, reduces costs and waste, and contributes to the overall health and recovery of patients. The full application demo can be downloaded [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/app-demo.mp4). The class-diagram is available [here](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/class-diagram/class-diagram.png).
+- This project was developed for the **Public Health Institution "Sveti Vračevi" Hospital** in Bijeljina as part of our **graduation thesis**. The software is specifically tailored for their hospital kitchen, streamlining processes related to meal planning, ingredient procurement, and inventory management. By optimizing resource management and enabling precise meal planning, the system helps ensure timely meal preparation, reduces costs and waste, and contributes to the overall health and recovery of patients. 
+- The full application demo can be downloaded [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/app-demo.mp4). The class-diagram is available [here](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/class-diagram/class-diagram.png).
 
 
 ## Software Development Life Cycle (SDLC)
