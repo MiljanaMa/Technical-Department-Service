@@ -12,6 +12,25 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 ![sdlc](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/project-timeline-diagram.jpg)
 
 
+## Technologies Used
+
+- **Angular**: For building the frontend of the application, providing a dynamic and responsive user experience.
+- **.NET**: For backend services, ensuring reliable business logic and data management.
+- **PostgreSQL**: For managing the application's database, ensuring secure and efficient data storage.
+
+
+## Tools Used
+
+- **Figma**: For designing the user interface and creating visual wireframes and prototypes.
+- **Draw.io**: For creating system architecture diagrams and flowcharts.
+- **Visual Studio**: For backend development with .NET.
+- **Visual Studio Code**: For frontend development with Angular.
+
+
+## Solution Architecture
+
+![architecture](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/architecture.jpg)
+
 ## Key Features
 
 ### Ingredient Management 
@@ -32,24 +51,6 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 ![warehouse](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/warehouse.jpg)
 #### New Fiscal Year 
 ![newYear](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/new-fiscal-year.jpg)
-
-
-## Technologies Used
-
-### Solution Architecture
-![architecture](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/architecture.jpg)
-
-- **Angular**: For building the frontend of the application, providing a dynamic and responsive user experience.
-- **.NET**: For backend services, ensuring reliable business logic and data management.
-- **PostgreSQL**: For managing the application's database, ensuring secure and efficient data storage.
-
-
-## Tools Used
-
-- **Figma**: For designing the user interface and creating visual wireframes and prototypes.
-- **Draw.io**: For creating system architecture diagrams and flowcharts.
-- **Visual Studio**: For backend development with .NET.
-- **Visual Studio Code**: For frontend development with Angular.
 
 
 ## Authors
