@@ -31,6 +31,7 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 
 ![architecture](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/architecture.jpg)
 
+
 ## Key Features
 
 ### Ingredient Management 
