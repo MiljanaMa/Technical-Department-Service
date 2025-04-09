@@ -2,39 +2,41 @@
 
 ## Introduction
 
-This project was developed for the **Public Health Institution "Sveti Vračevi" Hospital** in Bijeljina as part of our **graduation thesis**. The software is specifically tailored for their hospital kitchen, streamlining processes related to meal planning, ingredient procurement, and inventory management. By optimizing resource management and enabling precise meal planning, the system helps ensure timely meal preparation, reduces costs and waste, and contributes to the overall health and recovery of patients.
+This project was developed for the **Public Health Institution "Sveti Vračevi" Hospital** in Bijeljina as part of our **graduation thesis**. The software is specifically tailored for their hospital kitchen, streamlining processes related to meal planning, ingredient procurement, and inventory management. By optimizing resource management and enabling precise meal planning, the system helps ensure timely meal preparation, reduces costs and waste, and contributes to the overall health and recovery of patients. The full application demo can be downloaded [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/app-demo.mp4). The class-diagram is available [here](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/class-diagram/class-diagram.png).
 
 
-## Project Resourses
+## Software Development Life Cycle (SDLC)
 
--	The full application demo can be downloaded [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/app-demo.mp4).
--	Detailed information on planning and modeling, including the project timeline, software architecture, and class diagram, can be found [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/tree/readme/planning-and-modeling).
--	The insert script, migration script, and start script are available [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/tree/readme/scripts).
+- We followed all phases of the Software Development Life Cycle (SDLC) during the development of this application. The entire project timeline is illustrated in the diagram below.
+![sdlc](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/tree/main/planning-and-modeling)
 
 
 ## Key Features
 
 ### Ingredient Management 
-![ingredients](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/ingredients.jpg)
+![ingredients](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/preview/screenshots/ingredients.jpg)
 ### Meal Management
-![meals](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/meals.jpg)
+![meals](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/meals.jpg)
 ### Menu Management
 #### Create New Menus (Default or for the Upcoming Week)
-![menuFrom](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/menu-form.jpg)
+![menuFrom](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/menu-form.jpg)
 #### View and Review Existing Menus
-![menus](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/menu.jpg)
+![menus](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/menu.jpg)
 #### Generate Custom Menu Based on Patient Calorie Requirements
-![customMenu](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/custom-menu.jpg)
+![customMenu](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/custom-menu.jpg)
 ### Requisition Management
-![requisition](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/requisition.jpg)
+![requisition](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/requisition.jpg)
 ### Warehouse Management
 #### Warehouse Overview
-![warehouse](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/warehouse.jpg)
+![warehouse](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/warehouse.jpg)
 #### New Fiscal Year 
-![newYear](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/readme/preview/screenshots/new-fiscal-year.jpg)
+![newYear](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/new-fiscal-year.jpg)
 
 
 ## Technologies Used
+
+### Solution Architecture
+![architecture](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/architecture.jpg)
 
 - **Angular**: For building the frontend of the application, providing a dynamic and responsive user experience.
 - **.NET**: For backend services, ensuring reliable business logic and data management.
