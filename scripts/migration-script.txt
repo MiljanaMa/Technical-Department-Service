@@ -1,0 +1,2 @@
+Add-Migration -Name Init -Context KitchenContext -Project Technical-Department.Kitchen.Infrastructure -StartupProject Technical-Department.API
+Update-Database -Context KitchenContext -Project Technical-Department.Kitchen.Infrastructure -StartupProject Technical-Department.API
