@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This project was developed for the **Public Health Institution "Sveti Vračevi" Hospital** in Bijeljina as part of our **graduation thesis**. The software is specifically tailored for their hospital kitchen, streamlining processes related to meal planning, ingredient procurement, and inventory management. By optimizing resource management and enabling precise meal planning, the system helps ensure timely meal preparation, reduces costs and waste, and contributes to the overall health and recovery of patients. The full application demo can be downloaded [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/app-demo.mp4). The class-diagram is available [here](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/class-diagram/class-diagram.png).
+- This project was developed for the **Public Health Institution "Sveti Vračevi" Hospital** in Bijeljina as part of our **graduation thesis**. The software is specifically tailored for their hospital kitchen, streamlining processes related to meal planning, ingredient procurement, and inventory management. By optimizing resource management and enabling precise meal planning, the system helps ensure timely meal preparation, reduces costs and waste, and contributes to the overall health and recovery of patients. 
+- The full application demo can be downloaded [here](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/app-demo.mp4). The class-diagram is available [here](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/class-diagram/class-diagram.png).
 
 
 ## Software Development Life Cycle (SDLC)
@@ -10,6 +11,26 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 - We followed all phases of the Software Development Life Cycle (SDLC) during the development of this application. The entire project timeline is illustrated in the diagram below.
 
 ![sdlc](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/project-timeline-diagram.jpg)
+
+
+## Technologies Used
+
+- **Angular**: For building the frontend of the application, providing a dynamic and responsive user experience.
+- **.NET**: For backend services, ensuring reliable business logic and data management.
+- **PostgreSQL**: For managing the application's database, ensuring secure and efficient data storage.
+
+
+## Tools Used
+
+- **Figma**: For designing the user interface and creating visual wireframes and prototypes.
+- **Draw.io**: For creating system architecture diagrams and flowcharts.
+- **Visual Studio**: For backend development with .NET.
+- **Visual Studio Code**: For frontend development with Angular.
+
+
+## Solution Architecture
+
+![architecture](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/architecture.jpg)
 
 
 ## Key Features
@@ -32,24 +53,6 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 ![warehouse](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/warehouse.jpg)
 #### New Fiscal Year 
 ![newYear](https://github.com/MilenaM06/Hospital-Kitchen-Support-Application/blob/main/preview/screenshots/new-fiscal-year.jpg)
-
-
-## Technologies Used
-
-### Solution Architecture
-![architecture](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/architecture.jpg)
-
-- **Angular**: For building the frontend of the application, providing a dynamic and responsive user experience.
-- **.NET**: For backend services, ensuring reliable business logic and data management.
-- **PostgreSQL**: For managing the application's database, ensuring secure and efficient data storage.
-
-
-## Tools Used
-
-- **Figma**: For designing the user interface and creating visual wireframes and prototypes.
-- **Draw.io**: For creating system architecture diagrams and flowcharts.
-- **Visual Studio**: For backend development with .NET.
-- **Visual Studio Code**: For frontend development with Angular.
 
 
 ## Authors
