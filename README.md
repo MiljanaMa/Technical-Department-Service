@@ -8,7 +8,7 @@ This project was developed for the **Public Health Institution "Sveti Vračevi" 
 ## Software Development Life Cycle (SDLC)
 
 - We followed all phases of the Software Development Life Cycle (SDLC) during the development of this application. The entire project timeline is illustrated in the diagram below.
-![sdlc](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/tree/main/planning-and-modeling)
+![sdlc](https://github.com/MilenaM06/Hospital-Kitchen-Management-System/blob/main/planning-and-modeling/project-timeline-diagram.jpg)
 
 
 ## Key Features
