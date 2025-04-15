@@ -398,5 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Migrations
-src/**/Migrations/*
+**/Migrations/*
 
